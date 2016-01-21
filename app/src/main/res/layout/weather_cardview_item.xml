@@ -14,6 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/accent"
             android:layout_weight="1">
 
             <LinearLayout
@@ -29,8 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Утром"
-                    android:textColor="@color/primary_text"
-                    android:textStyle="bold" />
+                    android:textColor="@color/primary_text" />
 
                 <View
                     android:id="@+id/lineView"
@@ -43,6 +43,7 @@
                     android:id="@+id/aboutWeather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/textview_margin"
                     android:text="Легкий снегопад" />
 
                 <TextView
@@ -77,9 +78,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_weight="1"
                 android:text="-28°C"
-                android:textSize="48dp" />
+                android:textSize="48sp"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/min_max_Temperature"

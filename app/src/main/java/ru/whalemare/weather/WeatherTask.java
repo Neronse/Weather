@@ -32,7 +32,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
-    Weather weather = new Weather(); // сюда заносится весь прогноз
+//    Weather weather = new Weather("-1"); // сюда заносится весь прогноз
     ArrayList<Weather> weathers = new ArrayList<>(); // 4 объекта внутри списка прогноза
 
     public WeatherTask(Context context, RecyclerView recyclerView){
@@ -117,7 +117,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
      * создадим новый объект в ArrayList и будем изменять количество уже занесенных объектов.
      */
     private void setAttrOfForecast() {
-        weathers.add(new Weather()); // добавим новый элемент в список
+        weathers.add(new Weather()); // добавим новый элемент в список;
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String s = parser.getAttributeName(i);

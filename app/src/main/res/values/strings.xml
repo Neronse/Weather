@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Погода</string>
+    <string name="static_string_city">Данные по городу Новосибирск</string>
 </resources>

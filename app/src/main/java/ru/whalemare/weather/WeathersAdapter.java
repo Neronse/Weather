@@ -1,6 +1,7 @@
 package ru.whalemare.weather;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import ru.whalemare.weather.Activity.FullForecastActivity;
 
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
@@ -78,11 +81,9 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
 
         String nowTemperature = weathers.get(position).getTemperature_max()+"°C";
         String minMaxTemperature = weathers.get(position).getTemperature_min() + " | " + weathers.get(position).getTemperature_max(); // -20 | -27
-        String tod = weathers.get(position).getStringTodfromInt(weathers.get(position).getTod()); // TODO сделать 1 обращение к ArrayList
+        String tod = weathers.get(position).getHumanTod();
 
-        int cloudiness = weathers.get(position).getCloudiness();
-        int precipilation = weathers.get(position).getPrecipitation();
-        String aboutWeather = weathers.get(position).getAboutWeather(cloudiness, precipilation);  // TODO сделать 1 обращение к ArrayList
+        String aboutWeather = weathers.get(position).getHumanAboutWeather();
 
         holder.aboutWeather.setText(aboutWeather);
         holder.wind.setText(wind);
@@ -95,11 +96,25 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                //Context myContext = view.getContext();
                 Toast.makeText(context, "#" + position + " - Температура: " + weathers.get(position).getTemperature_max(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, FullForecastActivity.class); // описываем intent
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // todo разузнать
+                sendData(weathers.get(position), intent);
+
+                context.startActivity(intent); // переходим
+            }
+
+            private void sendData(Weather weather, Intent intent) {
+                intent.putExtra("t", weather.getTemperature_max()+"°C");
+                intent.putExtra("date", weather.getDay() + "." + weather.getMonth() + "." + weather.getYear());
+                intent.putExtra("tod", weather.getHumanTod() + ", " + weather.getHumanWeekday());
+                intent.putExtra("cloud", weather.getHumanAboutWeather());
+                intent.putExtra("pressure", weather.getPressure_min() + "-" + weather.getPressure_max() + " мм.рт.ст.");
+                intent.putExtra("wind", weather.getWind_min() + "-" + weather.getWind_max() + " м/с");
+                intent.putExtra("relwet", weather.getRelwet_min() + "-" + weather.getRelwet_max() + " %");
+                intent.putExtra("heat", weather.getHeat_min() + "°C | " + weather.getHeat_max() + "°C");
             }
         });
-
     }
 
     @Override

@@ -6,7 +6,12 @@ public class Weather {
     private String month = null; // месяц
     private String year = null; // год
 
+    private String humanAboutWeather = null; // Ясно: без осадков
+    private String humanTod = null; // время суток в человеческое строке: утро, день, вечер, ночь
+    private String humanWeekday = null;
+
     private int tod = -1; // время суток
+
     private int weekday = -1; // день недели
 
     private int cloudiness = -1; // облачность
@@ -54,12 +59,17 @@ public class Weather {
         this.year = year;
     }
 
+    public String getHumanWeekday() {
+        return humanWeekday;
+    }
+
     public int getTod() {
         return tod;
     }
 
     public void setTod(int tod) {
         this.tod = tod;
+        this.humanTod = getStringTodfromInt(tod);
     }
 
     public int getWeekday() {
@@ -68,6 +78,29 @@ public class Weather {
 
     public void setWeekday(int weekday) {
         this.weekday = weekday;
+        this.humanWeekday = getHumanWeekday(weekday);
+    }
+
+    private String getHumanWeekday(int weekday) {
+        switch (weekday)
+        {
+            case 1:
+                return "Воскресенье";
+            case 2:
+                return "Понедельник";
+            case 3:
+                return "Вторник";
+            case 4:
+                return "Среда";
+            case 5:
+                return "Четверг";
+            case 6:
+                return "Пятница";
+            case 7:
+                return "Суббота";
+        }
+
+        return null;
     }
 
     public int getCloudiness() {
@@ -76,6 +109,7 @@ public class Weather {
 
     public void setCloudiness(int cloudiness) {
         this.cloudiness = cloudiness;
+        this.humanAboutWeather = getAboutWeatherCloudines(cloudiness);
     }
 
     public int getPrecipitation() {
@@ -84,6 +118,7 @@ public class Weather {
 
     public void setPrecipitation(int precipitation) {
         this.precipitation = precipitation;
+        this.humanAboutWeather = getAboutWeatherPrecipitation(precipitation);
     }
 
     public int getRpower() {
@@ -124,6 +159,14 @@ public class Weather {
 
     public void setTemperature_max(int temperature_max) {
         this.temperature_max = temperature_max;
+    }
+
+    public String getHumanAboutWeather() {
+        return humanAboutWeather;
+    }
+
+    public String getHumanTod() {
+        return humanTod;
     }
 
     public int getTemperature_min() {
@@ -190,7 +233,7 @@ public class Weather {
         this.heat_min = heat_min;
     }
 
-    public String getStringTodfromInt(int tod) {
+    private String getStringTodfromInt(int tod) {
         switch (tod){
             case 0:
                 return "Ночь";
@@ -205,54 +248,40 @@ public class Weather {
         }
     }
 
-    public String getAboutWeather(int cloudiness, int precipitation)
+    private String getAboutWeatherCloudines(int cloudiness)
     {
-        String about = "";
-
         switch (cloudiness)
         {
             case 0:
-                about += "Ясно: ";
-                break;
+                return "Ясно: ";
             case 1:
-                about += "Малооблачно: ";
-                break;
+                return "Малооблачно: ";
             case 2:
-                about += "Облачно: ";
-                break;
+                return "Облачно: ";
             case 3:
-                about += "Пасмурно: ";
-                break;
+                return "Пасмурно: ";
             default:
-                about += "Неопределенно";
-                break;
+                return "Неопределенно";
         }
+    }
 
+    private String getAboutWeatherPrecipitation(int precipitation){
         switch (precipitation)
         {
             case 4:
-                about += "дождь";
-                break;
+                return humanAboutWeather += "дождь";
             case 5:
-                about += "ливень";
-                break;
+                return humanAboutWeather += "ливень";
             case 6:
-                about += "снег";
-                break;
+                return humanAboutWeather += "снег";
             case 7:
-                about += "снег";
-                break;
+                return humanAboutWeather += "снег";
             case 8:
-                about += "гроза";
-                break;
+                return humanAboutWeather += "гроза";
             case 10:
-                about += "без осадков";
-                break;
+                return humanAboutWeather += "без осадков";
             default:
-                about += "";
-                break;
+                return humanAboutWeather += "";
         }
-
-        return about;
     }
 }
