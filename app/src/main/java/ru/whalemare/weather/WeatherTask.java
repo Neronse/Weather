@@ -1,6 +1,8 @@
 package ru.whalemare.weather;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -11,7 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class WeatherTask extends AsyncTask<Void, Void, Void> {
+public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
     private final String SITE = "http://informer.gismeteo.ru/xml/29634.xml";
@@ -25,13 +27,21 @@ public class WeatherTask extends AsyncTask<Void, Void, Void> {
     private final String RELWET = "RELWET";
     private final String HEAT = "HEAT";
 
+    Context context;
+    RecyclerView recyclerView;
+
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
     Weather weather = new Weather(); // сюда заносится весь прогноз
     ArrayList<Weather> weathers = new ArrayList<>(); // 4 объекта внутри списка прогноза
 
+    public WeatherTask(Context context, RecyclerView recyclerView){
+        this.context = context;
+        this.recyclerView = recyclerView;
+    }
+
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected ArrayList<Weather> doInBackground(Void... voids) {
         try{
             URL url = new URL(SITE);
 
@@ -85,14 +95,22 @@ public class WeatherTask extends AsyncTask<Void, Void, Void> {
             // Небольшой тест на наличие записей в ArrayList
             for (int i=0; i<=countWeathers; i++)
                 Log.d(TAG, "День: " + weathers.get(i).getDay() + ". Температура макс: " + weathers.get(i).getTemperature_max() +
-                            "Ветер макс: " + weathers.get(i).getWind_max());
+                            "tod: " + weathers.get(i).getTod());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return weathers;
     }
 
+    @Override
+    protected void onPostExecute(ArrayList<Weather> weathers) {
+        super.onPostExecute(weathers);
+
+        RecyclerView.Adapter adapter = new WeathersAdapter(context, weathers);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
 
     /**
      * Т.к. это FORECAST это первый атрибут, который будет находится в .xml файле, то именно в нем
@@ -140,11 +158,11 @@ public class WeatherTask extends AsyncTask<Void, Void, Void> {
                     break;
                 case "rpower":
                     int rpower = Integer.parseInt(parser.getAttributeValue(i)); // переведем в число и занесем в объект
-                    weathers.get(countWeathers).setTod(rpower);
+                    weathers.get(countWeathers).setRpower(rpower);
                     break;
                 case "spower":
                     int spower = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setWeekday(spower);
+                    weathers.get(countWeathers).setSpower(spower);
                     break;
             }
         }

@@ -2,33 +2,33 @@ package ru.whalemare.weather;
 
 public class Weather {
 
-    String day = null; // число
-    String month = null; // месяц
-    String year = null; // год
+    private String day = null; // число
+    private String month = null; // месяц
+    private String year = null; // год
 
-    int tod = -1; // время суток
-    int weekday = -1; // день недели
+    private int tod = -1; // время суток
+    private int weekday = -1; // день недели
 
-    int cloudiness = -1; // облачность
-    int precipitation = -1; // тип осадков
-    int rpower = -1; // интенсивность осадков
-    int spower = -1; // вероятность грозы
+    private int cloudiness = -1; // облачность
+    private int precipitation = -1; // тип осадков
+    private int rpower = -1; // интенсивность осадков
+    private int spower = -1; // вероятность грозы
 
-    int pressure_max = -1; // давление максимальное
-    int pressure_min = -1; // давление минимальное
+    private int pressure_max = -1; // давление максимальное
+    private int pressure_min = -1; // давление минимальное
 
-    int temperature_max; // температура максимальная
-    int temperature_min; // температура минимальная
+    private int temperature_max; // температура максимальная
+    private int temperature_min; // температура минимальная
 
-    int wind_max = -1; // максимальное значение средней скорости ветра
-    int wind_min = -1; // минимальное значение средней скорости ветра
-    int wind_direction = -1; // направление ветра
+    private int wind_max = -1; // максимальное значение средней скорости ветра
+    private int wind_min = -1; // минимальное значение средней скорости ветра
+    private int wind_direction = -1; // направление ветра
 
-    int relwet_max = -1; // макс. относительная влажность воздуха
-    int relwet_min = -1; // мин. относительная влажность воздуха
+    private int relwet_max = -1; // макс. относительная влажность воздуха
+    private int relwet_min = -1; // мин. относительная влажность воздуха
 
-    int heat_max; // макс. температура воздуха по ощущениям
-    int heat_min; // мин. температура воздуха по ощущениям
+    private int heat_max; // макс. температура воздуха по ощущениям
+    private int heat_min; // мин. температура воздуха по ощущениям
 
     public String getDay() {
         return day;
@@ -188,5 +188,71 @@ public class Weather {
 
     public void setHeat_min(int heat_min) {
         this.heat_min = heat_min;
+    }
+
+    public String getStringTodfromInt(int tod) {
+        switch (tod){
+            case 0:
+                return "Ночь";
+            case 1:
+                return "Утро";
+            case 2:
+                return "День";
+            case 3:
+                return "Вечер";
+            default:
+                return "Сегодня"; // или завтра :)
+        }
+    }
+
+    public String getAboutWeather(int cloudiness, int precipitation)
+    {
+        String about = "";
+
+        switch (cloudiness)
+        {
+            case 0:
+                about += "Ясно: ";
+                break;
+            case 1:
+                about += "Малооблачно: ";
+                break;
+            case 2:
+                about += "Облачно: ";
+                break;
+            case 3:
+                about += "Пасмурно: ";
+                break;
+            default:
+                about += "Неопределенно";
+                break;
+        }
+
+        switch (precipitation)
+        {
+            case 4:
+                about += "дождь";
+                break;
+            case 5:
+                about += "ливень";
+                break;
+            case 6:
+                about += "снег";
+                break;
+            case 7:
+                about += "снег";
+                break;
+            case 8:
+                about += "гроза";
+                break;
+            case 10:
+                about += "без осадков";
+                break;
+            default:
+                about += "";
+                break;
+        }
+
+        return about;
     }
 }
