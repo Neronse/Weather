@@ -32,8 +32,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
-//    Weather weather = new Weather("-1"); // сюда заносится весь прогноз
-    ArrayList<Weather> weathers = new ArrayList<>(); // 4 объекта внутри списка прогноза
+    ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
 
     public WeatherTask(Context context, RecyclerView recyclerView){
         this.context = context;

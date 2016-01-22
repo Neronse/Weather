@@ -72,10 +72,6 @@ public class Weather {
         this.humanTod = getStringTodfromInt(tod);
     }
 
-    public int getWeekday() {
-        return weekday;
-    }
-
     public void setWeekday(int weekday) {
         this.weekday = weekday;
         this.humanWeekday = getHumanWeekday(weekday);
@@ -103,17 +99,9 @@ public class Weather {
         return null;
     }
 
-    public int getCloudiness() {
-        return cloudiness;
-    }
-
     public void setCloudiness(int cloudiness) {
         this.cloudiness = cloudiness;
         this.humanAboutWeather = getAboutWeatherCloudines(cloudiness);
-    }
-
-    public int getPrecipitation() {
-        return precipitation;
     }
 
     public void setPrecipitation(int precipitation) {
@@ -121,16 +109,8 @@ public class Weather {
         this.humanAboutWeather = getAboutWeatherPrecipitation(precipitation);
     }
 
-    public int getRpower() {
-        return rpower;
-    }
-
     public void setRpower(int rpower) {
         this.rpower = rpower;
-    }
-
-    public int getSpower() {
-        return spower;
     }
 
     public void setSpower(int spower) {
@@ -191,14 +171,6 @@ public class Weather {
 
     public void setWind_min(int wind_min) {
         this.wind_min = wind_min;
-    }
-
-    public int getWind_direction() {
-        return wind_direction;
-    }
-
-    public void setWind_direction(int wind_direction) {
-        this.wind_direction = wind_direction;
     }
 
     public int getRelwet_max() {

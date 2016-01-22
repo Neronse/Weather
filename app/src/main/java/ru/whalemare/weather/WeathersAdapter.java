@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -96,9 +95,10 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                Toast.makeText(context, "#" + position + " - Температура: " + weathers.get(position).getTemperature_max(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "#" + position + " - Температура: " + weathers.get(position).getTemperature_max(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FullForecastActivity.class); // описываем intent
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // todo разузнать
+
                 sendData(weathers.get(position), intent);
 
                 context.startActivity(intent); // переходим
