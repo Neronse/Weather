@@ -205,55 +205,32 @@ public class Weather {
         this.heat_min = heat_min;
     }
 
-    private String getStringTodfromInt(int tod) {
-        switch (tod){
-            case 0:
-                return "Ночь";
-            case 1:
-                return "Утро";
-            case 2:
-                return "День";
-            case 3:
-                return "Вечер";
-            default:
-                return "Сегодня"; // или завтра :)
-        }
+    private String getStringTodfromInt(int type) {
+        final String tods[] = {"Ночь", "Утро", "День", "Вечер"};
+
+        if (type < tods.length)
+            return tods[type];
+        else
+            return "Cегодня";
     }
 
-    private String getAboutWeatherCloudines(int cloudiness)
+    private String getAboutWeatherCloudines(int type)
     {
-        switch (cloudiness)
-        {
-            case 0:
-                return "Ясно: ";
-            case 1:
-                return "Малооблачно: ";
-            case 2:
-                return "Облачно: ";
-            case 3:
-                return "Пасмурно: ";
-            default:
-                return "Неопределенно";
-        }
+        final String cloudinesses[] = {"Ясно: ", "Малооблачно: ", "Облачно: ", "Пасмурно: "};
+        
+        if (type < cloudinesses.length)
+            return cloudinesses[type];
+        else
+            return "Неопределенно";
     }
 
-    private String getAboutWeatherPrecipitation(int precipitation){
-        switch (precipitation)
-        {
-            case 4:
-                return humanAboutWeather += "дождь";
-            case 5:
-                return humanAboutWeather += "ливень";
-            case 6:
-                return humanAboutWeather += "снег";
-            case 7:
-                return humanAboutWeather += "снег";
-            case 8:
-                return humanAboutWeather += "гроза";
-            case 10:
-                return humanAboutWeather += "без осадков";
-            default:
-                return humanAboutWeather += "";
-        }
+    private String getAboutWeatherPrecipitation(int type){
+        type = type-4;
+        final String precepitations[] = {"дождь", "ливень", "снег", "метель", "гроза", "без осадков"};
+
+        if (type < precepitations.length)
+            return humanAboutWeather += precepitations[type];
+        else
+            return humanAboutWeather;
     }
 }

@@ -38,10 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         pressRefresh = (TextView) findViewById(R.id.press_refresh);
 
-        // Проверка на подключение к интернету
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo internetInfo = cm.getActiveNetworkInfo();
-        if (internetInfo == null || !internetInfo.isConnectedOrConnecting())
+        if (!checkInternet())
             pressRefresh.setText("Нет подключения к интернету");
 
         //Закомменчено для соответствия ТЗ
@@ -67,5 +64,11 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean checkInternet() {
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo internetInfo = cm.getActiveNetworkInfo();
+        return !(internetInfo == null || !internetInfo.isConnectedOrConnecting());
     }
 }
