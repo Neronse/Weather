@@ -1,6 +1,9 @@
 package ru.whalemare.weather;
 
-public class Weather {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Weather implements Parcelable{
 
     private String day = null; // число
     private String month = null; // месяц
@@ -34,6 +37,46 @@ public class Weather {
 
     private int heat_max; // макс. температура воздуха по ощущениям
     private int heat_min; // мин. температура воздуха по ощущениям
+
+    public Weather(){};
+
+    protected Weather(Parcel in) {
+        day = in.readString();
+        month = in.readString();
+        year = in.readString();
+        humanAboutWeather = in.readString();
+        humanTod = in.readString();
+        humanWeekday = in.readString();
+        tod = in.readInt();
+        weekday = in.readInt();
+        cloudiness = in.readInt();
+        precipitation = in.readInt();
+        rpower = in.readInt();
+        spower = in.readInt();
+        pressure_max = in.readInt();
+        pressure_min = in.readInt();
+        temperature_max = in.readInt();
+        temperature_min = in.readInt();
+        wind_max = in.readInt();
+        wind_min = in.readInt();
+        wind_direction = in.readInt();
+        relwet_max = in.readInt();
+        relwet_min = in.readInt();
+        heat_max = in.readInt();
+        heat_min = in.readInt();
+    }
+
+    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
+        @Override
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        @Override
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
 
     public String getDay() {
         return day;
@@ -232,5 +275,37 @@ public class Weather {
             return humanAboutWeather += precepitations[type];
         else
             return humanAboutWeather;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(day);
+        parcel.writeString(month);
+        parcel.writeString(year);
+        parcel.writeString(humanAboutWeather);
+        parcel.writeString(humanTod);
+        parcel.writeString(humanWeekday);
+        parcel.writeInt(tod);
+        parcel.writeInt(weekday);
+        parcel.writeInt(cloudiness);
+        parcel.writeInt(precipitation);
+        parcel.writeInt(rpower);
+        parcel.writeInt(spower);
+        parcel.writeInt(pressure_max);
+        parcel.writeInt(pressure_min);
+        parcel.writeInt(temperature_max);
+        parcel.writeInt(temperature_min);
+        parcel.writeInt(wind_max);
+        parcel.writeInt(wind_min);
+        parcel.writeInt(wind_direction);
+        parcel.writeInt(relwet_max);
+        parcel.writeInt(relwet_min);
+        parcel.writeInt(heat_max);
+        parcel.writeInt(heat_min);
     }
 }

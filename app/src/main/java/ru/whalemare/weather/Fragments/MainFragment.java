@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.Weather;
 import ru.whalemare.weather.WeatherTask;
 
 public class MainFragment extends Fragment {
@@ -37,13 +38,20 @@ public class MainFragment extends Fragment {
     public MainFragment() {
     }
 
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-        return fragment;
+    private OnChooseForecastListener listener;
+    public interface OnChooseForecastListener {
+        void sendForecast(Weather weather);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (OnChooseForecastListener) context; // ??
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement onSomeEventListener");
+        }
     }
 
     @Override
@@ -63,6 +71,7 @@ public class MainFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
 
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_weathers);
         layoutManager = new LinearLayoutManager(getContext()); // или getActivity().getContext()?
         recyclerView.setLayoutManager(layoutManager);
@@ -80,7 +89,7 @@ public class MainFragment extends Fragment {
             Log.d(TAG, "onCreateView: интернета нет");
         } else {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-            WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView);
+            WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener);
             weatherTask.execute();
         }
     }
@@ -97,7 +106,7 @@ public class MainFragment extends Fragment {
         {
             case R.id.action_refresh:
                 pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView);
+                WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener);
                 weatherTask.execute();
                 return super.onOptionsItemSelected(item);
             default:

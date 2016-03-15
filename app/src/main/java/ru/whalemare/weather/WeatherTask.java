@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ru.whalemare.weather.Fragments.MainFragment;
+
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
@@ -29,14 +31,16 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     Context context;
     RecyclerView recyclerView;
+    MainFragment.OnChooseForecastListener listener;
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
     ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
 
-    public WeatherTask(Context context, RecyclerView recyclerView){
+    public WeatherTask(Context context, RecyclerView recyclerView, MainFragment.OnChooseForecastListener listener){
         this.context = context;
         this.recyclerView = recyclerView;
+        this.listener = listener;
     }
 
     @Override
@@ -106,7 +110,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     protected void onPostExecute(ArrayList<Weather> weathers) {
         super.onPostExecute(weathers);
 
-        RecyclerView.Adapter adapter = new WeathersAdapter(context, weathers);
+        RecyclerView.Adapter adapter = new WeathersAdapter(context, weathers, listener);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

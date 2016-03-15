@@ -11,19 +11,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ru.whalemare.weather.Activity.FullForecastActivity;
+import ru.whalemare.weather.Fragments.MainFragment;
 
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
     private final String TAG = "WHALETAG";
     private Context context;
     private ArrayList<Weather> weathers;
+    private MainFragment.OnChooseForecastListener listener;
 
-    WeathersAdapter(Context context, ArrayList<Weather> weathers)
+    WeathersAdapter(Context context, ArrayList<Weather> weathers, MainFragment.OnChooseForecastListener listener)
     {
         Log.d(TAG, "Пришло прогнозов: " + weathers.size());
         this.context = context;
         this.weathers = weathers;
+        this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -96,12 +98,14 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 //Toast.makeText(context, "#" + position + " - Температура: " + weathers.get(position).getTemperature_max(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, FullForecastActivity.class); // описываем intent
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // todo разузнать
+//                Intent intent = new Intent(context, FullForecastActivity.class); // описываем intent
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // todo разузнать
+//
+//                sendData(weathers.get(position), intent);
 
-                sendData(weathers.get(position), intent);
+                listener.sendForecast(weathers.get(position));
 
-                context.startActivity(intent); // переходим
+//                context.startActivity(intent); // переходим
             }
 
             private void sendData(Weather weather, Intent intent) {
