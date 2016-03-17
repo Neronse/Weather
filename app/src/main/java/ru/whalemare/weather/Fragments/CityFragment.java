@@ -4,10 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.List;
 
@@ -23,6 +24,14 @@ public class CityFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+
+    private CitiesCallback citiesCallback = new CitiesCallback() {
+        @Override
+        public void onCitiesRetrieved(List<City> cities) {
+            adapter = new CitiesAdapter(cities);
+            recyclerView.setAdapter(adapter);
+        }
+    };
 
     public CityFragment() {
         // Required empty public constructor
@@ -54,15 +63,8 @@ public class CityFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        CityTask cityTask = new CityTask(new CitiesCallback() {
-            @Override
-            public void onCitiesRetrieved(List<City> cities) {
-                for (int i = 0; i < cities.size(); i++)
-                    Log.d(TAG, "onCitiesRetrieved: количество городов: " + cities.get(i).getName());
-                adapter = new CitiesAdapter(cities);
-                recyclerView.setAdapter(adapter);
-            }
-        });
+        XmlPullParser parser = getActivity().getResources().getXml(R.xml.gismeteo);
+        CityTask cityTask = new CityTask(citiesCallback, parser);
         cityTask.execute();
     }
 

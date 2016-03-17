@@ -6,38 +6,47 @@ package ru.whalemare.weather.objects;
  */
 public class City {
 
-    private String code; // год города в гисметео
-    private String name; // имя города
-    private String region; // название области
+    private String gismeteoCode;
+    private String cityName;
+    private String regionCode;
+    private String regionName;
 
     public City() {
     }
 
-    public City(String name) {
-        this.name = name;
+    public City(String gismeteoCode) {
+        this.gismeteoCode = gismeteoCode;
     }
 
-    public String getCode() {
-        return code;
+    public String getGismeteoCode() {
+        return gismeteoCode;
     }
 
-    public String getName() {
-        return name;
+    public void setGismeteoCode(String gismeteoCode) {
+        this.gismeteoCode = gismeteoCode;
     }
 
-    public String getRegion() {
-        return region;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getRegionCode() {
+        return regionCode;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setRegionCode(String regionCode) {
+        this.regionCode = regionCode;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

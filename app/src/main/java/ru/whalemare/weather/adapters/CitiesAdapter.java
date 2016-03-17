@@ -61,13 +61,13 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(cities.get(position).getName());
+        holder.name.setText(cities.get(position).getCityName());
 
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                Log.d(TAG, "pos = " + position + "name = " + cities.get(position).getName());
-                Toast.makeText(view.getContext(), "OnClick: pos = " + position + ". name = " + cities.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "pos = " + position + "name = " + cities.get(position).getCityName());
+                Toast.makeText(view.getContext(), "OnClick: pos = " + position + ". name = " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
             }
         });
 
