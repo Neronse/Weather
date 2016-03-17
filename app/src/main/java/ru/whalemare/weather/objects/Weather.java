@@ -1,9 +1,9 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Weather implements Parcelable{
+public class Weather implements Parcelable {
 
     private String day = null; // число
     private String month = null; // месяц
@@ -38,7 +38,8 @@ public class Weather implements Parcelable{
     private int heat_max; // макс. температура воздуха по ощущениям
     private int heat_min; // мин. температура воздуха по ощущениям
 
-    public Weather(){};
+    public Weather() {
+    }
 
     protected Weather(Parcel in) {
         day = in.readString();
@@ -121,8 +122,7 @@ public class Weather implements Parcelable{
     }
 
     private String getHumanWeekday(int weekday) {
-        switch (weekday)
-        {
+        switch (weekday) {
             case 1:
                 return "Воскресенье";
             case 2:
@@ -257,18 +257,17 @@ public class Weather implements Parcelable{
             return "Cегодня";
     }
 
-    private String getAboutWeatherCloudines(int type)
-    {
+    private String getAboutWeatherCloudines(int type) {
         final String cloudinesses[] = {"Ясно: ", "Малооблачно: ", "Облачно: ", "Пасмурно: "};
-        
+
         if (type < cloudinesses.length)
             return cloudinesses[type];
         else
             return "Неопределенно";
     }
 
-    private String getAboutWeatherPrecipitation(int type){
-        type = type-4;
+    private String getAboutWeatherPrecipitation(int type) {
+        type = type - 4;
         final String precepitations[] = {"дождь", "ливень", "снег", "метель", "гроза", "без осадков"};
 
         if (type < precepitations.length)

@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.Weather;
-import ru.whalemare.weather.WeatherTask;
+import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.tasks.WeatherTask;
 
 public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";

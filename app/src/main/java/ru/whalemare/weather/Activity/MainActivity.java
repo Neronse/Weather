@@ -8,7 +8,7 @@ import android.widget.Toast;
 import ru.whalemare.weather.Fragments.FullForecastFragment;
 import ru.whalemare.weather.Fragments.MainFragment;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.Weather;
+import ru.whalemare.weather.objects.Weather;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnChooseForecastListener {
 

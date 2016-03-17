@@ -1,7 +1,6 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +11,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ru.whalemare.weather.Fragments.MainFragment;
+import ru.whalemare.weather.ItemClickListener;
+import ru.whalemare.weather.R;
+import ru.whalemare.weather.objects.Weather;
 
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
@@ -20,15 +22,14 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
     private ArrayList<Weather> weathers;
     private MainFragment.OnChooseForecastListener listener;
 
-    WeathersAdapter(Context context, ArrayList<Weather> weathers, MainFragment.OnChooseForecastListener listener)
-    {
+    public WeathersAdapter(Context context, ArrayList<Weather> weathers, MainFragment.OnChooseForecastListener listener) {
         Log.d(TAG, "Пришло прогнозов: " + weathers.size());
         this.context = context;
         this.weathers = weathers;
         this.listener = listener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView tod;
         public TextView aboutWeather;
@@ -80,7 +81,7 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
         String pressure = "Давление: " + weathers.get(position).getPressure_min() + " - " + weathers.get(position).getPressure_max() + " мм"; // 776 | 780 мм
         String relwet = "Влажность: " + weathers.get(position).getRelwet_min() + "-" + weathers.get(position).getRelwet_max() + "%"; // 88-90%
 
-        String nowTemperature = weathers.get(position).getTemperature_max()+"°C";
+        String nowTemperature = weathers.get(position).getTemperature_max() + "°C";
         String minMaxTemperature = weathers.get(position).getTemperature_min() + " | " + weathers.get(position).getTemperature_max(); // -20 | -27
         String tod = weathers.get(position).getHumanTod();
 
@@ -106,17 +107,6 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
                 listener.sendForecast(weathers.get(position));
 
 //                context.startActivity(intent); // переходим
-            }
-
-            private void sendData(Weather weather, Intent intent) {
-                intent.putExtra("t", weather.getTemperature_max()+"°C");
-                intent.putExtra("date", weather.getDay() + "." + weather.getMonth() + "." + weather.getYear());
-                intent.putExtra("tod", weather.getHumanTod() + ", " + weather.getHumanWeekday());
-                intent.putExtra("cloud", weather.getHumanAboutWeather());
-                intent.putExtra("pressure", weather.getPressure_min() + "-" + weather.getPressure_max() + " мм.рт.ст.");
-                intent.putExtra("wind", weather.getWind_min() + "-" + weather.getWind_max() + " м/с");
-                intent.putExtra("relwet", weather.getRelwet_min() + "-" + weather.getRelwet_max() + " %");
-                intent.putExtra("heat", weather.getHeat_min() + "°C | " + weather.getHeat_max() + "°C");
             }
         });
     }

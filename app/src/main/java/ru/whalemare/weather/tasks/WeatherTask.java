@@ -1,4 +1,4 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import ru.whalemare.weather.Fragments.MainFragment;
+import ru.whalemare.weather.adapters.WeathersAdapter;
+import ru.whalemare.weather.objects.Weather;
 
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
