@@ -4,7 +4,7 @@
              android:id="@+id/fragmentMain_relativeLayout"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             tools:context="ru.whalemare.weather.Fragments.MainFragment">
+             tools:context=".Fragments.ForecastFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarlayout"

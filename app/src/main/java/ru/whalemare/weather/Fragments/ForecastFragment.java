@@ -22,7 +22,7 @@ import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.Weather;
 import ru.whalemare.weather.tasks.WeatherTask;
 
-public class MainFragment extends Fragment {
+public class ForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
     private static final String KEY_WEATHER = "KEY_WEATHER";
 
@@ -33,11 +33,11 @@ public class MainFragment extends Fragment {
 
     private String weatherCode;
 
-    public MainFragment() {
+    public ForecastFragment() {
     }
 
-    public static MainFragment newInstance(String weatherCode){
-        MainFragment fragment = new MainFragment();
+    public static ForecastFragment newInstance(String weatherCode){
+        ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
         args.putString(KEY_WEATHER, weatherCode);
         fragment.setArguments(args);

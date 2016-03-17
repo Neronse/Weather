@@ -6,12 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import ru.whalemare.weather.Fragments.ForecastFragment;
 import ru.whalemare.weather.Fragments.FullForecastFragment;
-import ru.whalemare.weather.Fragments.MainFragment;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.Weather;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnChooseForecastListener {
+public class ForecastActivity extends AppCompatActivity implements ForecastFragment.OnChooseForecastListener {
 
     public static final String KEY_GISMETEO = "KEY_GISMETEO";
     private static final String TAG = "WHALETAG";
@@ -25,13 +25,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnCh
         gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
         Log.d(TAG, "resulting gismeteo code = " + gismeteo_code);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, new MainFragment().newInstance(gismeteo_code)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, new ForecastFragment().newInstance(gismeteo_code)).commit();
     }
 
     @Override
     public void sendForecast(Weather weather) {
         Fragment fullForecast = new FullForecastFragment().newInstance(weather);
         getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, fullForecast).commit();
-        Toast.makeText(MainActivity.this, "Оп", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ForecastActivity.this, "Оп", Toast.LENGTH_SHORT).show();
     }
 }

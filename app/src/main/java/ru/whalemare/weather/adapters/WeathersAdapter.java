@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ru.whalemare.weather.Fragments.MainFragment;
+import ru.whalemare.weather.Fragments.ForecastFragment;
 import ru.whalemare.weather.ItemClickListener;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.Weather;
@@ -20,9 +20,9 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
     private final String TAG = "WHALETAG";
     private Context context;
     private ArrayList<Weather> weathers;
-    private MainFragment.OnChooseForecastListener listener;
+    private ForecastFragment.OnChooseForecastListener listener;
 
-    public WeathersAdapter(Context context, ArrayList<Weather> weathers, MainFragment.OnChooseForecastListener listener) {
+    public WeathersAdapter(Context context, ArrayList<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
         Log.d(TAG, "Пришло прогнозов: " + weathers.size());
         this.context = context;
         this.weathers = weathers;

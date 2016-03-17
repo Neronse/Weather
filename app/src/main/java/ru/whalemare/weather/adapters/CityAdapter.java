@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.Activity.MainActivity;
+import ru.whalemare.weather.Activity.ForecastActivity;
 import ru.whalemare.weather.ItemClickListener;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.City;
@@ -72,7 +72,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 Toast.makeText(view.getContext(), "Выбран город " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                Intent intent = new Intent(view.getContext(), ForecastActivity.class);
                 intent.putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
                 view.getContext().startActivity(intent);
             }
