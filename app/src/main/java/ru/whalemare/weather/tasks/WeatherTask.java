@@ -1,6 +1,5 @@
 package ru.whalemare.weather.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,17 +30,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     private final String RELWET = "RELWET";
     private final String HEAT = "HEAT";
 
-    Context context;
     RecyclerView recyclerView;
     ForecastFragment.OnChooseForecastListener listener;
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
     ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
-    String weatherCode;
 
-    public WeatherTask(Context context, RecyclerView recyclerView, ForecastFragment.OnChooseForecastListener listener, String weatherCode){
-        this.context = context;
+    public WeatherTask(RecyclerView recyclerView, ForecastFragment.OnChooseForecastListener listener, String weatherCode){
         this.recyclerView = recyclerView;
         this.listener = listener;
         this.SITE += weatherCode + ".xml";
@@ -114,7 +110,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     protected void onPostExecute(ArrayList<Weather> weathers) {
         super.onPostExecute(weathers);
 
-        RecyclerView.Adapter adapter = new WeathersAdapter(context, weathers, listener);
+        RecyclerView.Adapter adapter = new WeathersAdapter(weathers, listener);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

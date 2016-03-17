@@ -98,7 +98,7 @@ public class ForecastFragment extends Fragment {
             Log.d(TAG, "onCreateView: интернета нет");
         } else {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-            WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener, weatherCode);
+            WeatherTask weatherTask = new WeatherTask(recyclerView, listener, weatherCode);
             weatherTask.execute();
         }
     }
@@ -115,7 +115,7 @@ public class ForecastFragment extends Fragment {
         {
             case R.id.action_refresh:
                 pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener, weatherCode);
+                WeatherTask weatherTask = new WeatherTask(recyclerView, listener, weatherCode);
                 weatherTask.execute();
                 return super.onOptionsItemSelected(item);
             default:

@@ -1,6 +1,5 @@
 package ru.whalemare.weather.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +17,11 @@ import ru.whalemare.weather.objects.Weather;
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
     private final String TAG = "WHALETAG";
-    private Context context;
     private ArrayList<Weather> weathers;
     private ForecastFragment.OnChooseForecastListener listener;
 
-    public WeathersAdapter(Context context, ArrayList<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
+    public WeathersAdapter(ArrayList<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
         Log.d(TAG, "Пришло прогнозов: " + weathers.size());
-        this.context = context;
         this.weathers = weathers;
         this.listener = listener;
     }
@@ -98,15 +95,7 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                //Toast.makeText(context, "#" + position + " - Температура: " + weathers.get(position).getTemperature_max(), Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(context, FullForecastActivity.class); // описываем intent
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // todo разузнать
-//
-//                sendData(weathers.get(position), intent);
-
                 listener.sendForecast(weathers.get(position));
-
-//                context.startActivity(intent); // переходим
             }
         });
     }
