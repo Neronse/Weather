@@ -44,27 +44,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/textview_margin"
-                    android:text="Легкий снегопад" />
+                    android:text="@string/aboutWeather" />
 
                 <TextView
                     android:id="@+id/wind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Ветер: 2 | 4 м/с" />
+                    android:text="@string/Wind" />
 
                 <TextView
                     android:id="@+id/pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Давление: 774 | 772 мм"
+                    android:text="@string/pressure"
                     android:layout_marginTop="@dimen/textview_margin" />
 
                 <TextView
                     android:id="@+id/relwet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Влажность: 78 %"
+                    android:text="@string/relwet_item"
                     android:layout_marginTop="@dimen/textview_margin"
                     android:layout_marginBottom="@dimen/textview_margin"/>
             </LinearLayout>
@@ -78,7 +78,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:text="-28°C"
+                android:text="@string/tempr_item"
                 android:textSize="48sp"
                 android:textColor="@color/white"/>
 
@@ -86,8 +86,8 @@
                 android:id="@+id/min_max_Temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-27 | -30"
-                android:textSize="22dp"
+                android:text="@string/min_max_tempr_item"
+                android:textSize="@dimen/sizeTempr"
                 android:layout_below="@+id/now_temperature"
                 android:layout_alignRight="@+id/now_temperature"
                 android:layout_alignEnd="@+id/now_temperature" />

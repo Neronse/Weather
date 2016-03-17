@@ -5,4 +5,19 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Novosibirsk">Новосибирск</string>
+    <string name="on_date">на 21.01.2016</string>
+    <string name="morning_thursday">Утро, Четверг</string>
+    <string name="clear_without_cloudiness">Ясно: без осадков</string>
+    <string name="press">Атмосферное давление: 770 мм.рт.ст.</string>
+    <string name="wind">Ветер: 3 м/c</string>
+    <string name="relwet">Относительная влажность воздуха: 88%</string>
+    <string name="heat">Температура по ощущениям: -25°C</string>
+    <string name="temp28">-28°C</string>
+    <string name="data_is_null">Данных нет \nНажмите кнопку \"Обновить\"</string>
+    <string name="aboutWeather">Легкий снегопад</string>
+    <string name="Wind">Ветер: 2 | 4 м/с</string>
+    <string name="pressure">Давление: 774 | 772 мм</string>
+    <string name="relwet_item">Влажность: 78 %</string>
+    <string name="tempr_item">-28°C</string>
+    <string name="min_max_tempr_item">-27 | -30</string>
 </resources>

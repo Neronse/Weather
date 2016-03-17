@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="на 21.01.2016"
+            android:text="@string/on_date"
             android:textColor="@color/secondary_text"
             android:id="@+id/now_data_full" />
 
@@ -55,29 +55,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Утро, Четверг"
+            android:text="@string/morning_thursday"
             android:layout_margin="@dimen/textview_margin"
             android:id="@+id/tod_weekday"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ясно: без осадков"
+            android:text="@string/clear_without_cloudiness"
             android:id="@+id/cloudiness"
-            android:layout_marginBottom="@dimen/textview_margin"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_marginBottom="@dimen/textview_margin"/>
     </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/scrollView"
-        android:layout_centerHorizontal="true" ></ScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -94,14 +82,14 @@
             android:layout_marginBottom="@dimen/textview_margin"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="Атмосферное давление: 770 мм.рт.ст." />
+            android:text="@string/press" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/wind"
             android:layout_marginBottom="@dimen/textview_margin"
-            android:text="Ветер: 3 м/c"
+            android:text="@string/wind"
             android:layout_below="@+id/pressure"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -111,7 +99,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/relwet"
             android:layout_marginBottom="@dimen/textview_margin"
-            android:text="Относительная влажность воздуха: 88%"
+            android:text="@string/relwet"
             android:layout_below="@+id/wind"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -121,11 +109,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/heat"
             android:layout_marginBottom="@dimen/textview_margin"
-            android:text="Температура по ощущениям: -25°C"
+            android:text="@string/heat"
             android:layout_below="@+id/relwet"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-
     </RelativeLayout>
 
 </RelativeLayout>
