@@ -18,7 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
+import ru.whalemare.weather.ForecastsCallback;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.objects.Weather;
 import ru.whalemare.weather.tasks.WeatherTask;
 
@@ -30,8 +34,18 @@ public class ForecastFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
 
     private String weatherCode;
+
+    ForecastsCallback callback = new ForecastsCallback() {
+        @Override
+        public void onForecastsRecieved(List<Weather> weathers) {
+            adapter = new WeathersAdapter(weathers, listener);
+            recyclerView.setAdapter(adapter);
+        }
+    };
+
 
     public ForecastFragment() {
     }
@@ -57,7 +71,7 @@ public class ForecastFragment extends Fragment {
         try {
             listener = (OnChooseForecastListener) context; // ??
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement onSomeEventListener");
+            throw new ClassCastException(context.toString() + " must implement Listener");
         }
     }
 
@@ -98,7 +112,7 @@ public class ForecastFragment extends Fragment {
             Log.d(TAG, "onCreateView: интернета нет");
         } else {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-            WeatherTask weatherTask = new WeatherTask(recyclerView, listener, weatherCode);
+            WeatherTask weatherTask = new WeatherTask(callback, listener, weatherCode);
             weatherTask.execute();
         }
     }
@@ -115,7 +129,7 @@ public class ForecastFragment extends Fragment {
         {
             case R.id.action_refresh:
                 pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(recyclerView, listener, weatherCode);
+                WeatherTask weatherTask = new WeatherTask(callback, listener, weatherCode);
                 weatherTask.execute();
                 return super.onOptionsItemSelected(item);
             default:

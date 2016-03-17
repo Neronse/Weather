@@ -1,7 +1,6 @@
 package ru.whalemare.weather.tasks;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -12,8 +11,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ru.whalemare.weather.ForecastsCallback;
 import ru.whalemare.weather.Fragments.ForecastFragment;
-import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.objects.Weather;
 
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
@@ -30,15 +29,15 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     private final String RELWET = "RELWET";
     private final String HEAT = "HEAT";
 
-    RecyclerView recyclerView;
     ForecastFragment.OnChooseForecastListener listener;
+    ForecastsCallback callback;
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
     ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
 
-    public WeatherTask(RecyclerView recyclerView, ForecastFragment.OnChooseForecastListener listener, String weatherCode){
-        this.recyclerView = recyclerView;
+    public WeatherTask(ForecastsCallback callback, ForecastFragment.OnChooseForecastListener listener, String weatherCode){
+        this.callback = callback;
         this.listener = listener;
         this.SITE += weatherCode + ".xml";
     }
@@ -109,10 +108,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     @Override
     protected void onPostExecute(ArrayList<Weather> weathers) {
         super.onPostExecute(weathers);
-
-        RecyclerView.Adapter adapter = new WeathersAdapter(weathers, listener);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        callback.onForecastsRecieved(weathers);
     }
 
     /**

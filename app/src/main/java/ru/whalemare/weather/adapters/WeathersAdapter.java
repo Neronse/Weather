@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ru.whalemare.weather.Fragments.ForecastFragment;
 import ru.whalemare.weather.ItemClickListener;
@@ -17,10 +17,10 @@ import ru.whalemare.weather.objects.Weather;
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
     private final String TAG = "WHALETAG";
-    private ArrayList<Weather> weathers;
+    private List<Weather> weathers;
     private ForecastFragment.OnChooseForecastListener listener;
 
-    public WeathersAdapter(ArrayList<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
+    public WeathersAdapter(List<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
         Log.d(TAG, "Пришло прогнозов: " + weathers.size());
         this.weathers = weathers;
         this.listener = listener;
