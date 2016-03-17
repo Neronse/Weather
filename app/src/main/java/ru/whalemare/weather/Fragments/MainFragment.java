@@ -23,20 +23,27 @@ import ru.whalemare.weather.objects.Weather;
 import ru.whalemare.weather.tasks.WeatherTask;
 
 public class MainFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "WHALETAG";
-
-    private String mParam1;
-    private String mParam2;
+    private static final String KEY_WEATHER = "KEY_WEATHER";
 
     private TextView pressRefresh;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
+    private String weatherCode;
+
     public MainFragment() {
     }
+
+    public static MainFragment newInstance(String weatherCode){
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putString(KEY_WEATHER, weatherCode);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     private OnChooseForecastListener listener;
     public interface OnChooseForecastListener {
@@ -58,7 +65,9 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d(TAG, "onCreate: ");
+        if (getArguments() != null) {
+            this.weatherCode = getArguments().getString(KEY_WEATHER, "-1");
+        }
     }
 
     @Override
@@ -89,7 +98,7 @@ public class MainFragment extends Fragment {
             Log.d(TAG, "onCreateView: интернета нет");
         } else {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-            WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener);
+            WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener, weatherCode);
             weatherTask.execute();
         }
     }
@@ -106,7 +115,7 @@ public class MainFragment extends Fragment {
         {
             case R.id.action_refresh:
                 pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener);
+                WeatherTask weatherTask = new WeatherTask(getActivity().getApplicationContext(), recyclerView, listener, weatherCode);
                 weatherTask.execute();
                 return super.onOptionsItemSelected(item);
             default:

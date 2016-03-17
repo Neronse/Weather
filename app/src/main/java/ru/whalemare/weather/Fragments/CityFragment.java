@@ -14,7 +14,7 @@ import java.util.List;
 
 import ru.whalemare.weather.CitiesCallback;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.adapters.CitiesAdapter;
+import ru.whalemare.weather.adapters.CityAdapter;
 import ru.whalemare.weather.objects.City;
 import ru.whalemare.weather.tasks.CityTask;
 
@@ -28,7 +28,7 @@ public class CityFragment extends Fragment {
     private CitiesCallback citiesCallback = new CitiesCallback() {
         @Override
         public void onCitiesRetrieved(List<City> cities) {
-            adapter = new CitiesAdapter(cities);
+            adapter = new CityAdapter(cities);
             recyclerView.setAdapter(adapter);
         }
     };
@@ -64,6 +64,7 @@ public class CityFragment extends Fragment {
         super.onResume();
 
         XmlPullParser parser = getActivity().getResources().getXml(R.xml.gismeteo);
+
         CityTask cityTask = new CityTask(citiesCallback, parser);
         cityTask.execute();
     }

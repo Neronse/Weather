@@ -20,7 +20,7 @@ import ru.whalemare.weather.objects.Weather;
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
-    private final String SITE = "http://informer.gismeteo.ru/xml/29634.xml";
+    private String SITE = "http://informer.gismeteo.ru/xml/";
 
     // теги
     private final String FORECAST = "FORECAST";
@@ -38,11 +38,13 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
     XmlPullParser parser; // парсер
     ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
+    String weatherCode;
 
-    public WeatherTask(Context context, RecyclerView recyclerView, MainFragment.OnChooseForecastListener listener){
+    public WeatherTask(Context context, RecyclerView recyclerView, MainFragment.OnChooseForecastListener listener, String weatherCode){
         this.context = context;
         this.recyclerView = recyclerView;
         this.listener = listener;
+        this.SITE += weatherCode + ".xml";
     }
 
     @Override

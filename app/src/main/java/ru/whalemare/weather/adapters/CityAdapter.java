@@ -1,7 +1,8 @@
 package ru.whalemare.weather.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.whalemare.weather.Activity.MainActivity;
 import ru.whalemare.weather.ItemClickListener;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.City;
@@ -19,12 +21,13 @@ import ru.whalemare.weather.objects.City;
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.ViewHolder> {
+public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     private static final String TAG = "WHALETAG";
     private List<City> cities = new ArrayList<>();
+    Context context;
 
-    public CitiesAdapter(List<City> cities) {
+    public CityAdapter(List<City> cities) {
         this.cities = cities;
     }
 
@@ -64,10 +67,14 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.ViewHolder
         holder.name.setText(cities.get(position).getCityName());
 
         holder.setClickListener(new ItemClickListener() {
+            public static final String KEY_GISMETEO = "KEY_GISMETEO";
+
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                Log.d(TAG, "pos = " + position + "name = " + cities.get(position).getCityName());
-                Toast.makeText(view.getContext(), "OnClick: pos = " + position + ". name = " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "Выбран город " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
+                view.getContext().startActivity(intent);
             }
         });
 
