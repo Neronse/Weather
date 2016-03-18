@@ -23,13 +23,18 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         final String KEY_GISMETEO = getApplicationContext().getResources().getString(R.string.KEY_GISMETEO);
         gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, new ForecastFragment().newInstance(gismeteo_code)).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activityMain, new ForecastFragment().newInstance(gismeteo_code))
+                .commit();
     }
 
     @Override
     public void sendForecast(Weather weather) {
         Fragment fullForecast = new FullForecastFragment().newInstance(weather);
-        getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, fullForecast).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activityMain, fullForecast)
+                .addToBackStack(null)
+                .commit();
         Toast.makeText(ForecastActivity.this, "Оп", Toast.LENGTH_SHORT).show();
     }
 }
