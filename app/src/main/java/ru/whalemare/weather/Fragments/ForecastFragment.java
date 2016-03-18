@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.whalemare.weather.ForecastsCallback;
+import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.objects.Weather;
@@ -37,6 +38,7 @@ public class ForecastFragment extends Fragment {
     private RecyclerView.Adapter adapter;
 
     private String weatherCode;
+    ParserConfig config;
 
     ForecastsCallback callback = new ForecastsCallback() {
         @Override
@@ -100,6 +102,7 @@ public class ForecastFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         pressRefresh = (TextView) view.findViewById(R.id.press_refresh);
+        config = new ParserConfig(getContext(), weatherCode, callback, listener);
 
         return view;
     }
@@ -112,7 +115,7 @@ public class ForecastFragment extends Fragment {
             Log.d(TAG, "onCreateView: интернета нет");
         } else {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-            WeatherTask weatherTask = new WeatherTask(callback, listener, weatherCode);
+            WeatherTask weatherTask = new WeatherTask(config);
             weatherTask.execute();
         }
     }
@@ -129,7 +132,7 @@ public class ForecastFragment extends Fragment {
         {
             case R.id.action_refresh:
                 pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(callback, listener, weatherCode);
+                WeatherTask weatherTask = new WeatherTask(config);
                 weatherTask.execute();
                 return super.onOptionsItemSelected(item);
             default:

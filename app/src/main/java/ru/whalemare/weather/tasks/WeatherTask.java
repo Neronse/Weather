@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import ru.whalemare.weather.ForecastsCallback;
 import ru.whalemare.weather.Fragments.ForecastFragment;
+import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.objects.Weather;
 
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
@@ -20,14 +21,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     private final String TAG = "WHALETAG";
     private String SITE = "http://informer.gismeteo.ru/xml/";
 
-    // теги
-    private final String FORECAST = "FORECAST";
-    private final String PHENOMENA = "PHENOMENA";
-    private final String PRESSURE = "PRESSURE";
-    private final String TEMPERATURE = "TEMPERATURE";
-    private final String WIND = "WIND";
-    private final String RELWET = "RELWET";
-    private final String HEAT = "HEAT";
+    private final ParserConfig config;
 
     ForecastFragment.OnChooseForecastListener listener;
     ForecastsCallback callback;
@@ -36,10 +30,11 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     XmlPullParser parser; // парсер
     ArrayList<Weather> weathers = new ArrayList<>(4); // 4 объекта внутри списка прогноза
 
-    public WeatherTask(ForecastsCallback callback, ForecastFragment.OnChooseForecastListener listener, String weatherCode){
-        this.callback = callback;
-        this.listener = listener;
-        this.SITE += weatherCode + ".xml";
+    public WeatherTask(ParserConfig config){
+        this.config = config;
+        this.callback = config.getCallback();
+        this.listener = config.getListener();
+        this.SITE += config.FORECAST_CODE_XML;
     }
 
     @Override
@@ -60,45 +55,36 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
                 {
                     String nameTag = parser.getName();
                     Log.d(TAG, "Новый тег: " + nameTag);
-                    switch(nameTag){
-                        case FORECAST:
-                            countWeathers++; // увеличим счетчик занесенных прогнозов
-                            setAttrOfForecast(); // занесем атрибуты в объект
-                          //  Log.d(TAG, "Занесли день: " + weathers.get(countWeathers).getDay() + "." + weathers.get(countWeathers).getMonth() + "." + weathers.get(countWeathers).getYear());
-                            break;
-                        case PHENOMENA:
-                            setAttrOfPhenomena();
-                           // Log.d(TAG, "Облачность: " + weathers.get(countWeathers).getCloudiness());
-                            break;
-                        case PRESSURE:
-                            setAttrOfPressure();
-                            //Log.d(TAG, "Max Pressure: " + weathers.get(countWeathers).getPressure_max());
-                            break;
-                        case TEMPERATURE:
-                            setAttrOfTemperature();
-                            break;
-                        case WIND:
-                            setAttrOfWind();
-                            break;
-                        case RELWET:
-                            setAttrOfRelwet();
-                            break;
-                        case HEAT:
-                            setAttrOfHeat();
-                            break;
-                        default:
-                            Log.d(TAG, "Совпадений нет");
-                            break;
+
+
+                    if (nameTag.equals(config.FORECAST)) {
+                        countWeathers++; // увеличим счетчик занесенных прогнозов
+                        setAttrOfForecast(); // занесем атрибуты в объект
+
+                    } else if (nameTag.equals(config.PHENOMENA)) {
+                        setAttrOfPhenomena();
+
+                    } else if (nameTag.equals(config.PRESSURE)) {
+                        setAttrOfPressure();
+
+                    } else if (nameTag.equals(config.TEMPERATURE)) {
+                        setAttrOfTemperature();
+
+                    } else if (nameTag.equals(config.WIND)) {
+                        setAttrOfWind();
+
+                    } else if (nameTag.equals(config.RELWET)) {
+                        setAttrOfRelwet();
+
+                    } else if (nameTag.equals(config.HEAT)) {
+                        setAttrOfHeat();
+
+                    } else {
+                        Log.d(TAG, "Совпадений нет");
                     }
                 }
                 eventType = parser.next();
             }
-
-            // Небольшой тест на наличие записей в ArrayList
-            for (int i=0; i<=countWeathers; i++)
-                Log.d(TAG, "День: " + weathers.get(i).getDay() + ". Температура макс: " + weathers.get(i).getTemperature_max() +
-                            "tod: " + weathers.get(i).getTod());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,24 +106,23 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String s = parser.getAttributeName(i);
-            switch (s) {
-                case "day":
-                    weathers.get(countWeathers).setDay(parser.getAttributeValue(i));
-                    break;
-                case "month":
-                    weathers.get(countWeathers).setMonth(parser.getAttributeValue(i));
-                    break;
-                case "year":
-                    weathers.get(countWeathers).setYear(parser.getAttributeValue(i));
-                    break;
-                case "tod":
-                    int tod = Integer.parseInt(parser.getAttributeValue(i)); // переведем в число и занесем в объект
-                    weathers.get(countWeathers).setTod(tod);
-                    break;
-                case "weekday":
-                    int weekday = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setWeekday(weekday);
-                    break;
+            if (s.equals(config.day)) {
+                weathers.get(countWeathers).setDay(parser.getAttributeValue(i));
+
+            } else if (s.equals(config.month)) {
+                weathers.get(countWeathers).setMonth(parser.getAttributeValue(i));
+
+            } else if (s.equals(config.year)) {
+                weathers.get(countWeathers).setYear(parser.getAttributeValue(i));
+
+            } else if (s.equals(config.tod)) {
+                int tod = Integer.parseInt(parser.getAttributeValue(i)); // переведем в число и занесем в объект
+                weathers.get(countWeathers).setTod(tod);
+
+            } else if (s.equals(config.weekday)) {
+                int weekday = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setWeekday(weekday);
+
             }
         }
     }
@@ -146,23 +131,22 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String phenomena = parser.getAttributeName(i);
-            switch(phenomena){
-                case "cloudiness":
-                    int cloudiness = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setCloudiness(cloudiness);
-                    break;
-                case "precipitation":
-                    int precipitation = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setPrecipitation(precipitation);
-                    break;
-                case "rpower":
-                    int rpower = Integer.parseInt(parser.getAttributeValue(i)); // переведем в число и занесем в объект
-                    weathers.get(countWeathers).setRpower(rpower);
-                    break;
-                case "spower":
-                    int spower = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setSpower(spower);
-                    break;
+            if (phenomena.equals(config.cloudiness)) {
+                int cloudiness = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setCloudiness(cloudiness);
+
+            } else if (phenomena.equals(config.precipitation)) {
+                int precipitation = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setPrecipitation(precipitation);
+
+            } else if (phenomena.equals(config.rpower)) {
+                int rpower = Integer.parseInt(parser.getAttributeValue(i)); // переведем в число и занесем в объект
+                weathers.get(countWeathers).setRpower(rpower);
+
+            } else if (phenomena.equals(config.spower)) {
+                int spower = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setSpower(spower);
+
             }
         }
     }
@@ -171,15 +155,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String pressure = parser.getAttributeName(i);
-            switch(pressure){
-                case "max":
-                    int max = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setPressure_max(max);
-                    break;
-                case "min":
-                    int min = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setPressure_min(min);
-                    break;
+            if (pressure.equals(config.max)) {
+                int max = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setPressure_max(max);
+
+            } else if (pressure.equals(config.min)) {
+                int min = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setPressure_min(min);
+
             }
         }
     }
@@ -188,15 +171,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String temperature = parser.getAttributeName(i);
-            switch(temperature){
-                case "max":
-                    int max = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setTemperature_max(max);
-                    break;
-                case "min":
-                    int min = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setTemperature_min(min);
-                    break;
+            if (temperature.equals(config.max)) {
+                int max = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setTemperature_max(max);
+
+            } else if (temperature.equals(config.min)) {
+                int min = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setTemperature_min(min);
+
             }
         }
     }
@@ -205,15 +187,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String wind = parser.getAttributeName(i);
-            switch(wind){
-                case "max":
-                    int max = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setWind_max(max);
-                    break;
-                case "min":
-                    int min = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setWind_min(min);
-                    break;
+            if (wind.equals(config.max)) {
+                int max = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setWind_max(max);
+
+            } else if (wind.equals(config.min)) {
+                int min = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setWind_min(min);
+
             }
         }
     }
@@ -222,15 +203,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String relwet = parser.getAttributeName(i);
-            switch(relwet){
-                case "max":
-                    int max = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setRelwet_max(max);
-                    break;
-                case "min":
-                    int min = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setRelwet_min(min);
-                    break;
+            if (relwet.equals(config.max)) {
+                int max = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setRelwet_max(max);
+
+            } else if (relwet.equals(config.min)) {
+                int min = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setRelwet_min(min);
+
             }
         }
     }
@@ -239,15 +219,14 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         for (int i=0; i<parser.getAttributeCount(); i++) // пройдемся по всем атрибутам
         {
             String heat = parser.getAttributeName(i);
-            switch(heat){
-                case "max":
-                    int max = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setHeat_max(max);
-                    break;
-                case "min":
-                    int min = Integer.parseInt(parser.getAttributeValue(i));
-                    weathers.get(countWeathers).setHeat_min(min);
-                    break;
+            if (heat.equals(config.max)) {
+                int max = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setHeat_max(max);
+
+            } else if (heat.equals(config.min)) {
+                int min = Integer.parseInt(parser.getAttributeValue(i));
+                weathers.get(countWeathers).setHeat_min(min);
+
             }
         }
     }
