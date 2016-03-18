@@ -77,7 +77,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="25dp"
                 android:text="@string/celcium"
                 android:textSize="48sp"
                 android:textColor="@color/white"/>
