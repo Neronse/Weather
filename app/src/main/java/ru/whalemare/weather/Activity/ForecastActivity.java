@@ -12,7 +12,6 @@ import ru.whalemare.weather.objects.Weather;
 
 public class ForecastActivity extends AppCompatActivity implements ForecastFragment.OnChooseForecastListener {
 
-    public static final String KEY_GISMETEO = "KEY_GISMETEO";
     private static final String TAG = "WHALETAG";
     public static String gismeteo_code;
 
@@ -21,6 +20,7 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final String KEY_GISMETEO = getApplicationContext().getResources().getString(R.string.KEY_GISMETEO);
         gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, new ForecastFragment().newInstance(gismeteo_code)).commit();

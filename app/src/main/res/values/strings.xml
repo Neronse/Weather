@@ -21,4 +21,5 @@
     <string name="tempr_item">-28°C</string>
     <string name="min_max_tempr_item">-27 | -30</string>
     <string name="wind">Ветер: </string>
+    <string name="KEY_GISMETEO">KEY_GISMETEO</string>
 </resources>

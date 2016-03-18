@@ -64,8 +64,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(cities.get(position).getCityName());
 
+        final String KEY_GISMETEO = holder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
         holder.setClickListener(new ItemClickListener() {
-            public static final String KEY_GISMETEO = "KEY_GISMETEO";
 
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {

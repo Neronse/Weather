@@ -33,9 +33,7 @@ public class CityFragment extends Fragment {
         }
     };
 
-    public CityFragment() {
-        // Required empty public constructor
-    }
+    public CityFragment() {}
 
     public static CityFragment newInstance(String param1) {
         CityFragment fragment = new CityFragment();

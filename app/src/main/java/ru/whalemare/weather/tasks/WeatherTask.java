@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import ru.whalemare.weather.ForecastsCallback;
-import ru.whalemare.weather.Fragments.ForecastFragment;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.objects.Weather;
 
@@ -23,7 +22,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final ParserConfig config;
 
-    ForecastFragment.OnChooseForecastListener listener;
     ForecastsCallback callback;
 
     int countWeathers = -1; // количество уже занесенных в объекты прогнозов
@@ -33,7 +31,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     public WeatherTask(ParserConfig config){
         this.config = config;
         this.callback = config.getCallback();
-        this.listener = config.getListener();
         this.SITE += config.FORECAST_CODE_XML;
     }
 

@@ -11,7 +11,6 @@ import ru.whalemare.weather.Fragments.ForecastFragment;
 public class ParserConfig {
 
     private final ForecastsCallback callback;
-    private final ForecastFragment.OnChooseForecastListener listener;
 
     public final String FORECAST_CODE_XML;
 
@@ -44,7 +43,6 @@ public class ParserConfig {
 
         this.FORECAST_CODE_XML = forecastCode + ".xml";
         this.callback = callback;
-        this.listener = listener;
 
         FORECAST = context.getResources().getString(R.string.FORECAST);
         PHENOMENA = context.getResources().getString(R.string.PHENOMENA);
@@ -68,9 +66,5 @@ public class ParserConfig {
 
     public ForecastsCallback getCallback() {
         return callback;
-    }
-
-    public ForecastFragment.OnChooseForecastListener getListener() {
-        return listener;
     }
 }
