@@ -1,5 +1,6 @@
 package ru.whalemare.weather.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.whalemare.weather.CitiesCallback;
+import ru.whalemare.weather.R;
 import ru.whalemare.weather.objects.City;
 
 /**
@@ -21,32 +23,24 @@ public class CityTask extends AsyncTask<Void, Void, List<City>> {
 
     private static final String TAG = "WHALETAG";
 
-
     private final CitiesCallback callback;
     private final List<City> cities = new ArrayList<>();
     private final XmlPullParser parser;
 
-    public CityTask(CitiesCallback callback, XmlPullParser parser) {
+    public CityTask(CitiesCallback callback, Context context) {
         this.callback = callback;
-        this.parser = parser;
+        this.parser = context.getResources().getXml(R.xml.gismeteo);
     }
+
+    private int count = 0;
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
     }
 
-    private static final String GISMETEO_CODE = "gismeteoCode";
-    private static final String CITY_NAME = "city_name";
-    private static final String REGION_CODE = "region_code";
-    private static final String REGION_NAME = "region_name";
-    private static final String ITEM = "item";
-
-    private static int count = 0;
-
     @Override
     protected List<City> doInBackground(Void... voids) {
-
         try {
             while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlPullParser.TEXT) {

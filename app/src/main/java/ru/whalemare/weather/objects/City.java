@@ -22,10 +22,6 @@ public class City {
         return gismeteoCode;
     }
 
-    public void setGismeteoCode(String gismeteoCode) {
-        this.gismeteoCode = gismeteoCode;
-    }
-
     public String getCityName() {
         return cityName;
     }

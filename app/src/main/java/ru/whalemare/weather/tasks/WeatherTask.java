@@ -108,7 +108,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     @Override
     protected void onPostExecute(ArrayList<Weather> weathers) {
         super.onPostExecute(weathers);
-        callback.onForecastsRecieved(weathers);
+        callback.onForecastsRetrieved(weathers);
     }
 
     /**

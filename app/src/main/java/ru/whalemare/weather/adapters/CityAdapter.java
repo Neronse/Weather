@@ -1,6 +1,5 @@
 package ru.whalemare.weather.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     private static final String TAG = "WHALETAG";
     private List<City> cities = new ArrayList<>();
-    Context context;
 
     public CityAdapter(List<City> cities) {
         this.cities = cities;

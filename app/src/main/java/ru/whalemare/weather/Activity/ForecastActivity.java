@@ -3,7 +3,6 @@ package ru.whalemare.weather.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import ru.whalemare.weather.Fragments.ForecastFragment;
@@ -23,7 +22,6 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         setContentView(R.layout.activity_main);
 
         gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
-        Log.d(TAG, "resulting gismeteo code = " + gismeteo_code);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.activityMain, new ForecastFragment().newInstance(gismeteo_code)).commit();
     }

@@ -9,5 +9,5 @@ import ru.whalemare.weather.objects.Weather;
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
 public interface ForecastsCallback {
-    void onForecastsRecieved(List<Weather> weathers);
+    void onForecastsRetrieved(List<Weather> weathers);
 }

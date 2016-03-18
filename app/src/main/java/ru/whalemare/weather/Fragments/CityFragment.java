@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import java.util.List;
 
 import ru.whalemare.weather.CitiesCallback;
@@ -70,9 +68,7 @@ public class CityFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        XmlPullParser parser = getActivity().getResources().getXml(R.xml.gismeteo);
-
-        CityTask cityTask = new CityTask(citiesCallback, parser);
+        CityTask cityTask = new CityTask(citiesCallback, getContext());
         cityTask.execute();
     }
 

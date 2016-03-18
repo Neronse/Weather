@@ -40,7 +40,7 @@ public class ForecastFragment extends Fragment {
 
     ForecastsCallback callback = new ForecastsCallback() {
         @Override
-        public void onForecastsRecieved(List<Weather> weathers) {
+        public void onForecastsRetrieved(List<Weather> weathers) {
             adapter = new WeathersAdapter(weathers, listener);
             recyclerView.setAdapter(adapter);
         }
