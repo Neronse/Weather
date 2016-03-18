@@ -23,5 +23,6 @@
     <string name="max">max</string>
     <string name="min">min</string>
 
+    <string name="KEY_GISMETEO">KEY_GISMETEO</string>
 
 </resources>

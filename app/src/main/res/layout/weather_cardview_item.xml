@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/Wind" />
+                    android:text="@string/wind" />
 
                 <TextView
                     android:id="@+id/pressure"
@@ -64,7 +64,7 @@
                     android:id="@+id/relwet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/relwet_item"
+                    android:text="@string/relwet"
                     android:layout_marginTop="@dimen/textview_margin"
                     android:layout_marginBottom="@dimen/textview_margin"/>
             </LinearLayout>
@@ -78,7 +78,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/tempr_item"
+                android:text="@string/celcium"
                 android:textSize="48sp"
                 android:textColor="@color/white"/>
 

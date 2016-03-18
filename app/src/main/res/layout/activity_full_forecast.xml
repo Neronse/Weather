@@ -82,14 +82,14 @@
             android:layout_marginBottom="@dimen/textview_margin"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="@string/press" />
+            android:text="@string/pressure" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/wind"
             android:layout_marginBottom="@dimen/textview_margin"
-            android:text="@string/wind_p"
+            android:text="@string/wind"
             android:layout_below="@+id/pressure"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
