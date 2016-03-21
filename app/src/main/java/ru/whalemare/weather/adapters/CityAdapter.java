@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +69,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                Toast.makeText(view.getContext(), "Выбран город " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), ForecastActivity.class)
                     .putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
                 view.getContext().startActivity(intent);

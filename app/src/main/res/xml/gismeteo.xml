@@ -457,12 +457,6 @@
         <region_name>Ярославская обл.</region_name>
     </item>
     <item>
-        <gismeteoCode>27612</gismeteoCode>
-        <city_name>Москва</city_name>
-        <region_code>77</region_code>
-        <region_name>Москва</region_name>
-    </item>
-    <item>
         <gismeteoCode>26063</gismeteoCode>
         <city_name>Санкт-Петербург</city_name>
         <region_code>78</region_code>

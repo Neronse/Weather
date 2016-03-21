@@ -1,5 +1,6 @@
 package ru.whalemare.weather.tasks;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,9 +19,12 @@ import ru.whalemare.weather.objects.Weather;
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
+    private final int TIME_PAUSE = 200;
     private String SITE = "http://informer.gismeteo.ru/xml/";
 
     private final ParserConfig config;
+
+    private ProgressDialog dialog;
 
     ForecastsCallback callback;
 
@@ -32,6 +36,16 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         this.config = config;
         this.callback = config.getCallback();
         this.SITE += config.FORECAST_CODE_XML;
+        dialog = new ProgressDialog(config.getContext());
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        dialog.setTitle("Поиск группы");
+        dialog.setMessage("Это не займет много времени");
+        dialog.show();
     }
 
     @Override
@@ -85,6 +99,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        pause(TIME_PAUSE);
         return weathers;
     }
 
@@ -92,6 +107,16 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
     protected void onPostExecute(ArrayList<Weather> weathers) {
         super.onPostExecute(weathers);
         callback.onForecastsRetrieved(weathers);
+        if (dialog.isShowing())
+            dialog.dismiss();
+    }
+
+    private void pause(int TIME_PAUSE) {
+        try {
+            Thread.sleep(TIME_PAUSE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -119,7 +144,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
             } else if (s.equals(config.weekday)) {
                 int weekday = Integer.parseInt(parser.getAttributeValue(i));
                 weathers.get(countWeathers).setWeekday(weekday);
-
             }
         }
     }
