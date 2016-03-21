@@ -11,6 +11,11 @@ public class City {
     private String regionCode;
     private String regionName;
 
+    public City(String gismeteoCode, String cityName) {
+        this.gismeteoCode = gismeteoCode;
+        this.cityName = cityName;
+    }
+
     public City() {
     }
 
