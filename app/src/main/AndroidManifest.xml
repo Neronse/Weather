@@ -14,7 +14,8 @@
         <activity android:name=".Activity.ForecastActivity">
         </activity>
 
-        <activity android:name=".Activity.CityActivity">
+        <activity android:name=".Activity.CityActivity"
+            android:theme="@style/SearchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
