@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Погода</string>
-    <string name="static_string_city">Данные по городу Новосибирск</string>
+    <string name="static_string_city">Данные</string>
+    <string name="Novosibirsk">Новосибирск</string>
+    <string name="on_date">на&#160;</string>
+    <string name="morning_thursday">Утро, Четверг</string>
+    <string name="clear_without_cloudiness">Ясно: без осадков</string>
+
+    <string name="pressure">Атмосферное давление:&#160;</string>
+    <string name="relwet">Относительная влажность воздуха:&#160;</string>
+    <string name="heat">Температура по ощущениям:&#160;</string>
+    <string name="wind">Ветер:&#160;</string>
+    <string name="celcium">°C</string>
+
+    <string name="temp28">-28°C</string>
+    <string name="data_is_null">Данных нет \nНажмите кнопку \"Обновить\"</string>
+    <string name="aboutWeather">Легкий снегопад</string>
+    <string name="min_max_tempr_item">-27 | -30</string>
+
 </resources>

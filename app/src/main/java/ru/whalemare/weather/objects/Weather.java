@@ -1,6 +1,9 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.objects;
 
-public class Weather {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Weather implements Parcelable {
 
     private String day = null; // число
     private String month = null; // месяц
@@ -34,6 +37,47 @@ public class Weather {
 
     private int heat_max; // макс. температура воздуха по ощущениям
     private int heat_min; // мин. температура воздуха по ощущениям
+
+    public Weather() {
+    }
+
+    protected Weather(Parcel in) {
+        day = in.readString();
+        month = in.readString();
+        year = in.readString();
+        humanAboutWeather = in.readString();
+        humanTod = in.readString();
+        humanWeekday = in.readString();
+        tod = in.readInt();
+        weekday = in.readInt();
+        cloudiness = in.readInt();
+        precipitation = in.readInt();
+        rpower = in.readInt();
+        spower = in.readInt();
+        pressure_max = in.readInt();
+        pressure_min = in.readInt();
+        temperature_max = in.readInt();
+        temperature_min = in.readInt();
+        wind_max = in.readInt();
+        wind_min = in.readInt();
+        wind_direction = in.readInt();
+        relwet_max = in.readInt();
+        relwet_min = in.readInt();
+        heat_max = in.readInt();
+        heat_min = in.readInt();
+    }
+
+    public static final Creator<Weather> CREATOR = new Creator<Weather>() {
+        @Override
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        @Override
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
 
     public String getDay() {
         return day;
@@ -78,8 +122,7 @@ public class Weather {
     }
 
     private String getHumanWeekday(int weekday) {
-        switch (weekday)
-        {
+        switch (weekday) {
             case 1:
                 return "Воскресенье";
             case 2:
@@ -205,55 +248,63 @@ public class Weather {
         this.heat_min = heat_min;
     }
 
-    private String getStringTodfromInt(int tod) {
-        switch (tod){
-            case 0:
-                return "Ночь";
-            case 1:
-                return "Утро";
-            case 2:
-                return "День";
-            case 3:
-                return "Вечер";
-            default:
-                return "Сегодня"; // или завтра :)
-        }
+    private String getStringTodfromInt(int type) {
+        final String tods[] = {"Ночь", "Утро", "День", "Вечер"};
+
+        if (type < tods.length)
+            return tods[type];
+        else
+            return "Cегодня";
     }
 
-    private String getAboutWeatherCloudines(int cloudiness)
-    {
-        switch (cloudiness)
-        {
-            case 0:
-                return "Ясно: ";
-            case 1:
-                return "Малооблачно: ";
-            case 2:
-                return "Облачно: ";
-            case 3:
-                return "Пасмурно: ";
-            default:
-                return "Неопределенно";
-        }
+    private String getAboutWeatherCloudines(int type) {
+        final String cloudinesses[] = {"Ясно: ", "Малооблачно: ", "Облачно: ", "Пасмурно: "};
+
+        if (type < cloudinesses.length)
+            return cloudinesses[type];
+        else
+            return "Неопределенно";
     }
 
-    private String getAboutWeatherPrecipitation(int precipitation){
-        switch (precipitation)
-        {
-            case 4:
-                return humanAboutWeather += "дождь";
-            case 5:
-                return humanAboutWeather += "ливень";
-            case 6:
-                return humanAboutWeather += "снег";
-            case 7:
-                return humanAboutWeather += "снег";
-            case 8:
-                return humanAboutWeather += "гроза";
-            case 10:
-                return humanAboutWeather += "без осадков";
-            default:
-                return humanAboutWeather += "";
-        }
+    private String getAboutWeatherPrecipitation(int type) {
+        type = type - 4;
+        final String precepitations[] = {"дождь", "ливень", "снег", "метель", "гроза", "без осадков"};
+
+        if (type < precepitations.length)
+            return humanAboutWeather += precepitations[type];
+        else
+            return humanAboutWeather;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(day);
+        parcel.writeString(month);
+        parcel.writeString(year);
+        parcel.writeString(humanAboutWeather);
+        parcel.writeString(humanTod);
+        parcel.writeString(humanWeekday);
+        parcel.writeInt(tod);
+        parcel.writeInt(weekday);
+        parcel.writeInt(cloudiness);
+        parcel.writeInt(precipitation);
+        parcel.writeInt(rpower);
+        parcel.writeInt(spower);
+        parcel.writeInt(pressure_max);
+        parcel.writeInt(pressure_min);
+        parcel.writeInt(temperature_max);
+        parcel.writeInt(temperature_min);
+        parcel.writeInt(wind_max);
+        parcel.writeInt(wind_min);
+        parcel.writeInt(wind_direction);
+        parcel.writeInt(relwet_max);
+        parcel.writeInt(relwet_min);
+        parcel.writeInt(heat_max);
+        parcel.writeInt(heat_min);
     }
 }
