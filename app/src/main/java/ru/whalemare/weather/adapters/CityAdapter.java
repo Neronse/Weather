@@ -2,6 +2,7 @@ package ru.whalemare.weather.adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,15 @@ import ru.whalemare.weather.objects.City;
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     private static final String TAG = "WHALETAG";
-    private List<City> cities = new ArrayList<>();
+    private List<City> cities;
 
     public CityAdapter(List<City> cities) {
-        this.cities = cities;
+        this.cities = new ArrayList<>(cities);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_city, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_city, parent, false);
         return new ViewHolder(view);
     }
 
@@ -70,8 +71,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 Toast.makeText(view.getContext(), "Выбран город " + cities.get(position).getCityName(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(view.getContext(), ForecastActivity.class);
-                intent.putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
+                Intent intent = new Intent(view.getContext(), ForecastActivity.class)
+                    .putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
                 view.getContext().startActivity(intent);
             }
         });
@@ -82,4 +83,60 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public int getItemCount() {
         return cities.size();
     }
+
+    public void animateTo(List<City> cities) {
+        applyAndAnimateRemovals(cities);
+        applyAndAnimateAdditions(cities);
+        applyAndAnimateMoveditems(cities);
+    }
+
+    private void applyAndAnimateAdditions(List<City> newCities) {
+        for (int i = 0, count = newCities.size(); i<count; i++) {
+            final City city = newCities.get(i);
+            if (!cities.contains(city)) {
+                addItem(i, city);
+            }
+        }
+        Log.d(TAG, "applyAndAnimateAdditions: " + cities.size());
+    }
+
+    private void applyAndAnimateMoveditems(List<City> newCities) {
+        for (int toPosition = newCities.size() - 1; toPosition >= 0; toPosition--) {
+            final City city = newCities.get(toPosition);
+            final int fromPosition = cities.indexOf(city);
+
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
+        Log.d(TAG, "applyAndAnimateMoveditems: " + cities.size());
+    }
+
+    private void applyAndAnimateRemovals(List<City> newCities) {
+        for (int i = cities.size() - 1; i >= 0; i--) {
+            final City city = cities.get(i);
+            if (!newCities.contains(city)) {
+                removeItem(i);
+            }
+        }
+        Log.d(TAG, "applyAndAnimateRemovals: " + cities.size());
+    }
+
+    public void addItem(int position, City city) {
+        cities.add(position, city);
+        notifyItemInserted(position);
+    }
+
+    private void moveItem(int from, int to) {
+        final City city = cities.remove(from);
+        cities.add(to, city);
+        notifyItemMoved(from, to);
+    }
+
+    public City removeItem(int position) {
+        final City city = cities.remove(position);
+        notifyItemRemoved(position);
+        return city;
+    }
+
 }

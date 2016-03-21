@@ -13,6 +13,9 @@ public class CityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_city, new CityFragment()).commit();
+        if (savedInstanceState == null)
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_city, new CityFragment().newInstance())
+                    .commit();
     }
 }
