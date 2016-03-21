@@ -66,7 +66,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_city, container, false);
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar_city);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
 

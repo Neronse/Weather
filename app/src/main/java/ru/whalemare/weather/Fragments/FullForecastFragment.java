@@ -48,7 +48,7 @@ public class FullForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_full_forecast, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_full);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
