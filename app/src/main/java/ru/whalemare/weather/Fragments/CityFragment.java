@@ -2,12 +2,17 @@ package ru.whalemare.weather.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,7 +24,7 @@ import ru.whalemare.weather.adapters.CityAdapter;
 import ru.whalemare.weather.objects.City;
 import ru.whalemare.weather.tasks.CityTask;
 
-public class CityFragment extends Fragment {
+public class CityFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "WHALETAG";
     private RecyclerView recyclerView;
@@ -75,5 +80,25 @@ public class CityFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_sw, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        // filter logic
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

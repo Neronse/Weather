@@ -17,5 +17,6 @@
     <string name="aboutWeather">Легкий снегопад</string>
     <string name="min_max_tempr_item">-27 | -30</string>
     <string name="Morning">Утром</string>
+    <string name="search">Поиск</string>
 
 </resources>
