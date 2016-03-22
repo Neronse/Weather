@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.CitiesCallback;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.interfaces.CitiesCallback;
 import ru.whalemare.weather.objects.City;
 
 /**

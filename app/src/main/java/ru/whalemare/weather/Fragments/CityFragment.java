@@ -18,9 +18,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.CitiesCallback;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
+import ru.whalemare.weather.interfaces.CitiesCallback;
 import ru.whalemare.weather.objects.City;
 import ru.whalemare.weather.tasks.CityTask;
 

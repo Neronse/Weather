@@ -11,8 +11,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-import ru.whalemare.weather.ForecastsCallback;
 import ru.whalemare.weather.ParserConfig;
+import ru.whalemare.weather.interfaces.ForecastsCallback;
 import ru.whalemare.weather.objects.Weather;
 
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {

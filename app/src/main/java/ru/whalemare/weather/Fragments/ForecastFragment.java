@@ -16,10 +16,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.ForecastsCallback;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
+import ru.whalemare.weather.interfaces.ForecastsCallback;
 import ru.whalemare.weather.objects.Weather;
 import ru.whalemare.weather.tasks.WeatherTask;
 

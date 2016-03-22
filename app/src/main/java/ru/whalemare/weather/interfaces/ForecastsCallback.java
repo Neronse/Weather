@@ -1,4 +1,4 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.interfaces;
 
 import java.util.List;
 
