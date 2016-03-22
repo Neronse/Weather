@@ -7,8 +7,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarlayout_city"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/toolbar"/>
+        android:layout_height="?attr/actionBarSize"
+        android:visibility="invisible">
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView

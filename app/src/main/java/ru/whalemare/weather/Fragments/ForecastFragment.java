@@ -5,19 +5,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.whalemare.weather.ForecastsCallback;
@@ -30,6 +26,7 @@ import ru.whalemare.weather.tasks.WeatherTask;
 public class ForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
     private static final String KEY_WEATHER = "KEY_WEATHER";
+    private static final String KEY_FORECASTS = "KEY_FORECASTS";
 
     private TextView pressRefresh;
 
@@ -38,16 +35,21 @@ public class ForecastFragment extends Fragment {
     private RecyclerView.Adapter adapter;
 
     private String weatherCode;
+    private ArrayList<Weather> weathers;
     ParserConfig config;
 
     ForecastsCallback callback = new ForecastsCallback() {
         @Override
         public void onForecastsRetrieved(List<Weather> weathers) {
+            setWeathers(weathers);
             adapter = new WeathersAdapter(weathers, listener);
             recyclerView.setAdapter(adapter);
         }
     };
 
+    void setWeathers(List<Weather> weathers) {
+        this.weathers = (ArrayList<Weather>) weathers;
+    }
 
     public ForecastFragment() {
     }
@@ -69,7 +71,6 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             listener = (OnChooseForecastListener) context; // ??
         } catch (ClassCastException e) {
@@ -82,7 +83,7 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            this.weatherCode = getArguments().getString(KEY_WEATHER, "-1");
+            this.weatherCode = getArguments().getString(KEY_WEATHER, null);
         }
     }
 
@@ -90,12 +91,6 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.d(TAG, "onCreateView: ");
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_weathers);
         layoutManager = new LinearLayoutManager(getContext()); // или getActivity().getContext()?
@@ -108,7 +103,8 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onStart() {
+        super.onStart();
         super.onResume();
         if (!checkInternet()) {
             pressRefresh.setText("Нет подключения к интернету");
@@ -117,26 +113,6 @@ public class ForecastFragment extends Fragment {
             pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
             WeatherTask weatherTask = new WeatherTask(config);
             weatherTask.execute();
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
-            case R.id.action_refresh:
-                pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
-                WeatherTask weatherTask = new WeatherTask(config);
-                weatherTask.execute();
-                return super.onOptionsItemSelected(item);
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

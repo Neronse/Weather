@@ -62,15 +62,18 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(cities.get(position).getCityName());
+        final String CITY_NAME = cities.get(position).getCityName();
+        holder.name.setText(CITY_NAME);
 
         final String KEY_GISMETEO = holder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
+        final String KEY_CITYNAME = holder.name.getContext().getResources().getString(R.string.KEY_CITYNAME);
         holder.setClickListener(new ItemClickListener() {
 
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 Intent intent = new Intent(view.getContext(), ForecastActivity.class)
-                    .putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode());
+                    .putExtra(KEY_GISMETEO, cities.get(position).getGismeteoCode())
+                        .putExtra(KEY_CITYNAME, CITY_NAME);
                 view.getContext().startActivity(intent);
             }
         });

@@ -2,7 +2,6 @@ package ru.whalemare.weather.tasks;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -19,7 +18,7 @@ import ru.whalemare.weather.objects.Weather;
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
-    private final int TIME_PAUSE = 200;
+    private final int TIME_PAUSE = 800;
     private String SITE = "http://informer.gismeteo.ru/xml/";
 
     private final ParserConfig config;
@@ -45,6 +44,7 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
         dialog.setTitle("Поиск группы");
         dialog.setMessage("Это не займет много времени");
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -65,8 +65,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
                 if (eventType == XmlPullParser.START_TAG) // если новый тег
                 {
                     String nameTag = parser.getName();
-                    Log.d(TAG, "Новый тег: " + nameTag);
-
 
                     if (nameTag.equals(config.FORECAST)) {
                         countWeathers++; // увеличим счетчик занесенных прогнозов
@@ -89,9 +87,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
                     } else if (nameTag.equals(config.HEAT)) {
                         setAttrOfHeat();
-
-                    } else {
-                        Log.d(TAG, "Совпадений нет");
                     }
                 }
                 eventType = parser.next();

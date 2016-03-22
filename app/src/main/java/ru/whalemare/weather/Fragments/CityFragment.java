@@ -3,11 +3,9 @@ package ru.whalemare.weather.Fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,10 +63,6 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_city, container, false);
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_city);
         layoutManager = new LinearLayoutManager(getContext());
