@@ -48,16 +48,10 @@ public class FullForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_full_forecast, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_full);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
 
         String textNowTemperature = weather.getTemperature_max() + "°C"; //
         String textData = "на " + weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
@@ -88,15 +82,6 @@ public class FullForecastFragment extends Fragment {
 
         return view;
     }
-
-
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {

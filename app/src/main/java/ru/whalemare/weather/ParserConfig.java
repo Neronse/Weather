@@ -14,6 +14,8 @@ public class ParserConfig {
 
     public final String FORECAST_CODE_XML;
 
+    public final Context context;
+
     // теги
     public final String FORECAST;
     public final String PHENOMENA;
@@ -43,6 +45,7 @@ public class ParserConfig {
 
         this.FORECAST_CODE_XML = forecastCode + ".xml";
         this.callback = callback;
+        this.context = context;
 
         FORECAST = context.getResources().getString(R.string.FORECAST);
         PHENOMENA = context.getResources().getString(R.string.PHENOMENA);
@@ -62,6 +65,10 @@ public class ParserConfig {
         spower = context.getResources().getString(R.string.spower);
         max = context.getResources().getString(R.string.max);
         min = context.getResources().getString(R.string.min);
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public ForecastsCallback getCallback() {

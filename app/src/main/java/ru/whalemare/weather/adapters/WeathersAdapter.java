@@ -74,8 +74,6 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
     @Override
     public void onBindViewHolder(WeathersAdapter.ViewHolder holder, int position) {
 
-
-
         String wind = holder.wind.getContext().getResources().getString(R.string.wind) + weathers.get(position).getWind_min() + " - " + weathers.get(position).getWind_max() + " м/с"; // 2-4 м/с
         String pressure = holder.wind.getContext().getResources().getString(R.string.pressure) + weathers.get(position).getPressure_min() + " - " + weathers.get(position).getPressure_max() + " мм"; // 776 | 780 мм
         String relwet = holder.wind.getContext().getResources().getString(R.string.relwet) + weathers.get(position).getRelwet_min() + "-" + weathers.get(position).getRelwet_max() + "%"; // 88-90%

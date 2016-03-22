@@ -1,43 +1,38 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    android:id="@+id/fragmentMain_relativeLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
 
-             android:id="@+id/fragmentMain_relativeLayout"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             tools:context=".Fragments.ForecastFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".Fragments.ForecastFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:title="@string/app_name"
-            android:background="@color/primary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.Toolbar>
+        android:layout_height="?attr/actionBarSize"
+        android:visibility="invisible">
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_weathers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_below="@+id/appbarlayout"
-        android:layout_marginTop="@dimen/cardview_margin"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/cardview_margin">
     </android.support.v7.widget.RecyclerView>
 
     <TextView
+        android:id="@+id/press_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/data_is_null"
-        android:id="@+id/press_refresh"
-        android:gravity="center_vertical|center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/data_is_null"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 </RelativeLayout>

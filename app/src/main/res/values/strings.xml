@@ -18,5 +18,6 @@
     <string name="min_max_tempr_item">-27 | -30</string>
     <string name="Morning">Утром</string>
     <string name="search">Поиск</string>
+    <string name="KEY_CITYNAME">KEY_CITYNAME</string>
 
 </resources>
