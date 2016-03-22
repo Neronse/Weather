@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,12 @@ import ru.whalemare.weather.tasks.CityTask;
 public class CityFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "WHALETAG";
+
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private CityAdapter adapter;
-    Toolbar toolbar;
 
-    List<City> cities;
+    private List<City> cities;
 
     private CitiesCallback citiesCallback = new CitiesCallback() {
         @Override
@@ -45,7 +46,6 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     };
 
     void setCities(List<City> cities) {
-
         this.cities = new ArrayList<>(cities);
     }
 
@@ -66,7 +66,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_city, container, false);
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
 
@@ -111,6 +111,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         return false;
     }
 
+    private boolean show = true;
     private List<City> filter(List<City> cities, String query) {
         query = query.toLowerCase();
         final List<City> filteredList = new ArrayList<>();
@@ -120,8 +121,17 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
                 filteredList.add(city);
             }
         }
-        Log.d(TAG, "filter: " + filteredList.size());
+
+        Log.d(TAG, "filter: show_outside = " + show);
+        if (filteredList.size() <= 0) {
+            if (show) {
+                Toast.makeText(getContext(), "Города по запросу не найдено", Toast.LENGTH_SHORT).show();
+                show = false;
+            }
+        } else {
+            show = true;
+        }
+
         return filteredList;
     }
-
 }
