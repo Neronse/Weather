@@ -1,18 +1,16 @@
 package ru.whalemare.weather.interfaces;
 
-import java.util.List;
-
 import ru.whalemare.weather.objects.City;
 
 /**
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public interface IDatabaseHandler {
+public interface DatabaseHandler {
 
-    void addCity(City city);
+    void getData();
 
-    void setCities(List<City> cities);
+    void setData();
 
     void setVersion(int version);
 
@@ -22,5 +20,4 @@ public interface IDatabaseHandler {
 
     City getCity(int position);
 
-    List<City> getAllCities();
 }

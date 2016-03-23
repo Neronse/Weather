@@ -19,5 +19,6 @@
     <string name="Morning">Утром</string>
     <string name="search">Поиск</string>
     <string name="KEY_CITYNAME">KEY_CITYNAME</string>
+    <string name="database_name">citiesDatabase</string>
 
 </resources>

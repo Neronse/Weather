@@ -128,4 +128,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
 
         return filteredList;
     }
+
+    void loadIntoDatabase(){
+    }
 }
