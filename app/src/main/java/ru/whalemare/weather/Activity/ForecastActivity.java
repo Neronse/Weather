@@ -1,4 +1,4 @@
-package ru.whalemare.weather.Activity;
+package ru.whalemare.weather.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,10 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import ru.whalemare.weather.Fragments.ForecastFragment;
-import ru.whalemare.weather.Fragments.FullForecastFragment;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.fragments.ForecastFragment;
+import ru.whalemare.weather.fragments.FullForecastFragment;
+import ru.whalemare.weather.models.Weather;
 
 public class ForecastActivity extends AppCompatActivity implements ForecastFragment.OnChooseForecastListener {
 

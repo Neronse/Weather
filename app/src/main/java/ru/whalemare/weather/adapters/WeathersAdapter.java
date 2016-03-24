@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ru.whalemare.weather.Fragments.ForecastFragment;
-import ru.whalemare.weather.ItemClickListener;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.fragments.ForecastFragment;
+import ru.whalemare.weather.interfaces.ItemClickListener;
+import ru.whalemare.weather.models.Weather;
 
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 

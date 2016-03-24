@@ -5,7 +5,7 @@
     android:id="@+id/activity_city"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.whalemare.weather.Activity.CityActivity">
+    tools:context="ru.whalemare.weather.activity.CityActivity">
 
     <include layout="@layout/toolbar"/>
 

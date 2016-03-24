@@ -11,10 +11,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.Activity.ForecastActivity;
-import ru.whalemare.weather.ItemClickListener;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.activity.ForecastActivity;
+import ru.whalemare.weather.interfaces.ItemClickListener;
+import ru.whalemare.weather.models.City;
 
 /**
  * @author Anton Vlasov

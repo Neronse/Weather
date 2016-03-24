@@ -1,4 +1,4 @@
-package ru.whalemare.weather.Fragments;
+package ru.whalemare.weather.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,10 +18,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.CitiesCallback;
+import ru.whalemare.weather.DatabaseHandlerImpl;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.interfaces.CitiesCallback;
+import ru.whalemare.weather.models.City;
 import ru.whalemare.weather.tasks.CityTask;
 
 public class CityFragment extends Fragment implements SearchView.OnQueryTextListener {
@@ -105,7 +106,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         return false;
     }
 
-    private boolean show = true;
+    private boolean show = true; // flag for showing message
     private List<City> filter(List<City> cities, String query) {
         query = query.toLowerCase();
         final List<City> filteredList = new ArrayList<>();
@@ -116,7 +117,6 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
             }
         }
 
-        Log.d(TAG, "filter: show_outside = " + show);
         if (filteredList.size() <= 0) {
             if (show) {
                 Toast.makeText(getContext(), "Города по запросу не найдено", Toast.LENGTH_SHORT).show();
@@ -127,5 +127,23 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         }
 
         return filteredList;
+    }
+
+    void loadCitiesIntoDatabase(List<City> cities){
+        final DatabaseHandlerImpl database = new DatabaseHandlerImpl(getContext());
+        if (cities.size() > 0)
+            database.setAllData(cities);
+        else
+            Log.d(TAG, "cities.size() = " + cities.size());
+    }
+
+
+
+    List<City> getCitiesFromDatabase(){
+        return new DatabaseHandlerImpl(getContext()).getAllData();
+    }
+
+    boolean checkTableInDatabase(){
+        return new DatabaseHandlerImpl(getContext()).checkTable();
     }
 }

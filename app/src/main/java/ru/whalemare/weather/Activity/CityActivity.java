@@ -1,11 +1,11 @@
-package ru.whalemare.weather.Activity;
+package ru.whalemare.weather.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import ru.whalemare.weather.Fragments.CityFragment;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.fragments.CityFragment;
 
 public class CityActivity extends AppCompatActivity {
 

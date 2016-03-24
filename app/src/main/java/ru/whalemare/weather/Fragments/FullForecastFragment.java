@@ -1,4 +1,4 @@
-package ru.whalemare.weather.Fragments;
+package ru.whalemare.weather.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.models.Weather;
 
 public class FullForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";

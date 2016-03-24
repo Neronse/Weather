@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activity.ForecastActivity">
+        <activity android:name=".activity.ForecastActivity">
         </activity>
 
-        <activity android:name=".Activity.CityActivity">
+        <activity android:name=".activity.CityActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
