@@ -1,4 +1,4 @@
-package ru.whalemare.weather.Fragments;
+package ru.whalemare.weather.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +22,7 @@ import ru.whalemare.weather.DatabaseHandlerImpl;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
 import ru.whalemare.weather.interfaces.CitiesCallback;
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.models.City;
 import ru.whalemare.weather.tasks.CityTask;
 
 public class CityFragment extends Fragment implements SearchView.OnQueryTextListener {

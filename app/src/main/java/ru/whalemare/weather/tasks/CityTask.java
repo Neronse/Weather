@@ -14,7 +14,7 @@ import java.util.List;
 import ru.whalemare.weather.DatabaseHandlerImpl;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.interfaces.CitiesCallback;
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.models.City;
 
 /**
  * @author Anton Vlasov
@@ -56,6 +56,8 @@ public class CityTask extends AsyncTask<Void, Void, List<City>> {
         }
 
         cities = database.getAllData();
+
+        database.close();
 
         return cities;
     }

@@ -2,7 +2,7 @@ package ru.whalemare.weather;
 
 import android.content.Context;
 
-import ru.whalemare.weather.Fragments.ForecastFragment;
+import ru.whalemare.weather.fragments.ForecastFragment;
 import ru.whalemare.weather.interfaces.ForecastsCallback;
 
 /**

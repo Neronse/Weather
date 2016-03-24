@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.interfaces.ForecastsCallback;
-import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.models.Weather;
 
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 

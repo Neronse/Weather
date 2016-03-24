@@ -1,4 +1,4 @@
-package ru.whalemare.weather.objects;
+package ru.whalemare.weather.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

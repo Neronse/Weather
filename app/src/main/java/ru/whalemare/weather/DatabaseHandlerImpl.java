@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.whalemare.weather.interfaces.DatabaseHandler;
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.models.City;
 
 /**
  * @author Anton Vlasov

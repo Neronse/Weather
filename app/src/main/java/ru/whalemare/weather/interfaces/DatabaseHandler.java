@@ -2,7 +2,7 @@ package ru.whalemare.weather.interfaces;
 
 import java.util.List;
 
-import ru.whalemare.weather.objects.City;
+import ru.whalemare.weather.models.City;
 
 /**
  * @author Anton Vlasov
