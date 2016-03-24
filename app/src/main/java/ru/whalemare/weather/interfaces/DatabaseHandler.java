@@ -1,5 +1,7 @@
 package ru.whalemare.weather.interfaces;
 
+import java.util.List;
+
 import ru.whalemare.weather.objects.City;
 
 /**
@@ -8,9 +10,9 @@ import ru.whalemare.weather.objects.City;
  */
 public interface DatabaseHandler {
 
-    void getData();
+    List<City> getAllData();
 
-    void setData();
+    void setAllData(List<City> cities);
 
     void setVersion(int version);
 
@@ -19,5 +21,13 @@ public interface DatabaseHandler {
     int getVersion();
 
     City getCity(int position);
+
+    String getQueryCreateTable();
+
+    /**
+     * @return <b>true</b> if the database has a items <br>
+     *         else <b>false</b>.
+     */
+    boolean checkTable();
 
 }
