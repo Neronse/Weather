@@ -62,7 +62,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
     }
 
     public void initializeDatabaseFromAPK() {
-        if (!isInitialized()){
+        if (!isInitialized()) {
             Log.d(TAG, "initializeDatabaseFromAPK: создадим бд из апк");
             // creating empty database for rewriting
             getReadableDatabase();
@@ -70,7 +70,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
             try {
                 copyDatabaseFromAssets();
             } catch (IOException e) {
-                throw new Error("Error copying database");
+                throw new RuntimeException("Error copying database", e);
             }
         } else {
             Log.d(TAG, "initializeDatabaseFromAPK: база данных уже есть в телефоне");
@@ -82,7 +82,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
         SQLiteDatabase checkDatabase = null;
 
         try {
-            checkDatabase = SQLiteDatabase.openDatabase(DATABASES_FOLDER+DATABASE_NAME, null,
+            checkDatabase = SQLiteDatabase.openDatabase(DATABASES_FOLDER + DATABASE_NAME, null,
                     SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
             Log.e(TAG, e.getMessage());
@@ -94,25 +94,34 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
         return checkDatabase != null;
     }
 
-    private void copyDatabaseFromAssets() throws IOException{
+    private void copyDatabaseFromAssets() throws IOException {
 
-        OutputStream output;
+        OutputStream output = null;
+        InputStream input = null;
 
-        //open database how input stream
-        InputStream input = new BufferedInputStream(context.getAssets().open(DATABASE_NAME));
+        try {
+            //open database how input stream
+            input = new BufferedInputStream(context.getAssets().open(DATABASE_NAME));
 
-        // open empty database how output stream
-        output = new BufferedOutputStream(new FileOutputStream(DATABASES_FOLDER+DATABASE_NAME));
+            // open empty database how output stream
+            output = new BufferedOutputStream(new FileOutputStream(DATABASES_FOLDER + DATABASE_NAME));
 
-        // перемещаем байты из входящего файла в исходящий
-        byte[] buffer = new byte[1024];
-        int lenght;
-        while ((lenght = input.read(buffer)) > 0)
-            output.write(buffer, 0, lenght);
+            // перемещаем байты из входящего файла в исходящий
+            byte[] buffer = new byte[1024];
+            int lenght;
+            while ((lenght = input.read(buffer)) > 0)
+                output.write(buffer, 0, lenght);
 
-        output.flush();
-        output.close();
-        input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            assert output != null;
+            output.flush();
+            output.close();
+            input.close();
+        }
+
+
     }
 
     public void openDatabase() throws SQLException {
@@ -122,7 +131,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public synchronized void close() {
-        if (this.database != null){
+        if (this.database != null) {
             database.close();
         }
         super.close();
@@ -204,7 +213,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
-        boolean answer = !cursor.getString(1).isEmpty() || !(cursor.getString(1) == null) ;
+        boolean answer = !cursor.getString(1).isEmpty() || !(cursor.getString(1) == null);
         cursor.close();
 
         Log.d(TAG, "Таблица " + TABLE_NAME + " есть ?= " + answer);

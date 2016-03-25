@@ -69,7 +69,7 @@ public class CityTask extends AsyncTask<Void, Void, List<City>> {
     }
 
     @Deprecated
-    void parsingData(){
+    void parsingData() {
         try {
             while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlPullParser.TEXT) {
@@ -83,17 +83,17 @@ public class CityTask extends AsyncTask<Void, Void, List<City>> {
                             break;
                         case 2:
                             // city name
-                            cities.get(cities.size()-1).setCityName(parser.getText());
+                            cities.get(cities.size() - 1).setCityName(parser.getText());
 //                            Log.d(TAG, "city name = " + parser.getText());
                             break;
                         case 3:
                             // region code
-                            cities.get(cities.size()-1).setRegionCode(parser.getText());
+                            cities.get(cities.size() - 1).setRegionCode(parser.getText());
 //                            Log.d(TAG, "region code = " + parser.getText());
                             break;
                         case 4:
                             // region name
-                            cities.get(cities.size()-1).setRegionName(parser.getText());
+                            cities.get(cities.size() - 1).setRegionName(parser.getText());
 //                            Log.d(TAG, "region name = " + parser.getText());
                             count = 0;
                             break;
