@@ -1,8 +1,8 @@
 <RelativeLayout
     android:id="@+id/fragmentMain_relativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".fragments.ForecastFragment">
@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/appbarlayout"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/cardview_margin">
+        android:layout_gravity="center">
     </android.support.v7.widget.RecyclerView>
 
     <TextView
