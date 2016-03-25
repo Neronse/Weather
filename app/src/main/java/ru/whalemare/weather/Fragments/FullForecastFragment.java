@@ -20,7 +20,7 @@ public class FullForecastFragment extends Fragment {
 
     private Weather weather;
 
-    public FullForecastFragment(){
+    public FullForecastFragment() {
     }
 
     public static FullForecastFragment newInstance(Weather weather) {
@@ -39,7 +39,6 @@ public class FullForecastFragment extends Fragment {
             this.weather = getArguments().getParcelable(ARG_FORECAST);
         }
     }
-
 
 
     @Override

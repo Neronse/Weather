@@ -139,7 +139,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public List<City> getAllData() {
-        final String query = "SELECT * FROM " + TABLE_NAME;
+        final String query = "SELECT * FROM " + TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
@@ -153,7 +153,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
         List<City> data = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE); // FIXME: 24.03.2016 really needed?
+            int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE);
             int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
             int regionCodeIndex = cursor.getColumnIndex(KEY_REGION_CODE);
             int regionNameIndex = cursor.getColumnIndex(KEY_REGION_NAME);

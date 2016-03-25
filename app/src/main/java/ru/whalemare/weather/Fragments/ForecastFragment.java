@@ -1,19 +1,21 @@
 package ru.whalemare.weather.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.whalemare.weather.ParserConfig;
@@ -29,29 +31,26 @@ public class ForecastFragment extends Fragment {
     private static final String KEY_FORECASTS = "KEY_FORECASTS";
 
     private TextView pressRefresh;
+    private SwipeRefreshLayout swipeRefresh;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
 
     private String weatherCode;
-    private ArrayList<Weather> weathers;
     ParserConfig config;
 
     ForecastsCallback callback = new ForecastsCallback() {
         @Override
         public void onForecastsRetrieved(List<Weather> weathers) {
-            setWeathers(weathers);
             adapter = new WeathersAdapter(weathers, listener);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
     };
 
-    void setWeathers(List<Weather> weathers) {
-        this.weathers = (ArrayList<Weather>) weathers;
-    }
-
     public ForecastFragment() {
+        this.setRetainInstance(true);
     }
 
     public static ForecastFragment newInstance(String weatherCode){
@@ -59,6 +58,7 @@ public class ForecastFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(KEY_WEATHER, weatherCode);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -71,8 +71,9 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         try {
-            listener = (OnChooseForecastListener) context; // ??
+            listener = (OnChooseForecastListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement Listener");
         }
@@ -81,6 +82,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             this.weatherCode = getArguments().getString(KEY_WEATHER, null);
@@ -92,8 +94,10 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_weathers);
-        layoutManager = new LinearLayoutManager(getContext()); // или getActivity().getContext()?
+        layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         pressRefresh = (TextView) view.findViewById(R.id.press_refresh);
@@ -105,12 +109,38 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        super.onResume();
+
+        tryToGetForecast();
+
+        swipeRefresh.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tryToGetForecast();
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+    }
+
+    /**
+     * Depending on whether there is Internet or not makes visible RecyclerView or TextView
+     */
+    Snackbar snackbar;
+    void tryToGetForecast(){
         if (!checkInternet()) {
             pressRefresh.setText("Нет подключения к интернету");
-            Log.d(TAG, "onCreateView: интернета нет");
+            snackbar = Snackbar.make(getView(), "Подключитесь к интернету", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        }
+                    });
+                    snackbar.show();
         } else {
-            pressRefresh.setVisibility(View.GONE); // уберем TextView с layout
+            if (snackbar != null)
+                if (snackbar.isShown())
+                    snackbar.dismiss();
             WeatherTask weatherTask = new WeatherTask(config);
             weatherTask.execute();
         }

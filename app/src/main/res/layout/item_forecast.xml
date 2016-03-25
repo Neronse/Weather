@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:weightSum="1">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/cardview_margin"
+        android:orientation="vertical"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/cardview_margin"
+                android:layout_marginTop="@dimen/cardview_margin"
+                android:text="@string/morning"
+                android:textColor="@color/primary_text"/>
+
+            <TextView
+                android:id="@+id/now_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tod"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/temp28"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/main_temperature"
+                android:layout_marginBottom="@dimen/double_cardview_margin"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

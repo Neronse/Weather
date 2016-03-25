@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="cardview_margin">10dp</dimen>
+    <dimen name="double_cardview_margin">20dp</dimen>
     <dimen name="textview_margin">4dp</dimen>
-    <dimen name="sizeTempr">22dp</dimen>
+    <dimen name="second_temperature">15sp</dimen>
+    <dimen name="main_temperature">48sp</dimen>
 </resources>
