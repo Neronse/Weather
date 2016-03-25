@@ -242,7 +242,6 @@ public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
             } else if (heat.equals(config.min)) {
                 int min = Integer.parseInt(parser.getAttributeValue(i));
                 weathers.get(countWeathers).setHeat_min(min);
-
             }
         }
     }
