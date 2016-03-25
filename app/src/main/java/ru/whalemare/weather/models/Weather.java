@@ -121,25 +121,18 @@ public class Weather implements Parcelable {
         this.humanWeekday = getHumanWeekday(weekday);
     }
 
-    private String getHumanWeekday(int weekday) {
-        switch (weekday) {
-            case 1:
-                return "Воскресенье";
-            case 2:
-                return "Понедельник";
-            case 3:
-                return "Вторник";
-            case 4:
-                return "Среда";
-            case 5:
-                return "Четверг";
-            case 6:
-                return "Пятница";
-            case 7:
-                return "Суббота";
-        }
+    private String getHumanWeekday(int type) {
+        final String[] days = {
+                "Воскресенье",
+                "Понедельник",
+                "Вторник",
+                "Среда",
+                "Четверг",
+                "Пятница",
+                "Суббота"
+        };
 
-        return null;
+        return days[type-1];
     }
 
     public void setCloudiness(int cloudiness) {
@@ -249,7 +242,12 @@ public class Weather implements Parcelable {
     }
 
     private String getStringTodfromInt(int type) {
-        final String tods[] = {"Ночь", "Утро", "День", "Вечер"};
+        final String tods[] = {
+                "Ночью",
+                "Утром",
+                "Днем",
+                "Вечером"
+        };
 
         if (type < tods.length)
             return tods[type];

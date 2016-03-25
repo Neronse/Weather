@@ -26,7 +26,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/cardview_margin"
                 android:layout_marginTop="@dimen/cardview_margin"
-                android:text="@string/Morning"
+                android:text="@string/morning"
                 android:textColor="@color/primary_text"/>
 
             <TextView
