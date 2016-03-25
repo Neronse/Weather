@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.whalemare.weather.ParserConfig;
@@ -35,23 +34,18 @@ public class ForecastFragment extends Fragment {
     private RecyclerView.Adapter adapter;
 
     private String weatherCode;
-    private ArrayList<Weather> weathers;
     ParserConfig config;
 
     ForecastsCallback callback = new ForecastsCallback() {
         @Override
         public void onForecastsRetrieved(List<Weather> weathers) {
-            setWeathers(weathers);
             adapter = new WeathersAdapter(weathers, listener);
             recyclerView.setAdapter(adapter);
         }
     };
 
-    void setWeathers(List<Weather> weathers) {
-        this.weathers = (ArrayList<Weather>) weathers;
-    }
-
     public ForecastFragment() {
+        this.setRetainInstance(true);
     }
 
     public static ForecastFragment newInstance(String weatherCode){
@@ -59,6 +53,7 @@ public class ForecastFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(KEY_WEATHER, weatherCode);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -71,8 +66,9 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         try {
-            listener = (OnChooseForecastListener) context; // ??
+            listener = (OnChooseForecastListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement Listener");
         }
@@ -81,6 +77,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             this.weatherCode = getArguments().getString(KEY_WEATHER, null);
@@ -93,7 +90,7 @@ public class ForecastFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_weathers);
-        layoutManager = new LinearLayoutManager(getContext()); // или getActivity().getContext()?
+        layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         pressRefresh = (TextView) view.findViewById(R.id.press_refresh);
@@ -105,7 +102,6 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        super.onResume();
         if (!checkInternet()) {
             pressRefresh.setText("Нет подключения к интернету");
             Log.d(TAG, "onCreateView: интернета нет");

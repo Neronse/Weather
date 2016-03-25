@@ -6,7 +6,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.DatabaseHandlerImpl;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
 import ru.whalemare.weather.interfaces.CitiesCallback;
@@ -48,7 +46,8 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         this.cities = new ArrayList<>(cities);
     }
 
-    public CityFragment() {}
+    public CityFragment() {
+    }
 
     public static CityFragment newInstance() {
         return new CityFragment();
@@ -73,23 +72,21 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onResume() {
+        getActivity().invalidateOptionsMenu();
         super.onResume();
 
         CityTask cityTask = new CityTask(citiesCallback, getContext());
         cityTask.execute();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
+    SearchView searchView;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_sw, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
     }
 
@@ -103,10 +100,14 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
+        searchView.clearFocus();
+        return true;
     }
 
     private boolean show = true; // flag for showing message
+
     private List<City> filter(List<City> cities, String query) {
         query = query.toLowerCase();
         final List<City> filteredList = new ArrayList<>();
@@ -127,23 +128,5 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         }
 
         return filteredList;
-    }
-
-    void loadCitiesIntoDatabase(List<City> cities){
-        final DatabaseHandlerImpl database = new DatabaseHandlerImpl(getContext());
-        if (cities.size() > 0)
-            database.setAllData(cities);
-        else
-            Log.d(TAG, "cities.size() = " + cities.size());
-    }
-
-
-
-    List<City> getCitiesFromDatabase(){
-        return new DatabaseHandlerImpl(getContext()).getAllData();
-    }
-
-    boolean checkTableInDatabase(){
-        return new DatabaseHandlerImpl(getContext()).checkTable();
     }
 }

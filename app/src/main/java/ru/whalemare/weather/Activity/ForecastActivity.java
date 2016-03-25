@@ -1,7 +1,8 @@
 package ru.whalemare.weather.activity;
 
+
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,15 +35,16 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         toolbar.setLogo(R.mipmap.ic_launcher);
 
         getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.container, new ForecastFragment().newInstance(gismeteo_code))
                 .commit();
     }
 
     @Override
     public void sendForecast(Weather weather) {
-        Fragment fullForecast = new FullForecastFragment().newInstance(weather);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fullForecast)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(R.id.container, new FullForecastFragment().newInstance(weather))
                 .addToBackStack(null)
                 .commit();
     }

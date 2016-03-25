@@ -18,7 +18,7 @@ import ru.whalemare.weather.models.Weather;
 public class WeatherTask extends AsyncTask<Void, Void, ArrayList<Weather>> {
 
     private final String TAG = "WHALETAG";
-    private final int TIME_PAUSE = 800;
+    private final int TIME_PAUSE = 200;
     private String SITE = "http://informer.gismeteo.ru/xml/";
 
     private final ParserConfig config;
