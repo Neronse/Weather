@@ -16,6 +16,10 @@
     <string name="data_is_null">Данных нет \nНажмите кнопку \"Обновить\"</string>
     <string name="aboutWeather">Легкий снегопад</string>
     <string name="min_max_tempr_item">-27 | -30</string>
-    <string name="Morning">Утром</string>
+    <string name="search">Поиск</string>
+    <string name="KEY_CITYNAME">KEY_CITYNAME</string>
+    <string name="database_name">citiesDatabase</string>
+
+    <string name="morning">Утром</string>
 
 </resources>

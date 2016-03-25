@@ -1,4 +1,4 @@
-package ru.whalemare.weather.Fragments;
+package ru.whalemare.weather.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.objects.Weather;
+import ru.whalemare.weather.models.Weather;
 
 public class FullForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
@@ -20,7 +20,7 @@ public class FullForecastFragment extends Fragment {
 
     private Weather weather;
 
-    public FullForecastFragment(){
+    public FullForecastFragment() {
     }
 
     public static FullForecastFragment newInstance(Weather weather) {
@@ -41,23 +41,16 @@ public class FullForecastFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_full_forecast, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_full);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
 
         String textNowTemperature = weather.getTemperature_max() + "°C"; //
         String textData = "на " + weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
@@ -88,15 +81,6 @@ public class FullForecastFragment extends Fragment {
 
         return view;
     }
-
-
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onAttach(Context context) {

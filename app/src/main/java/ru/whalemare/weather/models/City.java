@@ -1,4 +1,4 @@
-package ru.whalemare.weather.objects;
+package ru.whalemare.weather.models;
 
 /**
  * @author Anton Vlasov
@@ -12,6 +12,18 @@ public class City {
     private String regionName;
 
     public City() {
+    }
+
+    public City(String gismeteoCode, String cityName) {
+        this.gismeteoCode = gismeteoCode;
+        this.cityName = cityName;
+    }
+
+    public City(String gismeteoCode, String cityName, String regionCode, String regionName) {
+        this.gismeteoCode = gismeteoCode;
+        this.cityName = cityName;
+        this.regionCode = regionCode;
+        this.regionName = regionName;
     }
 
     public City(String gismeteoCode) {

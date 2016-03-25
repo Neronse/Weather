@@ -4,18 +4,13 @@
                 android:id="@+id/fragmentFullForecast"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".Activity.FullForecastActivity">
+                tools:context=".activity.FullForecastActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_full"
-            android:background="@color/primary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.Toolbar>
+        <include layout="@layout/toolbar"/>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout

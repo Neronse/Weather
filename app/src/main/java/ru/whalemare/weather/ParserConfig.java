@@ -2,7 +2,8 @@ package ru.whalemare.weather;
 
 import android.content.Context;
 
-import ru.whalemare.weather.Fragments.ForecastFragment;
+import ru.whalemare.weather.fragments.ForecastFragment;
+import ru.whalemare.weather.interfaces.ForecastsCallback;
 
 /**
  * @author Anton Vlasov
@@ -13,6 +14,8 @@ public class ParserConfig {
     private final ForecastsCallback callback;
 
     public final String FORECAST_CODE_XML;
+
+    public final Context context;
 
     // теги
     public final String FORECAST;
@@ -43,6 +46,7 @@ public class ParserConfig {
 
         this.FORECAST_CODE_XML = forecastCode + ".xml";
         this.callback = callback;
+        this.context = context;
 
         FORECAST = context.getResources().getString(R.string.FORECAST);
         PHENOMENA = context.getResources().getString(R.string.PHENOMENA);
@@ -62,6 +66,10 @@ public class ParserConfig {
         spower = context.getResources().getString(R.string.spower);
         max = context.getResources().getString(R.string.max);
         min = context.getResources().getString(R.string.min);
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public ForecastsCallback getCallback() {

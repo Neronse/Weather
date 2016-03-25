@@ -1,10 +1,11 @@
-package ru.whalemare.weather.Activity;
+package ru.whalemare.weather.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
-import ru.whalemare.weather.Fragments.CityFragment;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.fragments.CityFragment;
 
 public class CityActivity extends AppCompatActivity {
 
@@ -13,6 +14,13 @@ public class CityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_city, new CityFragment()).commit();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+
+        if (savedInstanceState == null)
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_city, new CityFragment().newInstance())
+                    .commit();
     }
 }
