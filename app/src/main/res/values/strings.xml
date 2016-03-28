@@ -21,5 +21,8 @@
     <string name="database_name">citiesDatabase</string>
 
     <string name="morning">Утром</string>
+    <string name="atmosphere_pressure">"Атмосферное давление: "</string>
+    <string name="mm_rt_st">" мм."</string>
+    <string name="m_s">" м/с"</string>
 
 </resources>
