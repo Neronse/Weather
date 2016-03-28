@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.fragments.ForecastFragment;
@@ -27,17 +27,24 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
         cityName = getIntent().getStringExtra(KEY_CITYNAME);
 
-        Log.d(TAG, "onCreate: cityName " + cityName);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(cityName);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.container, new ForecastFragment().newInstance(gismeteo_code))
                 .commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

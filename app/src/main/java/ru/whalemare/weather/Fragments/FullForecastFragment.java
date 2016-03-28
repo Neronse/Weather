@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,22 +45,30 @@ public class FullForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_full_forecast, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
-        String textNowTemperature = weather.getTemperature_max() + "°C"; //
-        String textData = "на " + weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
+        String textNowTemperature = weather.getTemperature_max() + getContext().getString(R.string.celcium);
+        String textData = weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
         String textTod = weather.getHumanTod() + ", " + weather.getHumanWeekday(); // Утро, Четверг
         String textCloudiness = weather.getHumanAboutWeather(); // Ясно: без осадков
-        String textPressure = "Атмосферное давление: " + weather.getPressure_min() + "-" + weather.getPressure_max() + " мм.рт.ст."; // 776-788 мм.рт.ст.
-        String textWind = "Ветер: " + weather.getWind_min() + "-" + weather.getWind_max() + " м/с"; // 2-4 м/c
-        String textRelwet = "Относительная влажность воздуха: " + weather.getRelwet_min() + "-" + weather.getRelwet_max() + " %"; // 77-78%
-        String textHeat = "По ощущениям: " + weather.getHeat_min() + "°C | " + weather.getHeat_max() + "°C";
+        String textPressure = getContext().getString(R.string.atmosphere_pressure) + weather.getPressure_min()
+                + "-" + weather.getPressure_max() + getContext().getString(R.string.mm_rt_st); // 776-788 мм.рт.ст.
+        String textWind = getContext().getString(R.string.wind) + weather.getWind_min()
+                + "-" + weather.getWind_max() + getContext().getString(R.string.m_s); // 2-4 м/c
+        String textRelwet = getContext().getString(R.string.relwet) + weather.getRelwet_min()
+                + "-" + weather.getRelwet_max() + " %"; // 77-78%
+        String textHeat = getContext().getString(R.string.heat) + weather.getHeat_min() +
+                getContext().getString(R.string.celcium) + " | " + weather.getHeat_max() + getContext().getString(R.string.celcium);
 
         TextView nowTemperature = (TextView) view.findViewById(R.id.now_temperature_full);
         TextView nowDate = (TextView) view.findViewById(R.id.now_data_full);
@@ -80,6 +89,14 @@ public class FullForecastFragment extends Fragment {
         heat.setText(textHeat);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
