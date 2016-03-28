@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,13 +45,17 @@ public class FullForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_full_forecast, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         String textNowTemperature = weather.getTemperature_max() + getContext().getString(R.string.celcium);
         String textData = weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
@@ -84,6 +89,14 @@ public class FullForecastFragment extends Fragment {
         heat.setText(textHeat);
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

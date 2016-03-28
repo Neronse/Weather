@@ -28,7 +28,6 @@ import ru.whalemare.weather.tasks.WeatherTask;
 public class ForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
     private static final String KEY_WEATHER = "KEY_WEATHER";
-    private static final String KEY_FORECASTS = "KEY_FORECASTS";
 
     private TextView pressRefresh;
     private SwipeRefreshLayout swipeRefresh;

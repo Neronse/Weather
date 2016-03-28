@@ -24,5 +24,6 @@
     <string name="atmosphere_pressure">"Атмосферное давление: "</string>
     <string name="mm_rt_st">" мм."</string>
     <string name="m_s">" м/с"</string>
+    <string name="back">Назад</string>
 
 </resources>
