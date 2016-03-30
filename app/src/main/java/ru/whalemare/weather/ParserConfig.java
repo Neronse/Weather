@@ -3,15 +3,12 @@ package ru.whalemare.weather;
 import android.content.Context;
 
 import ru.whalemare.weather.fragments.ForecastFragment;
-import ru.whalemare.weather.interfaces.ForecastsCallback;
 
 /**
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
 public class ParserConfig {
-
-    private final ForecastsCallback callback;
 
     public final String FORECAST_CODE_XML;
 
@@ -41,11 +38,9 @@ public class ParserConfig {
     public final String min;
 
     public ParserConfig(Context context, String forecastCode,
-                        ForecastsCallback callback,
                         ForecastFragment.OnChooseForecastListener listener) {
 
         this.FORECAST_CODE_XML = forecastCode + ".xml";
-        this.callback = callback;
         this.context = context;
 
         FORECAST = context.getResources().getString(R.string.FORECAST);
@@ -70,9 +65,5 @@ public class ParserConfig {
 
     public Context getContext() {
         return context;
-    }
-
-    public ForecastsCallback getCallback() {
-        return callback;
     }
 }

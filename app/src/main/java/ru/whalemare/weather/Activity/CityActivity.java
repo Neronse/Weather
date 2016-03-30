@@ -3,19 +3,9 @@ package ru.whalemare.weather.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import ru.whalemare.weather.ForecastService;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.fragments.CityFragment;
-import ru.whalemare.weather.models.MMWEATHER;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class CityActivity extends AppCompatActivity {
 
@@ -30,7 +20,7 @@ public class CityActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
 
-        testRetrofit();
+//        testRetrofit();
 
         if (savedInstanceState == null)
             getSupportFragmentManager().beginTransaction()
@@ -38,7 +28,7 @@ public class CityActivity extends AppCompatActivity {
                     .commit();
     }
 
-    private void testRetrofit(){
+/*    private void testRetrofit(){
         String BASE_URL = "http://informer.gismeteo.ru/xml/";
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -65,6 +55,7 @@ public class CityActivity extends AppCompatActivity {
             @Override
             public void onNext(MMWEATHER mmweather) {
                 Log.d(TAG, "onNext");
+                toListWeather(mmweather.getREPORT().getTOWN().getFORECAST());
                 Log.d(TAG, mmweather.getREPORT().getTOWN().getFORECAST().get(0).getDay() + "");
                 Log.d(TAG, mmweather.getREPORT().getTOWN().getFORECAST().get(0).getMonth() + "");
                 Log.d(TAG, mmweather.getREPORT().getTOWN().getFORECAST().get(0).getYear() + "");
@@ -75,4 +66,24 @@ public class CityActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+    private List<Weather> toListWeather(List<MMWEATHER.FORECAST> getted) {
+
+        List<Weather> weathers = new ArrayList<>();
+
+        Weather weather = new Weather();
+        for (MMWEATHER.FORECAST forecast : getted) {
+            weather.setDay(forecast.getDay().toString());
+            weather.setMonth(forecast.getMonth().toString());
+            weather.setYear(forecast.getYear().toString());
+            weather.setTod(forecast.getTod());
+            weather.setTemperature_max(forecast.getTEMPERATURE().getMax());
+
+            weathers.add(weather);
+
+            Log.d(TAG, weather.getDay() + "." + weather.getYear());
+        }
+
+        return weathers;
+    }*/
 }

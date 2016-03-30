@@ -12,23 +12,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.models.Weather;
+import ru.whalemare.weather.models.forecast.FORECAST;
 
 public class FullForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
 
     private static final String ARG_FORECAST = "FORECAST";
 
-    private Weather weather;
+    private FORECAST forecast;
 
     public FullForecastFragment() {
     }
 
-    public static FullForecastFragment newInstance(Weather weather) {
+    public FullForecastFragment(FORECAST forecast) { // FIXME: 30.03.2016 use arguments and parcelable
+        this.forecast = forecast;
+    }
+
+    public static FullForecastFragment newInstance(FORECAST forecast) {
         FullForecastFragment fragment = new FullForecastFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_FORECAST, weather);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+////        args.putParcelable(ARG_FORECAST, forecast);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -37,7 +41,7 @@ public class FullForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            this.weather = getArguments().getParcelable(ARG_FORECAST);
+            this.forecast = getArguments().getParcelable(ARG_FORECAST);
         }
     }
 
@@ -57,18 +61,18 @@ public class FullForecastFragment extends Fragment {
             e.printStackTrace();
         }
 
-        String textNowTemperature = weather.getTemperature_max() + getContext().getString(R.string.celcium);
-        String textData = weather.getDay() + "." + weather.getMonth() + "." + weather.getYear(); // на 21.09.2016
-        String textTod = weather.getHumanTod() + ", " + weather.getHumanWeekday(); // Утро, Четверг
-        String textCloudiness = weather.getHumanAboutWeather(); // Ясно: без осадков
-        String textPressure = getContext().getString(R.string.atmosphere_pressure) + weather.getPressure_min()
-                + "-" + weather.getPressure_max() + getContext().getString(R.string.mm_rt_st); // 776-788 мм.рт.ст.
-        String textWind = getContext().getString(R.string.wind) + weather.getWind_min()
-                + "-" + weather.getWind_max() + getContext().getString(R.string.m_s); // 2-4 м/c
-        String textRelwet = getContext().getString(R.string.relwet) + weather.getRelwet_min()
-                + "-" + weather.getRelwet_max() + " %"; // 77-78%
-        String textHeat = getContext().getString(R.string.heat) + weather.getHeat_min() +
-                getContext().getString(R.string.celcium) + " | " + weather.getHeat_max() + getContext().getString(R.string.celcium);
+        String textNowTemperature = forecast.getTEMPERATURE().getMax() + getContext().getString(R.string.celcium);
+        String textData = forecast.getDay() + "." + forecast.getMonth() + "." + forecast.getYear(); // на 21.09.2016
+        String textTod = getHumanTod(forecast) + ", " + getHumanWeekday(forecast); // Утро, Четверг
+        String textCloudiness = forecast.getPHENOMENA().getHumanAboutWeather(); // Ясно: без осадков
+        String textPressure = getContext().getString(R.string.atmosphere_pressure) + forecast.getPRESSURE().getMin()
+                + "-" + forecast.getPRESSURE().getMax() + getContext().getString(R.string.mm_rt_st); // 776-788 мм.рт.ст.
+        String textWind = getContext().getString(R.string.wind) + forecast.getWIND().getMin()
+                + "-" + forecast.getWIND().getMax() + getContext().getString(R.string.m_s); // 2-4 м/c
+        String textRelwet = getContext().getString(R.string.relwet) + forecast.getRELWET().getMin()
+                + "-" + forecast.getRELWET().getMax() + " %"; // 77-78%
+        String textHeat = getContext().getString(R.string.heat) + forecast.getHEAT().getMin() +
+                getContext().getString(R.string.celcium) + " | " + forecast.getHEAT().getMax() + getContext().getString(R.string.celcium);
 
         TextView nowTemperature = (TextView) view.findViewById(R.id.now_temperature_full);
         TextView nowDate = (TextView) view.findViewById(R.id.now_data_full);
@@ -107,5 +111,36 @@ public class FullForecastFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public String getHumanTod(FORECAST forecast) {
+        int type = forecast.getTod();
+        final String tods[] = {
+                "Ночью",
+                "Утром",
+                "Днем",
+                "Вечером"
+        };
+
+        if (type < tods.length)
+            return tods[type];
+        else
+            return "Cегодня";
+    }
+
+    // FIXME: 30.03.2016 add parcelable methods
+    public String getHumanWeekday(FORECAST forecast) {
+        int type = forecast.getWeekday();
+        final String[] days = {
+                "Воскресенье",
+                "Понедельник",
+                "Вторник",
+                "Среда",
+                "Четверг",
+                "Пятница",
+                "Суббота"
+        };
+
+        return days[type-1];
     }
 }

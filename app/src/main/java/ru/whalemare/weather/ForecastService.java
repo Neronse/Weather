@@ -2,7 +2,7 @@ package ru.whalemare.weather;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import ru.whalemare.weather.models.MMWEATHER;
+import ru.whalemare.weather.models.forecast.MMWEATHER;
 import rx.Observable;
 
 /**
