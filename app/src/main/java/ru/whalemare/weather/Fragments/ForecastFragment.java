@@ -149,4 +149,5 @@ public class ForecastFragment extends Fragment {
         NetworkInfo internetInfo = cm.getActiveNetworkInfo();
         return !(internetInfo == null || !internetInfo.isConnectedOrConnecting());
     }
+
 }
