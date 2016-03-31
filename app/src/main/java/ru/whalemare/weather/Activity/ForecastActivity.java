@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.fragments.ForecastFragment;
 import ru.whalemare.weather.fragments.FullForecastFragment;
-import ru.whalemare.weather.models.Weather;
+import ru.whalemare.weather.models.forecast.FORECAST;
 
 public class ForecastActivity extends AppCompatActivity implements ForecastFragment.OnChooseForecastListener {
 
@@ -48,10 +48,10 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     }
 
     @Override
-    public void sendForecast(Weather weather) {
+    public void sendForecast(FORECAST forecast) {
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.container, new FullForecastFragment().newInstance(weather))
+                .replace(R.id.container, new FullForecastFragment().newInstance(forecast))
                 .addToBackStack(null)
                 .commit();
     }

@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,13 @@ import java.util.List;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
-import ru.whalemare.weather.interfaces.ForecastsCallback;
-import ru.whalemare.weather.models.Weather;
-import ru.whalemare.weather.tasks.WeatherTask;
+import ru.whalemare.weather.models.forecast.FORECAST;
+import ru.whalemare.weather.models.forecast.MMWEATHER;
+import ru.whalemare.weather.tasks.RetrofitTask;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment {
     private static final String TAG = "WHALETAG";
@@ -36,26 +41,17 @@ public class ForecastFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
 
-    private String weatherCode;
+    private String gismeteoCode;
     ParserConfig config;
-
-    ForecastsCallback callback = new ForecastsCallback() {
-        @Override
-        public void onForecastsRetrieved(List<Weather> weathers) {
-            adapter = new WeathersAdapter(weathers, listener);
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        }
-    };
 
     public ForecastFragment() {
         this.setRetainInstance(true);
     }
 
-    public static ForecastFragment newInstance(String weatherCode){
+    public static ForecastFragment newInstance(String gismeteoCode){
         ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_WEATHER, weatherCode);
+        args.putString(KEY_WEATHER, gismeteoCode);
         fragment.setArguments(args);
 
         return fragment;
@@ -64,7 +60,7 @@ public class ForecastFragment extends Fragment {
 
     private OnChooseForecastListener listener;
     public interface OnChooseForecastListener {
-        void sendForecast(Weather weather);
+        void sendForecast(FORECAST forecast);
     }
 
     @Override
@@ -82,8 +78,10 @@ public class ForecastFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         if (getArguments() != null) {
-            this.weatherCode = getArguments().getString(KEY_WEATHER, null);
+            this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
+            downloadForecast(gismeteoCode);
         }
     }
 
@@ -99,7 +97,7 @@ public class ForecastFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         pressRefresh = (TextView) view.findViewById(R.id.press_refresh);
-        config = new ParserConfig(getContext(), weatherCode, callback, listener);
+        config = new ParserConfig(getContext(), gismeteoCode, listener);
 
         return view;
     }
@@ -120,33 +118,66 @@ public class ForecastFragment extends Fragment {
         });
     }
 
-    /**
-     * Depending on whether there is Internet or not makes visible RecyclerView or TextView
-     */
     Snackbar snackbar;
     void tryToGetForecast(){
         if (!checkInternet()) {
             pressRefresh.setText("Нет подключения к интернету");
             snackbar = Snackbar.make(getView(), "Подключитесь к интернету", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            startActivity(new Intent(Settings.ACTION_SETTINGS));
-                        }
+                    .setAction("OK", view -> {
+                        startActivity(new Intent(Settings.ACTION_SETTINGS));
                     });
                     snackbar.show();
         } else {
             if (snackbar != null)
                 if (snackbar.isShown())
                     snackbar.dismiss();
-            WeatherTask weatherTask = new WeatherTask(config);
-            weatherTask.execute();
+            downloadForecast(gismeteoCode);
         }
     }
 
     private boolean checkInternet() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE); // getApplicationContext
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo internetInfo = cm.getActiveNetworkInfo();
         return !(internetInfo == null || !internetInfo.isConnectedOrConnecting());
+    }
+
+    //Retrofit 2.0
+    private void downloadForecast(String gismeteoCode){
+        RetrofitTask retrofitTask = new RetrofitTask(getContext());
+
+        Observable<MMWEATHER> weather = retrofitTask
+                .createClient()
+                .getData(gismeteoCode);
+
+        Subscriber<MMWEATHER> subscriber = new Subscriber<MMWEATHER>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted!");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e);
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(MMWEATHER mmweather) {
+                Log.d(TAG, "onNext");
+                List<FORECAST> forecasts = mmweather.getREPORT().getTOWN().getFORECAST();
+                adapter = new WeathersAdapter(forecasts, listener);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+//                for (Weather weather : forecasts) {
+//                    Log.d(TAG, weather.getDay() + "." + weather.getYear() + " >> " +
+//                            weather.getHumanTod() + " | " + weather.getTemperature_max());
+//                }
+            }
+        };
+
+        weather.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 }

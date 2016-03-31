@@ -9,7 +9,8 @@ import ru.whalemare.weather.fragments.CityFragment;
 
 public class CityActivity extends AppCompatActivity {
 
-    @Override
+    private final String TAG = getClass().getSimpleName();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city);
