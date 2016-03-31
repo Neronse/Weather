@@ -31,13 +31,13 @@ public class CityActivity extends AppCompatActivity {
 /*    private void testRetrofit(){
         String BASE_URL = "http://informer.gismeteo.ru/xml/";
 
-        Retrofit retrofit = new Retrofit.Builder()
+        RetrofitTask retrofit = new RetrofitTask.Builder()
                 .baseUrl(BASE_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
 
-        ForecastService forecastService = retrofit.create(ForecastService.class);
+        ForecastClient forecastService = retrofit.create(ForecastClient.class);
         Observable<MMWEATHER> weather = forecastService.getData("30823");
 
         Subscriber<MMWEATHER> subscriber = new Subscriber<MMWEATHER>() {

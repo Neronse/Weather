@@ -51,7 +51,7 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     public void sendForecast(FORECAST forecast) {
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.container, new FullForecastFragment(forecast))
+                .replace(R.id.container, new FullForecastFragment().newInstance(forecast))
                 .addToBackStack(null)
                 .commit();
     }

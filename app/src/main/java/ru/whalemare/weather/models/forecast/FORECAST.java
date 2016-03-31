@@ -1,5 +1,8 @@
 package ru.whalemare.weather.models.forecast;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 
@@ -7,7 +10,7 @@ import org.simpleframework.xml.Element;
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public class FORECAST{
+public class FORECAST implements Parcelable{
 
     public FORECAST() {
     }
@@ -53,6 +56,23 @@ public class FORECAST{
 
     String humanTod = null;
     private String humanAboutWeather;
+
+    protected FORECAST(Parcel in) {
+        humanTod = in.readString();
+        humanAboutWeather = in.readString();
+    }
+
+    public static final Creator<FORECAST> CREATOR = new Creator<FORECAST>() {
+        @Override
+        public FORECAST createFromParcel(Parcel in) {
+            return new FORECAST(in);
+        }
+
+        @Override
+        public FORECAST[] newArray(int size) {
+            return new FORECAST[size];
+        }
+    };
 
     public WIND getWIND() {return this.wIND;}
     public void setWIND(WIND value) {this.wIND = value;}
@@ -122,5 +142,16 @@ public class FORECAST{
         };
 
         return days[type-1];
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(humanTod);
+        parcel.writeString(humanAboutWeather);
     }
 }

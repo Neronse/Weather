@@ -24,15 +24,11 @@ public class FullForecastFragment extends Fragment {
     public FullForecastFragment() {
     }
 
-    public FullForecastFragment(FORECAST forecast) { // FIXME: 30.03.2016 use arguments and parcelable
-        this.forecast = forecast;
-    }
-
     public static FullForecastFragment newInstance(FORECAST forecast) {
         FullForecastFragment fragment = new FullForecastFragment();
-//        Bundle args = new Bundle();
-////        args.putParcelable(ARG_FORECAST, forecast);
-//        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_FORECAST, forecast);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -54,7 +50,7 @@ public class FullForecastFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         try {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Подробно");
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getContext().getString(R.string.more));
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         } catch (NullPointerException e) {
@@ -63,7 +59,7 @@ public class FullForecastFragment extends Fragment {
 
         String textNowTemperature = forecast.getTEMPERATURE().getMax() + getContext().getString(R.string.celcium);
         String textData = forecast.getDay() + "." + forecast.getMonth() + "." + forecast.getYear(); // на 21.09.2016
-        String textTod = getHumanTod(forecast) + ", " + getHumanWeekday(forecast); // Утро, Четверг
+        String textTod = forecast.getHumanTod() + ", " + forecast.getHumanWeekday(); // Утро, Четверг
         String textCloudiness = forecast.getPHENOMENA().getHumanAboutWeather(); // Ясно: без осадков
         String textPressure = getContext().getString(R.string.atmosphere_pressure) + forecast.getPRESSURE().getMin()
                 + "-" + forecast.getPRESSURE().getMax() + getContext().getString(R.string.mm_rt_st); // 776-788 мм.рт.ст.
@@ -111,36 +107,5 @@ public class FullForecastFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    public String getHumanTod(FORECAST forecast) {
-        int type = forecast.getTod();
-        final String tods[] = {
-                "Ночью",
-                "Утром",
-                "Днем",
-                "Вечером"
-        };
-
-        if (type < tods.length)
-            return tods[type];
-        else
-            return "Cегодня";
-    }
-
-    // FIXME: 30.03.2016 add parcelable methods
-    public String getHumanWeekday(FORECAST forecast) {
-        int type = forecast.getWeekday();
-        final String[] days = {
-                "Воскресенье",
-                "Понедельник",
-                "Вторник",
-                "Среда",
-                "Четверг",
-                "Пятница",
-                "Суббота"
-        };
-
-        return days[type-1];
     }
 }

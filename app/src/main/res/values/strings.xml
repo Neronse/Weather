@@ -17,6 +17,7 @@
     <string name="aboutWeather">Легкий снегопад</string>
     <string name="min_max_tempr_item">-27 | -30</string>
     <string name="search">Поиск</string>
+    <string name="more">Подробно</string>
     <string name="KEY_CITYNAME">KEY_CITYNAME</string>
     <string name="database_name">citiesDatabase</string>
 
@@ -25,5 +26,6 @@
     <string name="mm_rt_st">" мм."</string>
     <string name="m_s">" м/с"</string>
     <string name="back">Назад</string>
+    <string name="gismeteo_base_url">http://informer.gismeteo.ru/xml/</string>
 
 </resources>
