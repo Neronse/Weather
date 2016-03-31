@@ -2,7 +2,6 @@ package ru.whalemare.weather.adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +67,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         final String KEY_GISMETEO = holder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
         final String KEY_CITYNAME = holder.name.getContext().getResources().getString(R.string.KEY_CITYNAME);
         holder.setClickListener(new ItemClickListener() {
-
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 Intent intent = new Intent(view.getContext(), ForecastActivity.class)
@@ -98,7 +96,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                 addItem(i, city);
             }
         }
-        Log.d(TAG, "applyAndAnimateAdditions: " + cities.size());
     }
 
     private void applyAndAnimateMoveditems(List<City> newCities) {
@@ -110,7 +107,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                 moveItem(fromPosition, toPosition);
             }
         }
-        Log.d(TAG, "applyAndAnimateMoveditems: " + cities.size());
     }
 
     private void applyAndAnimateRemovals(List<City> newCities) {
@@ -120,7 +116,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                 removeItem(i);
             }
         }
-        Log.d(TAG, "applyAndAnimateRemovals: " + cities.size());
     }
 
     public void addItem(int position, City city) {
