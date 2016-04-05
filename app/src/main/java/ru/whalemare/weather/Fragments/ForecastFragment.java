@@ -26,8 +26,8 @@ import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.di.AppComponent;
 import ru.whalemare.weather.di.DaggerAppComponent;
-import ru.whalemare.weather.di.RetrofitModule;
-import ru.whalemare.weather.interfaces.ForecastClient;
+import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.models.ForecastRestApiModel;
 import ru.whalemare.weather.models.forecast.FORECAST;
 import ru.whalemare.weather.models.forecast.MMWEATHER;
 import rx.Observable;
@@ -73,7 +73,7 @@ public class ForecastFragment extends Fragment {
         super.onAttach(context);
 
         AppComponent component = DaggerAppComponent.builder()
-                .retrofitModule(new RetrofitModule(getContext()))
+                .networkModule(new NetworkModule(getContext()))
                 .build();
 
         component.inject(this);
@@ -153,9 +153,9 @@ public class ForecastFragment extends Fragment {
     }
 
     //Retrofit 2.0
-    @Inject ForecastClient client;
+    @Inject ForecastRestApiModel model;
     private void downloadForecast(String gismeteoCode){
-        Observable<MMWEATHER> weather = client.getData(gismeteoCode);
+        Observable<MMWEATHER> observable = model.getData(gismeteoCode);
 
         Subscriber<MMWEATHER> subscriber = new Subscriber<MMWEATHER>() {
             @Override
@@ -179,7 +179,7 @@ public class ForecastFragment extends Fragment {
             }
         };
 
-        weather.subscribeOn(Schedulers.newThread())
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
