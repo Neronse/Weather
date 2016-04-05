@@ -19,12 +19,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
+import ru.whalemare.weather.di.AppComponent;
+import ru.whalemare.weather.di.DaggerAppComponent;
+import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.models.ForecastRestApiModel;
 import ru.whalemare.weather.models.forecast.FORECAST;
 import ru.whalemare.weather.models.forecast.MMWEATHER;
-import ru.whalemare.weather.tasks.RetrofitTask;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -67,6 +72,12 @@ public class ForecastFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        AppComponent component = DaggerAppComponent.builder()
+                .networkModule(new NetworkModule(getContext()))
+                .build();
+
+        component.inject(this);
+
         try {
             listener = (OnChooseForecastListener) context;
         } catch (ClassCastException e) {
@@ -81,7 +92,7 @@ public class ForecastFragment extends Fragment {
 
         if (getArguments() != null) {
             this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
-            downloadForecast(gismeteoCode);
+            tryToGetForecast();
         }
     }
 
@@ -106,8 +117,7 @@ public class ForecastFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        tryToGetForecast();
-
+//        tryToGetForecast();
         swipeRefresh.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -143,12 +153,9 @@ public class ForecastFragment extends Fragment {
     }
 
     //Retrofit 2.0
+    @Inject ForecastRestApiModel model;
     private void downloadForecast(String gismeteoCode){
-        RetrofitTask retrofitTask = new RetrofitTask(getContext());
-
-        Observable<MMWEATHER> weather = retrofitTask
-                .createClient()
-                .getData(gismeteoCode);
+        Observable<MMWEATHER> observable = model.getData(gismeteoCode);
 
         Subscriber<MMWEATHER> subscriber = new Subscriber<MMWEATHER>() {
             @Override
@@ -169,14 +176,10 @@ public class ForecastFragment extends Fragment {
                 adapter = new WeathersAdapter(forecasts, listener);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-//                for (Weather weather : forecasts) {
-//                    Log.d(TAG, weather.getDay() + "." + weather.getYear() + " >> " +
-//                            weather.getHumanTod() + " | " + weather.getTemperature_max());
-//                }
             }
         };
 
-        weather.subscribeOn(Schedulers.newThread())
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }

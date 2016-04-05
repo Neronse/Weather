@@ -9,7 +9,7 @@ import rx.Observable;
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public interface ForecastClient {
+public interface ForecastApiClient {
 
     @GET("{code}.xml")
     Observable<MMWEATHER> getData(@Path("code") String code);

@@ -1,36 +1,47 @@
-package ru.whalemare.weather.tasks;
+package ru.whalemare.weather.di;
 
 import android.content.Context;
 
+import dagger.Module;
+import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.interfaces.ForecastClient;
+import ru.whalemare.weather.interfaces.ForecastApiClient;
+import ru.whalemare.weather.models.ForecastRestApiModel;
 
 /**
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public class RetrofitTask {
+@Module
+public class NetworkModule {
 
-    Context context;
     private final String BASE_URL;
-    private final Retrofit retrofit;
+    private final Context context;
 
-    public RetrofitTask(Context context){
+    public NetworkModule(Context context) {
         this.context = context;
         this.BASE_URL = context.getString(R.string.gismeteo_base_url);
+    }
 
-        this.retrofit = new Retrofit.Builder()
+    @Provides
+    ForecastRestApiModel provideForecastRestApiModel(){
+        return new ForecastRestApiModel(context);
+    }
+
+    @Provides
+    ForecastApiClient provideForecastApiClient(){
+        final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
+        return retrofit.create(ForecastApiClient.class);
     }
 
-    public ForecastClient createClient() {
-        return this.retrofit.create(ForecastClient.class);
-    }
+
+
 
 }
