@@ -22,7 +22,12 @@ public class RetrofitTask {
         this.context = context;
         this.BASE_URL = context.getString(R.string.gismeteo_base_url);
 
-        this.retrofit = new Retrofit.Builder()
+        this.retrofit = getRetrofit();
+    }
+
+
+    public Retrofit getRetrofit(){
+        return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
@@ -32,5 +37,7 @@ public class RetrofitTask {
     public ForecastClient createClient() {
         return this.retrofit.create(ForecastClient.class);
     }
+
+
 
 }

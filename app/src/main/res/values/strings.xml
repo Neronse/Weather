@@ -27,5 +27,6 @@
     <string name="m_s">" м/с"</string>
     <string name="back">Назад</string>
     <string name="gismeteo_base_url">http://informer.gismeteo.ru/xml/</string>
+    <string name="city_not_founded">Города по запросу не найдено</string>
 
 </resources>
