@@ -15,7 +15,6 @@ import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,7 +123,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     }
 
-    public void openDatabase() throws SQLException {
+    public void openDatabase() {
         String path = DATABASES_FOLDER + DATABASE_NAME;
         this.database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -188,27 +187,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
     }
 
     @Override
-    public void setVersion(int version) {
-
-    }
-
-    @Override
-    public int getCountCities() {
-        return 0;
-    }
-
-    @Override
-    public int getVersion() {
-        return 0;
-    }
-
-    @Override
-    public City getCity(int position) {
-        return null;
-    }
-
-    @Override
-    public boolean checkTable() {
+    public boolean isHasTable() {
         SQLiteDatabase database = this.getReadableDatabase();
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);

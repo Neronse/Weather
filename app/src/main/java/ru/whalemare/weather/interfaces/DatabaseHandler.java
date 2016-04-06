@@ -14,20 +14,18 @@ public interface DatabaseHandler {
 
     void setAllData(List<City> cities);
 
-    void setVersion(int version);
-
-    int getCountCities();
-
-    int getVersion();
-
-    City getCity(int position);
-
     String getQueryCreateTable();
+
+    void initializeDatabaseFromAPK();
+
+    void openDatabase();
+
+    void close();
 
     /**
      * @return <b>true</b> if the database has a items <br>
      *         else <b>false</b>.
      */
-    boolean checkTable();
+    boolean isHasTable();
 
 }

@@ -25,6 +25,7 @@ import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.di.AppComponent;
+import ru.whalemare.weather.di.AppModule;
 import ru.whalemare.weather.di.DaggerAppComponent;
 import ru.whalemare.weather.di.NetworkModule;
 import ru.whalemare.weather.models.ForecastRestApiModel;
@@ -76,8 +77,8 @@ public class ForecastFragment extends Fragment {
 
         AppComponent component = DaggerAppComponent.builder()
                 .networkModule(new NetworkModule(getContext()))
+                .appModule(new AppModule(getContext()))
                 .build();
-
         component.inject(this);
 
         try {
@@ -119,7 +120,6 @@ public class ForecastFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-//        tryToGetForecast();
         swipeRefresh.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
