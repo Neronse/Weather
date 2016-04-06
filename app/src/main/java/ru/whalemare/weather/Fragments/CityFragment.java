@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
 import ru.whalemare.weather.models.City;
@@ -147,5 +148,11 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         super.onPause();
         adapter.setData(cities);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

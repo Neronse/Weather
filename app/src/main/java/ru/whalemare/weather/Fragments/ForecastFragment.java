@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
@@ -184,5 +185,11 @@ public class ForecastFragment extends Fragment {
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }
