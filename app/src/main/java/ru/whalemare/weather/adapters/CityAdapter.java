@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.activity.ForecastActivity;
 import ru.whalemare.weather.interfaces.ItemClickListener;
@@ -44,14 +46,15 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.itemCity_name)
         public TextView name;
 
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
-            name = (TextView) itemView.findViewById(R.id.itemCity_name);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
         }
@@ -74,6 +77,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
         final String KEY_GISMETEO = holder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
         final String KEY_CITYNAME = holder.name.getContext().getResources().getString(R.string.KEY_CITYNAME);
+
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {

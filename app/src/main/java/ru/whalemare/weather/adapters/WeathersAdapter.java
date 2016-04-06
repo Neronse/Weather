@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.fragments.ForecastFragment;
 import ru.whalemare.weather.interfaces.ItemClickListener;
@@ -25,16 +27,17 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.tod)
         public TextView tod;
+
+        @Bind(R.id.now_temperature)
         public TextView nowTemperature;
 
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tod = (TextView) itemView.findViewById(R.id.tod);
-            nowTemperature = (TextView) itemView.findViewById(R.id.now_temperature);
+            ButterKnife.bind(this, itemView);
 
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
