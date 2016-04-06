@@ -44,6 +44,5 @@ public class CityLoader extends AsyncTaskLoader<List<City>> {
 
         database.close();
         return cities;
-//        return null;
     }
 }

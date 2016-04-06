@@ -147,4 +147,5 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         return city;
     }
 
+
 }
