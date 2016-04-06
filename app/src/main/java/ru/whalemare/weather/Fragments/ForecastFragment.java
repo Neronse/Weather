@@ -95,7 +95,6 @@ public class ForecastFragment extends Fragment {
 
         if (getArguments() != null) {
             this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
-            tryToGetForecast();
         }
     }
 
@@ -103,6 +102,8 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        tryToGetForecast();
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
