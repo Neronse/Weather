@@ -49,6 +49,8 @@ public class ForecastFragment extends Fragment {
     private String gismeteoCode;
     ParserConfig config;
 
+    @Inject ForecastRestApiModel model;
+
     public ForecastFragment() {
         this.setRetainInstance(true);
     }
@@ -153,7 +155,6 @@ public class ForecastFragment extends Fragment {
     }
 
     //Retrofit 2.0
-    @Inject ForecastRestApiModel model;
     private void downloadForecast(String gismeteoCode){
         Observable<MMWEATHER> observable = model.getData(gismeteoCode);
 

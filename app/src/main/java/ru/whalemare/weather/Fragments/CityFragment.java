@@ -2,10 +2,13 @@ package ru.whalemare.weather.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,32 +22,20 @@ import java.util.List;
 
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityAdapter;
-import ru.whalemare.weather.interfaces.CitiesCallback;
 import ru.whalemare.weather.models.City;
-import ru.whalemare.weather.tasks.CityTask;
+import ru.whalemare.weather.tasks.CityLoader;
 
-public class CityFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class CityFragment extends Fragment implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<List<City>> {
 
-    private static final String TAG = "WHALETAG";
+    private final String TAG = getClass().getSimpleName();
+
+    SearchView searchView;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private CityAdapter adapter;
 
     private List<City> cities;
-
-    private CitiesCallback citiesCallback = new CitiesCallback() {
-        @Override
-        public void onCitiesRetrieved(List<City> cities) {
-            setCities(cities);
-            adapter = new CityAdapter(cities);
-            recyclerView.setAdapter(adapter);
-        }
-    };
-
-    void setCities(List<City> cities) {
-        this.cities = new ArrayList<>(cities);
-    }
 
     public CityFragment() {
     }
@@ -56,6 +47,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getLoaderManager().initLoader(1, null, this).forceLoad();
     }
 
     @Override
@@ -74,12 +66,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     public void onResume() {
         getActivity().invalidateOptionsMenu();
         super.onResume();
-
-        CityTask cityTask = new CityTask(citiesCallback, getContext());
-        cityTask.execute();
     }
-
-    SearchView searchView;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -92,10 +79,15 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextChange(String query) {
-        final List<City> filteredList = filter(cities, query);
-        adapter.animateTo(filteredList);
-        recyclerView.scrollToPosition(0);
-        return true;
+        if (!cities.isEmpty()) {
+            final List<City> filteredList = filter(cities, query);
+            adapter.animateTo(filteredList);
+            recyclerView.scrollToPosition(0);
+            return true;
+        } else {
+            Log.d(TAG, "onQueryTextChange: cities is empty");
+            return false;
+        }
     }
 
     @Override
@@ -107,7 +99,6 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     private boolean show = true; // flag for showing message
-
     private List<City> filter(List<City> cities, String query) {
         query = query.toLowerCase();
         final List<City> filteredList = new ArrayList<>();
@@ -128,5 +119,33 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         }
 
         return filteredList;
+    }
+
+    @Override
+    public Loader<List<City>> onCreateLoader(int id, Bundle args) {
+        return new CityLoader(getContext());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<City>> loader, List<City> data) {
+        if (!data.isEmpty()) {
+            this.cities = data;
+            adapter = new CityAdapter(data);
+            recyclerView.setAdapter(adapter);
+        } else {
+            Log.d(TAG, "onLoadFinished: cities is empty");
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<City>> loader) {
+        Log.d(TAG, "onLoaderReset");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.setData(cities);
+        adapter.notifyDataSetChanged();
     }
 }
