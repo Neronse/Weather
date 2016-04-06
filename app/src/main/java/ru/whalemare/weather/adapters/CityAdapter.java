@@ -21,11 +21,19 @@ import ru.whalemare.weather.models.City;
  */
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
-    private static final String TAG = "WHALETAG";
+    private final String TAG = getClass().getSimpleName();
     private List<City> cities;
 
     public CityAdapter(List<City> cities) {
         this.cities = new ArrayList<>(cities);
+    }
+
+    /**
+     * Do not use without constructor initialization
+     * @param cities
+     */
+    public void setData(List<City> cities) {
+        this.cities = cities;
     }
 
     @Override
