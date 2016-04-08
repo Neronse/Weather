@@ -1,4 +1,4 @@
-package ru.whalemare.weather.interfaces;
+package ru.whalemare.weather.database;
 
 import android.database.Cursor;
 

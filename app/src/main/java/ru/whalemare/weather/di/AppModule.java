@@ -4,8 +4,8 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.whalemare.weather.DatabaseHandlerImpl;
-import ru.whalemare.weather.interfaces.DatabaseHandler;
+import ru.whalemare.weather.database.DatabaseHandler;
+import ru.whalemare.weather.database.DatabaseHandlerImpl;
 
 /**
  * @author Anton Vlasov

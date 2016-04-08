@@ -22,11 +22,11 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.CityCursorAdapter;
+import ru.whalemare.weather.database.DatabaseHandler;
 import ru.whalemare.weather.di.AppComponent;
 import ru.whalemare.weather.di.AppModule;
 import ru.whalemare.weather.di.DaggerAppComponent;
 import ru.whalemare.weather.di.NetworkModule;
-import ru.whalemare.weather.interfaces.DatabaseHandler;
 import ru.whalemare.weather.tasks.CityLoader;
 
 public class CityFragment extends Fragment implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {

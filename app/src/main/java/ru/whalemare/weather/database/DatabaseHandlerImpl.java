@@ -1,4 +1,4 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,7 +18,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.interfaces.DatabaseHandler;
+import ru.whalemare.weather.R;
 import ru.whalemare.weather.models.City;
 
 /**
