@@ -1,10 +1,9 @@
 package ru.whalemare.weather.tasks;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
 
 import javax.inject.Inject;
 
@@ -13,36 +12,43 @@ import ru.whalemare.weather.di.AppModule;
 import ru.whalemare.weather.di.DaggerAppComponent;
 import ru.whalemare.weather.di.NetworkModule;
 import ru.whalemare.weather.interfaces.DatabaseHandler;
-import ru.whalemare.weather.models.City;
 
 /**
  * @author Anton Vlasov
  *         Developed by Magora Team (magora-systems.com). 2016.
  */
-public class CityLoader extends AsyncTaskLoader<List<City>> {
+public class CityLoader extends CursorLoader {
 
     private String TAG = getClass().getSimpleName();
+    private String query;
 
     @Inject DatabaseHandler database;
 
-    public CityLoader(Context context) {
+    public CityLoader(Context context, Bundle args) {
         super(context);
         AppComponent component = DaggerAppComponent.builder()
                 .appModule(new AppModule(context))
                 .networkModule(new NetworkModule(context))
                 .build();
         component.inject(this);
+        if (args != null)
+            this.query = args.getString("query", null);
+        else
+            this.query = null;
     }
 
     @Override
-    public List<City> loadInBackground() {
+    public Cursor loadInBackground() {
         database.initializeDatabaseFromAPK();
-
         database.openDatabase();
+        Cursor cursor;
 
-        List<City> cities = new ArrayList<>(database.getAllData());
+        if (query == null) {
+            cursor = database.getCursorWithAllData();
+        } else {
+            cursor = database.getCursorWithDataByQuery(query);
+        }
 
-        database.close();
-        return cities;
+        return cursor;
     }
 }

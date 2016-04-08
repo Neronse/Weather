@@ -1,6 +1,8 @@
 package ru.whalemare.weather.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -8,25 +10,26 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.adapters.CityAdapter;
-import ru.whalemare.weather.models.City;
+import ru.whalemare.weather.adapters.CityCursorAdapter;
+import ru.whalemare.weather.di.AppComponent;
+import ru.whalemare.weather.di.AppModule;
+import ru.whalemare.weather.di.DaggerAppComponent;
+import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.interfaces.DatabaseHandler;
 import ru.whalemare.weather.tasks.CityLoader;
 
-public class CityFragment extends Fragment implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<List<City>> {
+public class CityFragment extends Fragment implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private final String TAG = getClass().getSimpleName();
 
@@ -34,9 +37,9 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private CityAdapter adapter;
+    private CityCursorAdapter adapter;
 
-    private List<City> cities;
+    @Inject DatabaseHandler database;
 
     public CityFragment() {
     }
@@ -48,7 +51,15 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(1, null, this).forceLoad();
+
+        getLoaderManager().initLoader(0, null, this);
+
+        AppComponent component = DaggerAppComponent.builder()
+                .appModule(new AppModule(getContext()))
+                .networkModule(new NetworkModule(getContext()))
+                .build();
+
+        component.inject(this);
     }
 
     @Override
@@ -60,13 +71,16 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_city);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new CityCursorAdapter(getContext(), null);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
     @Override
     public void onResume() {
-        getActivity().invalidateOptionsMenu();
         super.onResume();
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -79,80 +93,52 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
     public boolean onQueryTextChange(String query) {
-        if (!cities.isEmpty()) {
-            final List<City> filteredList = filter(cities, query);
-            adapter.animateTo(filteredList);
-            recyclerView.scrollToPosition(0);
-            return true;
-        } else {
-            Log.d(TAG, "onQueryTextChange: cities is empty");
-            return false;
-        }
+        Bundle args = new Bundle();
+        args.putString("query", query);
+        getLoaderManager().restartLoader(0, args, this);
+        return true;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        searchView.setQuery("", false);
-        searchView.setIconified(true);
-        searchView.clearFocus();
+        Bundle args = new Bundle();
+        args.putString("query", query);
+        getLoaderManager().restartLoader(0, args, this);
         return true;
-    }
-
-    private boolean show = true; // flag for showing message
-    private List<City> filter(List<City> cities, String query) {
-        query = query.toLowerCase();
-        final List<City> filteredList = new ArrayList<>();
-        for (City city : cities) {
-            final String text = city.getCityName().toLowerCase();
-            if (text.contains(query)) {
-                filteredList.add(city);
-            }
-        }
-
-        if (filteredList.size() <= 0) {
-            if (show) {
-                Toast.makeText(getContext(), "Города по запросу не найдено", Toast.LENGTH_SHORT).show();
-                show = false;
-            }
-        } else {
-            show = true;
-        }
-
-        return filteredList;
-    }
-
-    @Override
-    public Loader<List<City>> onCreateLoader(int id, Bundle args) {
-        return new CityLoader(getContext());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<City>> loader, List<City> data) {
-        if (!data.isEmpty()) {
-            this.cities = data;
-            adapter = new CityAdapter(data);
-            recyclerView.setAdapter(adapter);
-        } else {
-            Log.d(TAG, "onLoadFinished: cities is empty");
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<City>> loader) {
-        Log.d(TAG, "onLoaderReset");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        adapter.setData(cities);
-        adapter.notifyDataSetChanged();
+        database.close();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        database.close();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CityLoader(getContext(), args);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.changeCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.changeCursor(null);
     }
 }
