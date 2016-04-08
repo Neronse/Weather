@@ -5,10 +5,7 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import ru.whalemare.weather.di.AppComponent;
-import ru.whalemare.weather.di.AppModule;
-import ru.whalemare.weather.di.DaggerAppComponent;
-import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.di.App;
 import ru.whalemare.weather.interfaces.ForecastApiClient;
 import ru.whalemare.weather.interfaces.ForecastApiModel;
 import ru.whalemare.weather.models.forecast.MMWEATHER;
@@ -22,15 +19,10 @@ public class ForecastRestApiModel implements ForecastApiModel {
 
     @Inject ForecastApiClient client;
 
-    String TAG = "WHALETAG";
+    String TAG = getClass().getSimpleName();
 
     public ForecastRestApiModel(Context context) {
-        AppComponent component = DaggerAppComponent.builder()
-                .appModule(new AppModule(context))
-                .networkModule(new NetworkModule(context))
-                .build();
-
-        component.inject(this);
+        App.get(context).getComponent().inject(this);
     }
 
     @Override

@@ -8,10 +8,7 @@ import android.support.v4.content.CursorLoader;
 import javax.inject.Inject;
 
 import ru.whalemare.weather.database.DatabaseHandler;
-import ru.whalemare.weather.di.AppComponent;
-import ru.whalemare.weather.di.AppModule;
-import ru.whalemare.weather.di.DaggerAppComponent;
-import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.di.App;
 
 /**
  * @author Anton Vlasov
@@ -26,11 +23,9 @@ public class CityLoader extends CursorLoader {
 
     public CityLoader(Context context, Bundle args) {
         super(context);
-        AppComponent component = DaggerAppComponent.builder()
-                .appModule(new AppModule(context))
-                .networkModule(new NetworkModule(context))
-                .build();
-        component.inject(this);
+
+        App.get(context).getComponent().inject(this);
+
         if (args != null)
             this.query = args.getString("query", null);
         else

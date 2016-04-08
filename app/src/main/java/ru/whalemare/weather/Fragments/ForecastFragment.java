@@ -25,10 +25,7 @@ import butterknife.ButterKnife;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
-import ru.whalemare.weather.di.AppComponent;
-import ru.whalemare.weather.di.AppModule;
-import ru.whalemare.weather.di.DaggerAppComponent;
-import ru.whalemare.weather.di.NetworkModule;
+import ru.whalemare.weather.di.App;
 import ru.whalemare.weather.models.ForecastRestApiModel;
 import ru.whalemare.weather.models.forecast.FORECAST;
 import ru.whalemare.weather.models.forecast.MMWEATHER;
@@ -76,11 +73,7 @@ public class ForecastFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        AppComponent component = DaggerAppComponent.builder()
-                .networkModule(new NetworkModule(getContext()))
-                .appModule(new AppModule(getContext()))
-                .build();
-        component.inject(this);
+        App.get(context).getComponent().inject(this);
 
         try {
             listener = (OnChooseForecastListener) context;
