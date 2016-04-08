@@ -12,6 +12,15 @@ import ru.whalemare.weather.models.City;
  */
 public interface DatabaseHandler {
 
+    String DATABASES_FOLDER = "/data/data/ru.whalemare.weather/databases/";
+
+    String TABLE_NAME = "cities";
+    String KEY_ID = "_id";
+    String KEY_GISMETEO_CODE = "gismeteo_code";
+    String KEY_CITY_NAME = "city_name";
+    String KEY_REGION_CODE = "region_code";
+    String KEY_REGION_NAME = "region_name";
+
     List<City> getAllData();
 
     void setAllData(List<City> cities);

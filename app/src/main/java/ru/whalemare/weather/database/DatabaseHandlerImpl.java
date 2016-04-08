@@ -31,16 +31,8 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
     private SQLiteDatabase database;
     private final Context context;
 
-    private final String DATABASES_FOLDER = "/data/data/ru.whalemare.weather/databases/";
     private final String DATABASE_NAME;
     private final int DATABASE_VERSION;
-
-    private final String TABLE_NAME = "cities";
-    private final String KEY_ID = "id";
-    public final String KEY_GISMETEO_CODE = "gismeteo_code";
-    public final String KEY_CITY_NAME = "city_name";
-    public final String KEY_REGION_CODE = "region_code";
-    public final String KEY_REGION_NAME = "region_name";
 
     public DatabaseHandlerImpl(Context context) {
         super(context, context.getString(R.string.database_name), null, context.getResources().getInteger(R.integer.database_version));
