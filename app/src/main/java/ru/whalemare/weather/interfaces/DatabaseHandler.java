@@ -1,5 +1,7 @@
 package ru.whalemare.weather.interfaces;
 
+import android.database.Cursor;
+
 import java.util.List;
 
 import ru.whalemare.weather.models.City;
@@ -27,5 +29,9 @@ public interface DatabaseHandler {
      *         else <b>false</b>.
      */
     boolean isHasTable();
+
+    Cursor getCursorWithAllData();
+
+    Cursor getCursorWithDataByQuery(String name);
 
 }

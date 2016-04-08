@@ -207,4 +207,39 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
                 + KEY_REGION_CODE + " text not null, "
                 + KEY_REGION_NAME + " text not null);";
     }
+
+    @Override
+    public Cursor getCursorWithAllData() {
+        final String query = "SELECT * FROM " + TABLE_NAME +" ORDER BY city_name ASC";
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor;
+
+        try {
+            cursor = database.rawQuery(query, null);
+        } catch (IOError e) {
+            e.printStackTrace();
+            Log.e(TAG, "getAllData: не удалось получить курсор");
+            return null;
+        }
+
+        return cursor;
+    }
+
+    @Override
+    public Cursor getCursorWithDataByQuery(String name) {
+        final String query = "SELECT * FROM " + TABLE_NAME +" WHERE city_name " +
+                "LIKE \'%" + name + "%\' ORDER BY city_name ASC";
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor;
+
+        try {
+            cursor = database.rawQuery(query, null);
+        } catch (IOError e) {
+            e.printStackTrace();
+            Log.e(TAG, "getAllData: не удалось получить курсор");
+            return null;
+        }
+
+        return cursor;
+    }
 }
