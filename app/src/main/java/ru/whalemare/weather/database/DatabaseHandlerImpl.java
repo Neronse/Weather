@@ -130,7 +130,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public List<City> getAllData() {
-        final String query = "SELECT * FROM " + TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
+        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
@@ -144,10 +144,10 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
         List<City> data = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE);
-            int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
-            int regionCodeIndex = cursor.getColumnIndex(KEY_REGION_CODE);
-            int regionNameIndex = cursor.getColumnIndex(KEY_REGION_NAME);
+            int gismeteoCodeIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
+            int cityNameIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
+            int regionCodeIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_REGION_CODE);
+            int regionNameIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_REGION_NAME);
 
             do {
                 data.add(new City(
@@ -170,11 +170,11 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
         ContentValues values = new ContentValues();
 
         for (City city : cities) {
-            values.put(KEY_GISMETEO_CODE, city.getGismeteoCode());
-            values.put(KEY_CITY_NAME, city.getCityName());
-            values.put(KEY_REGION_CODE, city.getRegionCode());
-            values.put(KEY_REGION_NAME, city.getRegionName());
-            database.insert(TABLE_NAME, null, values);
+            values.put(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode());
+            values.put(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName());
+            values.put(CitiesProvider.CitiesMetaData.KEY_REGION_CODE, city.getRegionCode());
+            values.put(CitiesProvider.CitiesMetaData.KEY_REGION_NAME, city.getRegionName());
+            database.insert(CitiesProvider.CitiesMetaData.TABLE_NAME, null, values);
         }
     }
 
@@ -182,27 +182,27 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
     public boolean isHasTable() {
         SQLiteDatabase database = this.getReadableDatabase();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME, null);
 
         boolean answer = !cursor.getString(1).isEmpty() || !(cursor.getString(1) == null);
         cursor.close();
 
-        Log.d(TAG, "Таблица " + TABLE_NAME + " есть ?= " + answer);
+        Log.d(TAG, "Таблица " + CitiesProvider.CitiesMetaData.TABLE_NAME + " есть ?= " + answer);
         return answer;
     }
 
     public String getQueryCreateTable() {
-        return "CREATE TABLE " + TABLE_NAME + "( "
-                + KEY_ID + " integer primary key autoincrement, "
-                + KEY_GISMETEO_CODE + " text not null, "
-                + KEY_CITY_NAME + " text not null, "
-                + KEY_REGION_CODE + " text not null, "
-                + KEY_REGION_NAME + " text not null);";
+        return "CREATE TABLE " + CitiesProvider.CitiesMetaData.TABLE_NAME + "( "
+                + CitiesProvider.CitiesMetaData.KEY_ID + " integer primary key autoincrement, "
+                + CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_CITY_NAME + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_REGION_CODE + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_REGION_NAME + " text not null);";
     }
 
     @Override
     public Cursor getCursorWithAllData() {
-        final String query = "SELECT * FROM " + TABLE_NAME +" ORDER BY city_name ASC";
+        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC";
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
@@ -219,7 +219,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public Cursor getCursorWithDataByQuery(String name) {
-        final String query = "SELECT * FROM " + TABLE_NAME +" WHERE city_name " +
+        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" WHERE city_name " +
                 "LIKE \'%" + name + "%\' ORDER BY city_name ASC";
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
