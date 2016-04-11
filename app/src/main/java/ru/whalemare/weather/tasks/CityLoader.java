@@ -4,9 +4,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 
 import javax.inject.Inject;
 
+import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.database.DatabaseHandler;
 import ru.whalemare.weather.di.App;
 
@@ -39,10 +41,12 @@ public class CityLoader extends CursorLoader {
         Cursor cursor;
 
         if (query == null) {
-            cursor = database.getCursorWithAllData();
+            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, null, null, null, null);
         } else {
             cursor = database.getCursorWithDataByQuery(query);
         }
+
+        Log.d(TAG, "cursor = " + cursor.getCount());
 
         return cursor;
     }
