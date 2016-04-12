@@ -28,7 +28,7 @@ public class CitiesProvider extends ContentProvider {
     static final String CITIES_URL = "content://" + PROVIDER_NAME + "/" + CitiesMetaData.TABLE_NAME;
     public static final Uri CITIES_CONTENT_URI = Uri.parse(CITIES_URL);
 
-    static final String STATS_URL = "content://" + PROVIDER_NAME + "/" + StatsMetaData.TABLE_NAME;
+    public static final String STATS_URL = "content://" + PROVIDER_NAME + "/" + StatsMetaData.TABLE_NAME;
     public static final Uri STATS_CONTENT_URI = Uri.parse(STATS_URL);
 
 
@@ -171,16 +171,18 @@ public class CitiesProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-//            int count = 0;
-//            switch (uriMatcher.match(uri)) {
-//                case ALL_CITIES:
-//                    count = db.update(CitiesMetaData.TABLE_NAME, citiesValues, selection, selectionArgs);
-//                    break;
-//                default:
-//                    throw new IllegalArgumentException("Unknown URI " + uri);
-//            }
-//            getContext().getContentResolver().notifyChange(uri, null);
-//            return count;
-        return 0;
+            int count;
+            switch (uriMatcher.match(uri)) {
+                case ALL_CITIES:
+                    count = db.update(CitiesMetaData.TABLE_NAME, values, selection, selectionArgs);
+                    break;
+                case STATS_ALL_DATA:
+                    count = db.update(StatsMetaData.TABLE_NAME, values, selection, selectionArgs);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri);
+            }
+            getContext().getContentResolver().notifyChange(uri, null);
+            return count;
     }
 }

@@ -1,7 +1,9 @@
 package ru.whalemare.weather.tasks;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
@@ -49,11 +51,25 @@ public class CityLoader extends CursorLoader {
         if (query == null) {
             cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, null, null, null);
 
+            ContentValues values = new ContentValues();
+            values.put(CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE, "30823");
+            values.put(CitiesProvider.StatsMetaData.KEY_TOD, "2");
+            values.put(CitiesProvider.StatsMetaData.KEY_DATE, "15.04.2016");
+            values.put(CitiesProvider.StatsMetaData.KEY_T_MAX, 1000);
+            values.put(CitiesProvider.StatsMetaData.KEY_T_MIN, -300);
+
+            String url = CitiesProvider.STATS_URL + "/1";
+            Uri uri = Uri.parse(url);
+            int updated = getContext().getContentResolver().update(CitiesProvider.STATS_CONTENT_URI, values, null, null);
+
             Cursor tempCursor = getContext().getContentResolver().query(CitiesProvider.STATS_CONTENT_URI, null, null, null, null);
             if (tempCursor != null) {
-                Log.d(TAG, "loadInBackground: tempCursor = " + tempCursor.getCount());
-                tempCursor.close();
+                tempCursor.moveToFirst();
+                while (tempCursor.moveToNext()){
+                    Log.d(TAG, "loadInBackground: temp max = " + tempCursor.getInt(tempCursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX)));
+                }
             }
+            Log.d(TAG, "loadInBackground: updated is " + updated);
         } else {
             cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, "city_name LIKE \'%" + query + "%\'", null, null); // FIXME: 12.04.2016 how to write the same query, but in the argument
         }
