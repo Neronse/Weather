@@ -33,6 +33,7 @@ public class CitiesProvider extends ContentProvider {
 
 
     private static HashMap<String, String> citiesValues;
+
     static {
         citiesValues = new HashMap<>();
         citiesValues.put(CitiesMetaData.KEY_ID, CitiesMetaData.KEY_ID);
@@ -43,6 +44,7 @@ public class CitiesProvider extends ContentProvider {
     }
 
     private static HashMap<String, String> statsValues;
+
     static {
         statsValues = new HashMap<>();
         statsValues.put(StatsMetaData.KEY_ID, StatsMetaData.KEY_ID);
@@ -55,12 +57,11 @@ public class CitiesProvider extends ContentProvider {
 
     static final UriMatcher uriMatcher;
     static final int ALL_CITIES = 0;
-    static final int SINGLE_CITY = 1;
     static final int STATS_ALL_DATA = 2;
+
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, CitiesMetaData.TABLE_NAME, ALL_CITIES);
-        uriMatcher.addURI(PROVIDER_NAME, CitiesMetaData.TABLE_NAME, SINGLE_CITY);
         uriMatcher.addURI(PROVIDER_NAME, StatsMetaData.TABLE_NAME, STATS_ALL_DATA);
     }
 
@@ -74,7 +75,7 @@ public class CitiesProvider extends ContentProvider {
         public final static String KEY_REGION_NAME = "region_name";
     }
 
-    public static class StatsMetaData implements BaseColumns{
+    public static class StatsMetaData implements BaseColumns {
         public final static String TABLE_NAME = "stats";
         public final static String KEY_ID = "_id";
         public final static String KEY_GISMETEO_CODE = "gismeteo_code";
@@ -85,6 +86,7 @@ public class CitiesProvider extends ContentProvider {
     }
 
     SQLiteDatabase db;
+
     @Override
     public boolean onCreate() {
         DatabaseHandlerImpl databaseHandler = new DatabaseHandlerImpl(getContext());
@@ -100,23 +102,25 @@ public class CitiesProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(CitiesMetaData.TABLE_NAME);
 
         switch (uriMatcher.match(uri)) {
-            case ALL_CITIES:
-                qb.setProjectionMap(citiesValues);
-                break;
-            case SINGLE_CITY:
-
-                break;
             case STATS_ALL_DATA:
                 Log.d(TAG, "query: Была запрошена статистика по uri = " + uri);
+                qb.setTables(StatsMetaData.TABLE_NAME);
+                qb.setProjectionMap(statsValues);
+                if (sortOrder == null){
+                    sortOrder = StatsMetaData.KEY_DATE;
+                }
+                break;
+            case ALL_CITIES:
+                qb.setTables(CitiesMetaData.TABLE_NAME);
+                qb.setProjectionMap(citiesValues);
+                if (sortOrder == null) {
+                    sortOrder = CitiesMetaData.KEY_CITY_NAME;
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-        if (sortOrder == null || sortOrder.equals("")) {
-            sortOrder = CitiesMetaData.KEY_CITY_NAME;
         }
 
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
@@ -130,8 +134,6 @@ public class CitiesProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case ALL_CITIES:
                 return "vnd.android.cursor.dir/vnd." + PROVIDER_NAME + CitiesMetaData.TABLE_NAME;
-            case SINGLE_CITY:
-                return "vnd.android.cursor.item/vnd." + PROVIDER_NAME + CitiesMetaData.TABLE_NAME;
             case STATS_ALL_DATA:
                 return "vnd.android.cursor.item/vnd." + PROVIDER_NAME + StatsMetaData.TABLE_NAME;
             default:
