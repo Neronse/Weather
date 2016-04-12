@@ -22,30 +22,38 @@ public class CitiesProvider extends ContentProvider {
     private final String TAG = getClass().getSimpleName();
 
     static final String PROVIDER_NAME = "ru.whalemare.weather.database.CitiesProvider";
-    static final String URL = "content://" + PROVIDER_NAME + "/cte";
+    static final String URL = "content://" + PROVIDER_NAME + "/" + CitiesMetaData.TABLE_NAME;
     public static final Uri CONTENT_URI = Uri.parse(URL);
 
-    static final UriMatcher uriMatcher;
+
     private static HashMap<String, String> values;
+    static {
+        values = new HashMap<>();
+        values.put(CitiesMetaData.KEY_ID, CitiesMetaData.KEY_ID);
+        values.put(CitiesMetaData.KEY_CITY_NAME, CitiesMetaData.KEY_CITY_NAME);
+        values.put(CitiesMetaData.KEY_GISMETEO_CODE, CitiesMetaData.KEY_GISMETEO_CODE);
+        values.put(CitiesMetaData.KEY_REGION_CODE, CitiesMetaData.KEY_REGION_CODE);
+        values.put(CitiesMetaData.KEY_REGION_NAME, CitiesMetaData.KEY_REGION_NAME);
+    }
+
+    static final UriMatcher uriMatcher;
     static final int ALL_CITIES = 0;
     static final int SINGLE_CITY = 1;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "cte", ALL_CITIES);
-        uriMatcher.addURI(PROVIDER_NAME, "cte/*", SINGLE_CITY);
+        uriMatcher.addURI(PROVIDER_NAME, CitiesMetaData.TABLE_NAME, ALL_CITIES);
+        uriMatcher.addURI(PROVIDER_NAME, CitiesMetaData.TABLE_NAME, SINGLE_CITY);
     }
 
-    static class CitiesMetaData implements BaseColumns {
+    public static class CitiesMetaData implements BaseColumns {
 
-        final static String TABLE_NAME = "cities";
-        final static String KEY_ID = "_id";
-        final static String KEY_GISMETEO_CODE = "gismeteo_code";
-        final static String KEY_CITY_NAME = "city_name";
-        final static String KEY_REGION_CODE = "region_code";
-        final static String KEY_REGION_NAME = "region_name";
-
+        public final static String TABLE_NAME = "cities";
+        public final static String KEY_ID = "_id";
+        public final static String KEY_GISMETEO_CODE = "gismeteo_code";
+        public final static String KEY_CITY_NAME = "city_name";
+        public final static String KEY_REGION_CODE = "region_code";
+        public final static String KEY_REGION_NAME = "region_name";
     }
-
 
     SQLiteDatabase db;
     @Override
@@ -75,11 +83,11 @@ public class CitiesProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        if (sortOrder == null || sortOrder == "") {
+        if (sortOrder == null || sortOrder.equals("")) {
             sortOrder = CitiesMetaData.KEY_CITY_NAME;
         }
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-                null, sortOrder);
+
+        Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
@@ -89,9 +97,9 @@ public class CitiesProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case ALL_CITIES:
-                return "vnd.android.cursor.dir/cte";
+                return "vnd.android.cursor.dir/vnd." + PROVIDER_NAME + CitiesMetaData.TABLE_NAME;
             case SINGLE_CITY:
-                return "vnd.android.cursor.item/cte"; //// TODO: 11.04.2016 mistake?
+                return "vnd.android.cursor.item/vnd." + PROVIDER_NAME + CitiesMetaData.TABLE_NAME;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -99,17 +107,44 @@ public class CitiesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(Uri uri, ContentValues values) {
+/*        long rowID = db.insert(CitiesMetaData.TABLE_NAME, null, values);
+        if (rowID > 0) {
+            Uri tempUri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+            getContext().getContentResolver().notifyChange(tempUri, null);
+            return tempUri;
+        }
+        throw new SQLException("Failed to add a record into " + uri);*/
         return null;
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+/*        int count = 0;
+        switch (uriMatcher.match(uri)) {
+            case ALL_CITIES:
+                count = db.delete(CitiesMetaData.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;*/
         return 0;
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+//            int count = 0;
+//            switch (uriMatcher.match(uri)) {
+//                case ALL_CITIES:
+//                    count = db.update(CitiesMetaData.TABLE_NAME, values, selection, selectionArgs);
+//                    break;
+//                default:
+//                    throw new IllegalArgumentException("Unknown URI " + uri);
+//            }
+//            getContext().getContentResolver().notifyChange(uri, null);
+//            return count;
         return 0;
     }
 }

@@ -26,8 +26,7 @@
         <provider
             android:name=".database.CitiesProvider"
             android:authorities="ru.whalemare.weather.database.CitiesProvider"
-            android:exported="true"
-            android:multiprocess="true" >
+            android:exported="false">
         </provider>
 
     </application>

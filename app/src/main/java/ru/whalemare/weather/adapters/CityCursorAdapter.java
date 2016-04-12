@@ -22,6 +22,7 @@ import ru.whalemare.weather.models.City;
  */
 public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapter.ViewHolder> {
 
+    private final String TAG = getClass().getSimpleName();
     Cursor cursor;
 
     public CityCursorAdapter(Context context, Cursor cursor) {
@@ -31,8 +32,6 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
-        String TAG = "WHALETAG";
-
         City city = getCityFromCursor(cursor);
 
         final String KEY_GISMETEO = viewHolder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
@@ -91,6 +90,16 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
         final int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
         final int regionCodeIndex = cursor.getColumnIndex(KEY_REGION_CODE);
         final int regionNameIndex = cursor.getColumnIndex(KEY_REGION_NAME);
+
+//        String[] item = {};
+//
+//        for (int i = 0; i<3; i++){
+//            if (cursor.isNull(i)) {
+//                Log.d(TAG, i + " == null");
+//            } else {
+//                item[i] = cursor.getString(i);
+//            }
+//        }
 
         return new City(cursor.getString(gismeteoCodeIndex), cursor.getString(cityNameIndex),
                 cursor.getString(regionCodeIndex), cursor.getString(regionNameIndex));

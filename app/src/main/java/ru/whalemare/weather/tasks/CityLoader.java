@@ -40,6 +40,11 @@ public class CityLoader extends CursorLoader {
         database.openDatabase();
         Cursor cursor;
 
+//        String[] rows = {
+//                CitiesProvider.CitiesMetaData.KEY_ID,
+//                CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
+//                CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
+
         if (query == null) {
             cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, null, null, null, null);
         } else {
@@ -47,6 +52,14 @@ public class CityLoader extends CursorLoader {
         }
 
         Log.d(TAG, "cursor = " + cursor.getCount());
+
+//        cursor.moveToFirst();
+//        while (cursor.moveToNext()) {
+//            Log.d(TAG, "" + cursor.getString(0));
+//            Log.d(TAG, "" + cursor.getString(1));
+//            Log.d(TAG, "" + cursor.getString(2));
+//        }
+
 
         return cursor;
     }
