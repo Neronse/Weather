@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -40,26 +39,16 @@ public class CityLoader extends CursorLoader {
         database.openDatabase();
         Cursor cursor;
 
-//        String[] rows = {
-//                CitiesProvider.CitiesMetaData.KEY_ID,
-//                CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
-//                CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
+        final String[] rows = {
+                CitiesProvider.CitiesMetaData.KEY_ID,
+                CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
+                CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
 
         if (query == null) {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, null, null, null, null);
+            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, rows, null, null, null);
         } else {
-            cursor = database.getCursorWithDataByQuery(query);
+            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, rows, "city_name LIKE \'%" + query + "%\'", null, null); // FIXME: 12.04.2016 how to write the same query, but in the argument
         }
-
-        Log.d(TAG, "cursor = " + cursor.getCount());
-
-//        cursor.moveToFirst();
-//        while (cursor.moveToNext()) {
-//            Log.d(TAG, "" + cursor.getString(0));
-//            Log.d(TAG, "" + cursor.getString(1));
-//            Log.d(TAG, "" + cursor.getString(2));
-//        }
-
 
         return cursor;
     }

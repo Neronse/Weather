@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,29 +81,21 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
         }
     }
 
+    final String KEY_GISMETEO_CODE = "gismeteo_code";
+    final String KEY_CITY_NAME = "city_name";
     private City getCityFromCursor(Cursor cursor) {
-        final String KEY_GISMETEO_CODE = "gismeteo_code";
-        final String KEY_CITY_NAME = "city_name";
-        final String KEY_REGION_CODE = "region_code";
-        final String KEY_REGION_NAME = "region_name";
 
         final int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE);
         final int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
-        final int regionCodeIndex = cursor.getColumnIndex(KEY_REGION_CODE);
-        final int regionNameIndex = cursor.getColumnIndex(KEY_REGION_NAME);
 
-//        String[] item = {};
-//
-//        for (int i = 0; i<3; i++){
-//            if (cursor.isNull(i)) {
-//                Log.d(TAG, i + " == null");
-//            } else {
-//                item[i] = cursor.getString(i);
-//            }
-//        }
-
-        return new City(cursor.getString(gismeteoCodeIndex), cursor.getString(cityNameIndex),
-                cursor.getString(regionCodeIndex), cursor.getString(regionNameIndex));
+        if (cityNameIndex != -1 && gismeteoCodeIndex != -1) {
+//            Log.d(TAG, "getCityFromCursor: city_name = " + cursor.getString(cityNameIndex));
+//            Log.d(TAG, "getCityFromCursor: gismeteo_code = " + cursor.getString(gismeteoCodeIndex));
+            return new City(cursor.getString(cityNameIndex), cursor.getString(gismeteoCodeIndex));
+        } else {
+            Log.w(TAG, "getCityFromCursor: WARNING! cursor have is " + cursor.getColumnCount() + " column.");
+            throw new NullPointerException("Item of the city not found name and gismeteo_code columns"); //todo another exception
+        }
     }
 
 }
