@@ -15,9 +15,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.activity.ChartActivity;
 import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.di.App;
@@ -39,7 +42,7 @@ import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
-    private static final String KEY_WEATHER = "KEY_WEATHER";
+    private static final String KEY_GISMETEO_CODE = "KEY_GISMETEO_CODE";
 
     private TextView pressRefresh;
     private SwipeRefreshLayout swipeRefresh;
@@ -60,7 +63,7 @@ public class ForecastFragment extends Fragment {
     public static ForecastFragment newInstance(String gismeteoCode){
         ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_WEATHER, gismeteoCode);
+        args.putString(KEY_GISMETEO_CODE, gismeteoCode);
         fragment.setArguments(args);
 
         return fragment;
@@ -92,7 +95,7 @@ public class ForecastFragment extends Fragment {
         Log.d(TAG, "onCreate");
 
         if (getArguments() != null) {
-            this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
+            this.gismeteoCode = getArguments().getString(KEY_GISMETEO_CODE, null);
         }
     }
 
@@ -125,6 +128,24 @@ public class ForecastFragment extends Fragment {
             tryToGetForecast();
             swipeRefresh.setRefreshing(false);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_chart) {
+            Log.d(TAG, "onOptionsItemSelected: статистика");
+            Toast.makeText(getContext(), "Chart", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), ChartActivity.class);
+//            intent.putExtra()
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     Snackbar snackbar;

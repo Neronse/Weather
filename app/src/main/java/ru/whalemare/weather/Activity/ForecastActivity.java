@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.whalemare.weather.R;
@@ -37,6 +38,12 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.container, new ForecastFragment().newInstance(gismeteo_code))
                 .commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_forecast, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

@@ -1,17 +1,21 @@
 package ru.whalemare.weather.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.activity.ChartActivity;
 import ru.whalemare.weather.models.forecast.FORECAST;
 
 public class FullForecastFragment extends Fragment {
@@ -95,9 +99,16 @@ public class FullForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             getActivity().onBackPressed();
+        } else if (item.getItemId() == R.id.action_chart) {
+            Log.d(TAG, "onOptionsItemSelected: статистика");
+            Toast.makeText(getContext(), "Chart", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), ChartActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public void onAttach(Context context) {
