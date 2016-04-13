@@ -141,12 +141,13 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public List<City> getAllData() {
-        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
+//        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC";
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
         try {
-            cursor = database.rawQuery(query, null);
+//            cursor = database.rawQuery(query, null);
+            cursor = database.query(CitiesProvider.CitiesMetaData.TABLE_NAME, null, null, null, null, null, CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
         } catch (IOError e) {
             e.printStackTrace();
             Log.e(TAG, "getAllData: не удалось получить курсор");

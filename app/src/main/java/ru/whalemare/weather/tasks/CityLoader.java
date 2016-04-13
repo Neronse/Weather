@@ -71,7 +71,7 @@ public class CityLoader extends CursorLoader {
             }
             Log.d(TAG, "loadInBackground: updated is " + updated);
         } else {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, "city_name LIKE \'%" + query + "%\'", null, null); // FIXME: 12.04.2016 how to write the same query, but in the argument
+            cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, "city_name LIKE ?", new String[]{"%"+query+"%"}, null);
         }
         database.close();
 

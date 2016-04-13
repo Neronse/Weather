@@ -94,7 +94,7 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
             return new City(cursor.getString(cityNameIndex), cursor.getString(gismeteoCodeIndex));
         } else {
             Log.w(TAG, "getCityFromCursor: WARNING! cursor have is " + cursor.getColumnCount() + " column.");
-            throw new NullPointerException("Item of the city not found name and gismeteo_code columns"); //todo another exception
+            throw new IllegalArgumentException("Item of the city not found name and gismeteo_code columns");
         }
     }
 

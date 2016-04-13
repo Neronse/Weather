@@ -185,4 +185,9 @@ public class CitiesProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
             return count;
     }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        return super.bulkInsert(uri, values);
+    }
 }
