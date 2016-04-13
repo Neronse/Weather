@@ -3,7 +3,6 @@ package ru.whalemare.weather.tasks;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
@@ -58,9 +57,7 @@ public class CityLoader extends CursorLoader {
             values.put(CitiesProvider.StatsMetaData.KEY_T_MAX, 1000);
             values.put(CitiesProvider.StatsMetaData.KEY_T_MIN, -300);
 
-            String url = CitiesProvider.STATS_URL + "/1";
-            Uri uri = Uri.parse(url);
-            int updated = getContext().getContentResolver().update(CitiesProvider.STATS_CONTENT_URI, values, null, null);
+            int deleted = getContext().getContentResolver().delete(CitiesProvider.STATS_CONTENT_URI, "tod = 2", null);
 
             Cursor tempCursor = getContext().getContentResolver().query(CitiesProvider.STATS_CONTENT_URI, null, null, null, null);
             if (tempCursor != null) {
@@ -69,7 +66,7 @@ public class CityLoader extends CursorLoader {
                     Log.d(TAG, "loadInBackground: temp max = " + tempCursor.getInt(tempCursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX)));
                 }
             }
-            Log.d(TAG, "loadInBackground: updated is " + updated);
+            Log.d(TAG, "loadInBackground: deleted is " + deleted);
         } else {
             cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, "city_name LIKE ?", new String[]{"%"+query+"%"}, null);
         }

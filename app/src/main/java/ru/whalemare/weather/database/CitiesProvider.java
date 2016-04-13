@@ -105,10 +105,9 @@ public class CitiesProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case STATS_ALL_DATA:
-                Log.d(TAG, "query: Была запрошена статистика по uri = " + uri);
                 qb.setTables(StatsMetaData.TABLE_NAME);
                 qb.setProjectionMap(statsValues);
-                if (sortOrder == null){
+                if (sortOrder == null) {
                     sortOrder = StatsMetaData.KEY_DATE;
                 }
                 break;
@@ -156,38 +155,44 @@ public class CitiesProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-/*        int count = 0;
+        int count = 0;
         switch (uriMatcher.match(uri)) {
             case ALL_CITIES:
                 count = db.delete(CitiesMetaData.TABLE_NAME, selection, selectionArgs);
                 break;
+            case STATS_ALL_DATA:
+                count = db.delete(StatsMetaData.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
-        return count;*/
-        return 0;
+
+        return count;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-            int count;
-            switch (uriMatcher.match(uri)) {
-                case ALL_CITIES:
-                    count = db.update(CitiesMetaData.TABLE_NAME, values, selection, selectionArgs);
-                    break;
-                case STATS_ALL_DATA:
-                    count = db.update(StatsMetaData.TABLE_NAME, values, selection, selectionArgs);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown URI " + uri);
-            }
-            getContext().getContentResolver().notifyChange(uri, null);
-            return count;
+        int count;
+        switch (uriMatcher.match(uri)) {
+            case ALL_CITIES:
+                count = db.update(CitiesMetaData.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case STATS_ALL_DATA:
+                count = db.update(StatsMetaData.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return count;
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] values) { //todo do nothing?
         return super.bulkInsert(uri, values);
     }
 }
