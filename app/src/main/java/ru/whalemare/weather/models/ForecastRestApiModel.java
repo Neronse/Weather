@@ -1,7 +1,6 @@
 package ru.whalemare.weather.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -27,7 +26,6 @@ public class ForecastRestApiModel implements ForecastApiModel {
 
     @Override
     public Observable<MMWEATHER> getData(String code) {
-        Log.d(TAG, "getData in ForecastApiModel; client = " + client);
         return client.getData(code);
     }
 }

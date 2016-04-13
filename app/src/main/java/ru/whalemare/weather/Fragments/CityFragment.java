@@ -48,7 +48,9 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getLoaderManager().initLoader(0, null, this);
+        Bundle args = new Bundle();
+        args.putInt("DO", -1);
+        getLoaderManager().initLoader(0, args, this);
 
         App.get(getContext()).getComponent().inject(this);
     }

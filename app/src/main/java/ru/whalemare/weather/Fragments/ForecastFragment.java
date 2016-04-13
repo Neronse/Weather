@@ -1,7 +1,9 @@
 package ru.whalemare.weather.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import butterknife.ButterKnife;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.adapters.WeathersAdapter;
+import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.di.App;
 import ru.whalemare.weather.models.ForecastRestApiModel;
 import ru.whalemare.weather.models.forecast.FORECAST;
@@ -35,7 +38,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment {
-    private static final String TAG = "WHALETAG";
+    private final String TAG = getClass().getSimpleName();
     private static final String KEY_WEATHER = "KEY_WEATHER";
 
     private TextView pressRefresh;
@@ -86,6 +89,7 @@ public class ForecastFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d(TAG, "onCreate");
 
         if (getArguments() != null) {
             this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
@@ -95,6 +99,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         tryToGetForecast();
@@ -114,14 +119,11 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        Log.d(TAG, "onStart");
         swipeRefresh.setSize(SwipeRefreshLayout.DEFAULT);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                tryToGetForecast();
-                swipeRefresh.setRefreshing(false);
-            }
+        swipeRefresh.setOnRefreshListener(() -> {
+            tryToGetForecast();
+            swipeRefresh.setRefreshing(false);
         });
     }
 
@@ -167,11 +169,74 @@ public class ForecastFragment extends Fragment {
 
             @Override
             public void onNext(MMWEATHER mmweather) {
-                Log.d(TAG, "onNext");
                 List<FORECAST> forecasts = mmweather.getREPORT().getTOWN().getFORECAST();
                 adapter = new WeathersAdapter(forecasts, listener);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                for (int i=0; i<forecasts.size(); i++){
+                    FORECAST forecast = forecasts.get(i);
+                    int tod = forecast.getTod();
+                    String date = Integer.toString(forecast.getDay()) + "." + Integer.toString(forecast.getMonth()) +
+                            "." + Integer.toString(forecast.getYear()); // DD.MM.YYYY
+
+                    if (isExistStatsBy(tod, date, gismeteoCode)){
+                        Log.d(TAG, "Data by tod = " + tod + "\n" +
+                                "by date = " + date + "\n" +
+                                "by gismeteoCode = " + gismeteoCode + " already exist!");
+
+                    } else {
+                        Log.d(TAG, "Inserting data");
+                        ContentValues values = new ContentValues();
+
+                        values.put(CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE, gismeteoCode);
+                        values.put(CitiesProvider.StatsMetaData.KEY_TOD, Integer.toString(tod));
+                        values.put(CitiesProvider.StatsMetaData.KEY_DATE, date);
+                        values.put(CitiesProvider.StatsMetaData.KEY_T_MAX, forecast.getTEMPERATURE().getMax());
+                        values.put(CitiesProvider.StatsMetaData.KEY_T_MIN, forecast.getTEMPERATURE().getMin());
+
+                        getContext().getContentResolver().insert(CitiesProvider.STATS_CONTENT_URI, values);
+                    }
+                }
+            }
+
+            private boolean isExistStatsBy(int tod, String date, String gismeteoCode) {
+                boolean exist = false;
+                final String[] projection = {
+                        CitiesProvider.StatsMetaData.KEY_ID,
+                        CitiesProvider.StatsMetaData.KEY_TOD,
+                        CitiesProvider.StatsMetaData.KEY_DATE,
+                        CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE
+                };
+
+                Cursor cursor = getContext().getContentResolver().query(CitiesProvider.STATS_CONTENT_URI, projection,
+                        CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE + " = ? AND " +
+                        CitiesProvider.StatsMetaData.KEY_TOD + " = ? AND " +
+                        CitiesProvider.StatsMetaData.KEY_DATE + " = ?",
+                        new String[] {gismeteoCode, Integer.toString(tod), date}, null);
+
+                if (cursor.getCount() > 0) {
+                    exist = true;
+                } else {
+                    Log.d(TAG, "-------");
+                    printDataInStats(cursor);
+                    Log.d(TAG, "-------");
+                    exist = false;
+                }
+
+                cursor.close();
+                return exist;
+            }
+
+
+            private void printDataInStats(Cursor cursor) {
+                cursor.moveToFirst();
+                while (cursor.moveToNext()){
+                    Log.d(TAG, cursor.getString(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_TOD)));
+                    Log.d(TAG, cursor.getString(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_DATE)));
+                    Log.d(TAG, cursor.getString(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE)));
+                    Log.d(TAG, "========");
+                }
             }
         };
 

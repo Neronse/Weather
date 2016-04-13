@@ -66,21 +66,22 @@ public class CitiesProvider extends ContentProvider {
     }
 
     public static class CitiesMetaData implements BaseColumns {
-
-        public final static String TABLE_NAME = "cities";
         public final static String KEY_ID = "_id";
-        public final static String KEY_GISMETEO_CODE = "gismeteo_code";
-        public final static String KEY_CITY_NAME = "city_name";
-        public final static String KEY_REGION_CODE = "region_code";
-        public final static String KEY_REGION_NAME = "region_name";
+
+        public final static String TABLE_NAME = "cities"; // string in db
+        public final static String KEY_GISMETEO_CODE = "gismeteo_code"; // string in db
+        public final static String KEY_CITY_NAME = "city_name"; // string in db
+        public final static String KEY_REGION_CODE = "region_code"; // string in db
+        public final static String KEY_REGION_NAME = "region_name"; // string in db
     }
 
     public static class StatsMetaData implements BaseColumns {
-        public final static String TABLE_NAME = "stats";
         public final static String KEY_ID = "_id";
-        public final static String KEY_GISMETEO_CODE = "gismeteo_code";
-        public final static String KEY_TOD = "tod";
-        public final static String KEY_DATE = "date";
+
+        public final static String TABLE_NAME = "stats"; // string in db
+        public final static String KEY_GISMETEO_CODE = "gismeteo_code"; // string in db
+        public final static String KEY_TOD = "tod"; // string in db
+        public final static String KEY_DATE = "date"; // string in db
         public final static String KEY_T_MAX = "t_max"; // integer in db
         public final static String KEY_T_MIN = "t_min"; // integer in db
     }
@@ -142,11 +143,14 @@ public class CitiesProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    /**
+     * Using <b>only</b> for inserting statistics
+     */
+    public Uri insert(Uri uri, ContentValues values) { //todo uriMatcher add
         Log.d(TAG, "insert");
         long rowID = db.insert(StatsMetaData.TABLE_NAME, null, values);
         if (rowID > 0) {
-            Uri returnUri = ContentUris.withAppendedId(CITIES_CONTENT_URI, rowID);
+            Uri returnUri = ContentUris.withAppendedId(STATS_CONTENT_URI, rowID);
             getContext().getContentResolver().notifyChange(returnUri, null);
             return returnUri;
         }

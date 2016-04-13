@@ -1,11 +1,9 @@
 package ru.whalemare.weather.tasks;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -21,6 +19,7 @@ public class CityLoader extends CursorLoader {
 
     private String TAG = getClass().getSimpleName();
     private String query;
+    private int doing = 1; // need, then data is downloading by second call. Downloading only in "onResume" method
 
     @Inject
     DatabaseHandler database;
@@ -30,48 +29,36 @@ public class CityLoader extends CursorLoader {
 
         App.get(context).getComponent().inject(this);
 
-        if (args != null)
+        if (args != null) {
             this.query = args.getString("query", null);
+            this.doing = args.getInt("DO");
+        }
         else
             this.query = null;
     }
 
     @Override
     public Cursor loadInBackground() {
-        database.initializeDatabaseFromAPK();
-        database.openReadOnlyDatabase();
-        Cursor cursor;
+        if (doing != -1) {
+            Cursor cursor;
 
-        final String[] rows = {
-                CitiesProvider.CitiesMetaData.KEY_ID,
-                CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
-                CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
+            final String[] rowsCities = {
+                    CitiesProvider.CitiesMetaData.KEY_ID,
+                    CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
+                    CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
 
-        if (query == null) {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, null, null, null);
-
-            ContentValues values = new ContentValues();
-            values.put(CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE, "30823");
-            values.put(CitiesProvider.StatsMetaData.KEY_TOD, "2");
-            values.put(CitiesProvider.StatsMetaData.KEY_DATE, "15.04.2016");
-            values.put(CitiesProvider.StatsMetaData.KEY_T_MAX, 1000);
-            values.put(CitiesProvider.StatsMetaData.KEY_T_MIN, -300);
-
-            int deleted = getContext().getContentResolver().delete(CitiesProvider.STATS_CONTENT_URI, "tod = 2", null);
-
-            Cursor tempCursor = getContext().getContentResolver().query(CitiesProvider.STATS_CONTENT_URI, null, null, null, null);
-            if (tempCursor != null) {
-                tempCursor.moveToFirst();
-                while (tempCursor.moveToNext()){
-                    Log.d(TAG, "loadInBackground: temp max = " + tempCursor.getInt(tempCursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX)));
-                }
+            if (query == null) {
+                cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rowsCities, null, null, null);
+            } else {
+                cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rowsCities, "city_name LIKE ?", new String[]{"%" + query + "%"}, null);
             }
-            Log.d(TAG, "loadInBackground: deleted is " + deleted);
-        } else {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rows, "city_name LIKE ?", new String[]{"%"+query+"%"}, null);
-        }
-        database.close();
+            database.close();
 
-        return cursor;
+            return cursor;
+        } else {
+            database.initializeDatabaseFromAPK();
+            database.openReadOnlyDatabase();
+            return null;
+        }
     }
 }
