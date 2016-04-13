@@ -128,7 +128,6 @@ public class FORECAST implements Parcelable{
             return "Cегодня";
     }
 
-    // FIXME: 30.03.2016 add parcelable methods
     public String getHumanWeekday() {
         int type = getWeekday();
         final String[] days = {

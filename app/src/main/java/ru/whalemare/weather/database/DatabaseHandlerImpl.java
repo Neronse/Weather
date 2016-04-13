@@ -48,8 +48,17 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + CitiesProvider.CitiesMetaData.TABLE_NAME);
 //        onCreate(database);
+//        if (newVersion == 3)
+//            database.execSQL("CREATE TABLE IF NOT EXISTS stats (" +
+//                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+//                "gismeteo_code TEXT NOT NULL, " +
+//                "tod TEXT NOT NULL, " +
+//                "date TEXT NOT NULL, " +
+//                "t_max INTEGER NOT NULL, " +
+//                "t_min INTEGER NOT NULL" +
+//                ")");
     }
 
     public void initializeDatabaseFromAPK() {
@@ -77,12 +86,16 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
                     SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
             Log.e(TAG, e.getMessage());
+            Log.d(TAG, e.getMessage());
         } finally {
             if (checkDatabase != null)
                 checkDatabase.close();
         }
 
-        return checkDatabase != null;
+        if (checkDatabase != null)
+            return true;
+        else
+            return false;
     }
 
     private void copyDatabaseFromAssets() throws IOException {
@@ -111,11 +124,9 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
             output.close();
             input.close();
         }
-
-
     }
 
-    public void openDatabase() {
+    public void openReadOnlyDatabase() {
         String path = DATABASES_FOLDER + DATABASE_NAME;
         this.database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -130,12 +141,13 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public List<City> getAllData() {
-        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
+//        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC";
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
         try {
-            cursor = database.rawQuery(query, null);
+//            cursor = database.rawQuery(query, null);
+            cursor = database.query(CitiesProvider.CitiesMetaData.TABLE_NAME, null, null, null, null, null, CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
         } catch (IOError e) {
             e.printStackTrace();
             Log.e(TAG, "getAllData: не удалось получить курсор");

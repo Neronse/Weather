@@ -19,37 +19,46 @@ public class CityLoader extends CursorLoader {
 
     private String TAG = getClass().getSimpleName();
     private String query;
+    private int doing = 1; // need, then data is downloading by second call. Downloading only in "onResume" method
 
-    @Inject DatabaseHandler database;
+    @Inject
+    DatabaseHandler database;
 
     public CityLoader(Context context, Bundle args) {
         super(context);
 
         App.get(context).getComponent().inject(this);
 
-        if (args != null)
+        if (args != null) {
             this.query = args.getString("query", null);
+            this.doing = args.getInt("DO");
+        }
         else
             this.query = null;
     }
 
     @Override
     public Cursor loadInBackground() {
-        database.initializeDatabaseFromAPK();
-        database.openDatabase();
-        Cursor cursor;
+        if (doing != -1) {
+            Cursor cursor;
 
-        final String[] rows = {
-                CitiesProvider.CitiesMetaData.KEY_ID,
-                CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
-                CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
+            final String[] rowsCities = {
+                    CitiesProvider.CitiesMetaData.KEY_ID,
+                    CitiesProvider.CitiesMetaData.KEY_CITY_NAME,
+                    CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE};
 
-        if (query == null) {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, rows, null, null, null);
+            if (query == null) {
+                cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rowsCities, null, null, null);
+            } else {
+                cursor = getContext().getContentResolver().query(CitiesProvider.CITIES_CONTENT_URI, rowsCities, "city_name LIKE ?", new String[]{"%" + query + "%"}, null);
+            }
+            database.close();
+
+            return cursor;
         } else {
-            cursor = getContext().getContentResolver().query(CitiesProvider.CONTENT_URI, rows, "city_name LIKE \'%" + query + "%\'", null, null); // FIXME: 12.04.2016 how to write the same query, but in the argument
+            database.initializeDatabaseFromAPK();
+            database.openReadOnlyDatabase();
+            return null;
         }
-
-        return cursor;
     }
 }

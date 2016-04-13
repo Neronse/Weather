@@ -2,7 +2,6 @@ package ru.whalemare.weather.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -49,7 +48,9 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getLoaderManager().initLoader(0, null, this);
+        Bundle args = new Bundle();
+        args.putInt("DO", -1);
+        getLoaderManager().initLoader(0, args, this);
 
         App.get(getContext()).getComponent().inject(this);
     }
@@ -73,6 +74,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     public void onResume() {
         super.onResume();
         getActivity().invalidateOptionsMenu();
+        getLoaderManager().restartLoader(0, null, this);
     }
 
     @Override
@@ -82,12 +84,6 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
         final MenuItem item = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getLoaderManager().restartLoader(0, null, this);
     }
 
     @Override

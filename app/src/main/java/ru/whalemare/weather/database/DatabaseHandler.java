@@ -22,7 +22,7 @@ public interface DatabaseHandler {
 
     void initializeDatabaseFromAPK();
 
-    void openDatabase();
+    void openReadOnlyDatabase();
 
     void close();
 
