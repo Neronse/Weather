@@ -141,9 +141,12 @@ public class ForecastFragment extends Fragment {
         if (item.getItemId() == R.id.action_chart) {
             Log.d(TAG, "onOptionsItemSelected: статистика");
             Toast.makeText(getContext(), "Chart", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), ChartActivity.class);
-//            intent.putExtra()
-            startActivity(intent);
+            Intent intent = new Intent(getActivity(), ChartActivity.class);
+            if (gismeteoCode != null) {
+                Log.d(TAG, "onOptionsItemSelected: send gismeteoCode " + gismeteoCode);
+                intent.putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode);
+                startActivity(intent);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

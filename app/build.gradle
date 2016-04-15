@@ -58,4 +58,7 @@ dependencies {
 
     //ButterKnife
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    //2D-Charts
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }
