@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -44,6 +45,9 @@ public class ChartActivity extends AppCompatActivity {
 
         List<String> labels = new ArrayList<>();
         List<Entry> values = new ArrayList<>();
+        List<Entry> minValues = new ArrayList<>();
+
+        int min = 1000, max = -1000;
 
         if(cursor != null) {
             cursor.moveToFirst();
@@ -53,45 +57,71 @@ public class ChartActivity extends AppCompatActivity {
                 Integer maxValue = cursor.getInt(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX));
                 Integer minValue = cursor.getInt(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MIN));
 
+                if (min > maxValue) {
+                    min = maxValue;
+                }
+                if (max < maxValue) {
+                    max = maxValue;
+                }
+
                 labels.add(bottomLabel);
                 values.add(new Entry(maxValue, values.size()));
-
+                minValues.add(new Entry(minValue, minValues.size()));
             } while (cursor.moveToNext());
+            cursor.close();
         } else {
             Toast.makeText(ChartActivity.this, "Cursor with charts is " + cursor, Toast.LENGTH_SHORT).show();
         }
-        cursor.close();
 
-        LineDataSet dataSet = new LineDataSet(values, "Температура");
-        dataSet.setDrawCubic(true);
-        dataSet.setDrawCircles(false);
-        dataSet.setLineWidth(1.8f);
-        dataSet.setCircleColor(Color.WHITE);
-        dataSet.setColor(Color.WHITE);
+        LineDataSet dataSet = new LineDataSet(values, "");
+        setConfigLineDataSet(dataSet, true, false, 1.8f, Color.WHITE, Color.WHITE);
 
         LineData data = new LineData(labels, dataSet);
         data.setDrawValues(false);
 
-        // if disabled, scaling can be done on x- and y-axis separately
-        lineChart.setPinchZoom(true);
-        lineChart.setDescription("");
-        lineChart.getLegend().setEnabled(false);
-        lineChart.setBackgroundColor(Color.rgb(0, 191, 165));
-        lineChart.setDrawGridBackground(false);
-        lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
-        lineChart.getAxisRight().setEnabled(false);
+        setConfigLineChart(true, "", false, Color.rgb(0, 191, 165), false, false);
 
         XAxis x = lineChart.getXAxis();
-        x.setDrawGridLines(false);
-
         YAxis y = lineChart.getAxisLeft();
         y.setDrawGridLines(false);
+        x.setDrawGridLines(false);
 
+        LimitLine maxLimitLine = new LimitLine(max, "Максимальная температура");
+        maxLimitLine.setLineWidth(4f);
+        maxLimitLine.enableDashedLine(10f, 10f, 0f);
+        maxLimitLine.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        maxLimitLine.setTextSize(10f);
+        y.addLimitLine(maxLimitLine);
+
+        LimitLine minLimitLine = new LimitLine(min, "Минимальная температура");
+        minLimitLine.setLineWidth(4f);
+        minLimitLine.enableDashedLine(10f, 10f, 0f);
+        minLimitLine.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        minLimitLine.setTextSize(10f);
+        y.addLimitLine(minLimitLine);
 
         lineChart.setData(data);
         lineChart.animateY(1000);
+        lineChart.setCameraDistance(5.5f);
         lineChart.invalidate();
+    }
+
+    private void setConfigLineDataSet(LineDataSet dataSet, boolean drawCubic, boolean drawCircles, float lineWidth, int circleColor, int lineColor) {
+        dataSet.setDrawCubic(drawCubic);
+        dataSet.setDrawCircles(drawCircles);
+        dataSet.setLineWidth(lineWidth);
+        dataSet.setCircleColor(circleColor);
+        dataSet.setColor(lineColor);
+    }
+
+    private void setConfigLineChart(boolean pinchZoom, String description, boolean enableLegend, int backgroundColor, boolean drawGridBackground, boolean enableRightAxis) {
+        // if disabled, scaling can be done on x- and y-axis separately
+        lineChart.setPinchZoom(pinchZoom);
+        lineChart.setDescription(description);
+        lineChart.getLegend().setEnabled(enableLegend);
+        lineChart.setBackgroundColor(backgroundColor);
+        lineChart.setDrawGridBackground(drawGridBackground);
+        lineChart.getAxisRight().setEnabled(enableRightAxis);
     }
 
 }
