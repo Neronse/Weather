@@ -4,7 +4,10 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,6 +31,9 @@ public class ChartActivity extends AppCompatActivity {
     @Bind(R.id.linechart)
     public LineChart lineChart;
 
+    @Bind(R.id.toolbar)
+    public Toolbar toolbar;
+
     private String TAG = getClass().getSimpleName();
 
     @Override
@@ -39,6 +45,11 @@ public class ChartActivity extends AppCompatActivity {
         String gismeteoCode = getIntent().getStringExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
         Log.d(TAG, "gismeteoCode = " + gismeteoCode);
         Toast.makeText(ChartActivity.this, gismeteoCode, Toast.LENGTH_SHORT).show();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("График температур");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Cursor cursor = getContentResolver().query(CitiesProvider.STATS_CONTENT_URI, null,
                 CitiesProvider.StatsMetaData.KEY_GISMETEO_CODE + " = " + gismeteoCode, null, null);
@@ -54,18 +65,20 @@ public class ChartActivity extends AppCompatActivity {
 
             do {
                 String bottomLabel = cursor.getString(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_DATE));
-                Integer maxValue = cursor.getInt(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX));
+                Integer value = cursor.getInt(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MAX));
                 Integer minValue = cursor.getInt(cursor.getColumnIndex(CitiesProvider.StatsMetaData.KEY_T_MIN));
 
-                if (min > maxValue) {
-                    min = maxValue;
+                Log.d(TAG, "value = " + value);
+
+                if (min > value) {
+                    min = value;
                 }
-                if (max < maxValue) {
-                    max = maxValue;
+                if (max < value) {
+                    max = value;
                 }
 
                 labels.add(bottomLabel);
-                values.add(new Entry(maxValue, values.size()));
+                values.add(new Entry(value, values.size()));
                 minValues.add(new Entry(minValue, minValues.size()));
             } while (cursor.moveToNext());
             cursor.close();
@@ -74,7 +87,7 @@ public class ChartActivity extends AppCompatActivity {
         }
 
         LineDataSet dataSet = new LineDataSet(values, "");
-        setConfigLineDataSet(dataSet, true, false, 1.8f, Color.WHITE, Color.WHITE);
+        setConfigLineDataSet(dataSet, false, false, 1.8f, Color.WHITE, Color.WHITE);
 
         LineData data = new LineData(labels, dataSet);
         data.setDrawValues(false);
@@ -104,6 +117,31 @@ public class ChartActivity extends AppCompatActivity {
         lineChart.animateY(1000);
         lineChart.setCameraDistance(5.5f);
         lineChart.invalidate();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chart, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        if (id == R.id.action_choose_range) {
+            Toast.makeText(ChartActivity.this, "Выбор дат", Toast.LENGTH_SHORT).show();
+//            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext(), R.style.AlertDialog_AppCompat_Light_);
+//            LayoutInflater inflater = getLayoutInflater();
+//            View view = inflater.inflate(R.layout.dialog_view, null);
+//            alertDialog.setView(view);
+//            alertDialog.setTitle("Выберите диапазон дат");
+//            alertDialog.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setConfigLineDataSet(LineDataSet dataSet, boolean drawCubic, boolean drawCircles, float lineWidth, int circleColor, int lineColor) {

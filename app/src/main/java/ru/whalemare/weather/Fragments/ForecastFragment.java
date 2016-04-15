@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import ru.whalemare.weather.ParserConfig;
 import ru.whalemare.weather.R;
-import ru.whalemare.weather.activity.ChartActivity;
 import ru.whalemare.weather.adapters.WeathersAdapter;
 import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.di.App;
@@ -138,16 +136,6 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_chart) {
-            Log.d(TAG, "onOptionsItemSelected: статистика");
-            Toast.makeText(getContext(), "Chart", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getActivity(), ChartActivity.class);
-            if (gismeteoCode != null) {
-                Log.d(TAG, "onOptionsItemSelected: send gismeteoCode " + gismeteoCode);
-                intent.putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode);
-                startActivity(intent);
-            }
-        }
         return super.onOptionsItemSelected(item);
     }
 

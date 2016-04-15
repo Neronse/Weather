@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/action_chart"
-        android:title="@string/chart"
-        android:icon="@drawable/ic_chart"
-        app:showAsAction="always"
+        android:id="@+id/action_choose_range"
+        android:title="@string/choose_range"
+        app:showAsAction="never"
         />
-
 </menu>

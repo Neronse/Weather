@@ -29,5 +29,6 @@
     <string name="gismeteo_base_url">http://informer.gismeteo.ru/xml/</string>
     <string name="city_not_founded">Города по запросу не найдено</string>
     <string name="chart">Статистика</string>
+    <string name="choose_range">Выбрать диапазон</string>
 
 </resources>
