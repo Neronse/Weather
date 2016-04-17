@@ -30,5 +30,6 @@
     <string name="city_not_founded">Города по запросу не найдено</string>
     <string name="chart">Статистика</string>
     <string name="choose_range">Выбрать диапазон</string>
+    <string name="KEY_SHARED_WEATHER">KEY_SHARED_WEATHER</string>
 
 </resources>

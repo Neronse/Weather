@@ -2,6 +2,7 @@ package ru.whalemare.weather.activity;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,17 +21,18 @@ import ru.whalemare.weather.models.forecast.FORECAST;
 public class ForecastActivity extends AppCompatActivity implements ForecastFragment.OnChooseForecastListener {
 
     private static final String TAG = "WHALETAG";
-    public static String gismeteo_code, cityName;
+    public static String gismeteoCode, cityName;
+    private SharedPreferences shared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final String KEY_GISMETEO = getApplicationContext().getResources().getString(R.string.KEY_GISMETEO);
-        final String KEY_CITYNAME = getApplicationContext().getResources().getString(R.string.KEY_CITYNAME);
-        gismeteo_code = getIntent().getStringExtra(KEY_GISMETEO);
-        cityName = getIntent().getStringExtra(KEY_CITYNAME);
+//        final String KEY_GISMETEO = getApplicationContext().getResources().getString(R.string.KEY_GISMETEO);
+//        final String KEY_CITYNAME = getApplicationContext().getResources().getString(R.string.KEY_CITYNAME);
+        gismeteoCode = getIntent().getStringExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
+        cityName = getIntent().getStringExtra(CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -38,9 +40,12 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+//        shared = getSharedPreferences(getString(R.string.KEY_SHARED_WEATHER), MODE_PRIVATE);
+//        shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode).commit();
+
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.container, new ForecastFragment().newInstance(gismeteo_code))
+                .replace(R.id.container, new ForecastFragment().newInstance(gismeteoCode))
                 .commit();
     }
 
@@ -54,14 +59,15 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
+//            shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, null).commit();
         }
         if (item.getItemId() == R.id.action_chart) {
             Log.d(TAG, "onOptionsItemSelected: статистика");
             Toast.makeText(this, "Chart", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ChartActivity.class);
-            if (gismeteo_code != null) {
-                Log.d(TAG, "onOptionsItemSelected: send gismeteoCode " + gismeteo_code);
-                intent.putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteo_code);
+            if (gismeteoCode != null) {
+                Log.d(TAG, "onOptionsItemSelected: send gismeteoCode " + gismeteoCode);
+                intent.putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode);
                 startActivity(intent);
             }
         }
@@ -72,7 +78,7 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     public void sendForecast(FORECAST forecast) {
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.container, new FullForecastFragment().newInstance(forecast, gismeteo_code))
+                .replace(R.id.container, new FullForecastFragment().newInstance(forecast, gismeteoCode))
                 .addToBackStack(null)
                 .commit();
     }
