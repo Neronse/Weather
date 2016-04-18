@@ -150,7 +150,7 @@ public class ForecastFragment extends Fragment {
                     });
                     snackbar.show();
         } else {
-            if (getView() == null) {
+            if (!checkInternet() && getView() == null) {
                 Toast.makeText(getContext(), "Подключитесь к интернету", Toast.LENGTH_SHORT).show();
             }
             if (snackbar != null)

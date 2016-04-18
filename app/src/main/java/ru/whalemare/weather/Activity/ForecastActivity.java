@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.database.CitiesProvider;
@@ -28,9 +27,8 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        shared = getSharedPreferences(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, MODE_PRIVATE);
 
-//        final String KEY_GISMETEO = getApplicationContext().getResources().getString(R.string.KEY_GISMETEO);
-//        final String KEY_CITYNAME = getApplicationContext().getResources().getString(R.string.KEY_CITYNAME);
         gismeteoCode = getIntent().getStringExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
         cityName = getIntent().getStringExtra(CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
 
@@ -40,8 +38,6 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        shared = getSharedPreferences(getString(R.string.KEY_SHARED_WEATHER), MODE_PRIVATE);
-//        shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode).commit();
 
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -59,11 +55,11 @@ public class ForecastActivity extends AppCompatActivity implements ForecastFragm
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
-//            shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, null).commit();
+            shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, null).commit();
+            shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, null).commit();
         }
         if (item.getItemId() == R.id.action_chart) {
             Log.d(TAG, "onOptionsItemSelected: статистика");
-            Toast.makeText(this, "Chart", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ChartActivity.class);
             if (gismeteoCode != null) {
                 Log.d(TAG, "onOptionsItemSelected: send gismeteoCode " + gismeteoCode);

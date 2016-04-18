@@ -1,5 +1,8 @@
 package ru.whalemare.weather.fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +23,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.activity.ForecastActivity;
 import ru.whalemare.weather.adapters.CityCursorAdapter;
+import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.database.DatabaseHandler;
 import ru.whalemare.weather.di.App;
 import ru.whalemare.weather.tasks.CityLoader;
@@ -34,6 +39,7 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private CityCursorAdapter adapter;
+    private SharedPreferences shared;
 
     @Inject DatabaseHandler database;
 
@@ -47,6 +53,16 @@ public class CityFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        shared = getContext().getSharedPreferences(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, Context.MODE_PRIVATE);
+        final String gismeteoCode = shared.getString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, null);
+        final String cityName = shared.getString(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, null);
+        if (gismeteoCode != null && cityName != null) {
+            Intent intent = new Intent(getActivity(), ForecastActivity.class);
+            intent.putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode);
+            intent.putExtra(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, cityName);
+            startActivity(intent);
+        }
 
         Bundle args = new Bundle();
         args.putInt("DO", -1);

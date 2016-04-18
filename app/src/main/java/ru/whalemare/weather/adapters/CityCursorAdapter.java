@@ -2,6 +2,7 @@ package ru.whalemare.weather.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -48,6 +49,11 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
                 if (checkInternet()) {
+
+                    SharedPreferences shared = context.getSharedPreferences(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, Context.MODE_PRIVATE);
+                    shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode()).commit(); // TODO: 18.04.2016 возможно ли что имя настроек и ключа будет совпадать?
+                    shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName()).commit();
+
                     Intent intent = new Intent(view.getContext(), ForecastActivity.class)
                             .putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode())
                             .putExtra(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName());
