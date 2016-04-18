@@ -3,11 +3,14 @@ package ru.whalemare.weather.activity;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -133,13 +136,14 @@ public class ChartActivity extends AppCompatActivity {
             onBackPressed();
         }
         if (id == R.id.action_choose_range) {
-            Toast.makeText(ChartActivity.this, "Выбор дат", Toast.LENGTH_SHORT).show();
-//            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext(), R.style.AlertDialog_AppCompat_Light_);
-//            LayoutInflater inflater = getLayoutInflater();
-//            View view = inflater.inflate(R.layout.dialog_view, null);
-//            alertDialog.setView(view);
-//            alertDialog.setTitle("Выберите диапазон дат");
-//            alertDialog.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_view, null);
+            builder.setView(view);
+            builder.setTitle("Выберите диапазон дат");
+            builder.show();
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
