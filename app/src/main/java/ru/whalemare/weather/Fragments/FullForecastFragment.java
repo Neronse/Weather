@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.whalemare.weather.R;
+import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.models.forecast.FORECAST;
 
 public class FullForecastFragment extends Fragment {
@@ -20,14 +21,16 @@ public class FullForecastFragment extends Fragment {
     private static final String ARG_FORECAST = "FORECAST";
 
     private FORECAST forecast;
+    private String gismeteo_code;
 
     public FullForecastFragment() {
     }
 
-    public static FullForecastFragment newInstance(FORECAST forecast) {
+    public static FullForecastFragment newInstance(FORECAST forecast, String gismeteo_code) {
         FullForecastFragment fragment = new FullForecastFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FORECAST, forecast);
+        args.putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteo_code);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,6 +101,8 @@ public class FullForecastFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public void onAttach(Context context) {

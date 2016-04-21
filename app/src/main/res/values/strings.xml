@@ -28,5 +28,10 @@
     <string name="back">Назад</string>
     <string name="gismeteo_base_url">http://informer.gismeteo.ru/xml/</string>
     <string name="city_not_founded">Города по запросу не найдено</string>
+    <string name="chart">Статистика</string>
+    <string name="choose_range">Выбрать диапазон</string>
+    <string name="KEY_SHARED_WEATHER">KEY_SHARED_WEATHER</string>
+    <string name="date_from">Начните вводить начальную дату</string>
+    <string name="date_to">Начните вводить конечную дату</string>
 
 </resources>

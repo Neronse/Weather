@@ -53,7 +53,7 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 //        if (newVersion == 3)
 //            database.execSQL("CREATE TABLE IF NOT EXISTS stats (" +
 //                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-//                "gismeteo_code TEXT NOT NULL, " +
+//                "gismeteoCode TEXT NOT NULL, " +
 //                "tod TEXT NOT NULL, " +
 //                "date TEXT NOT NULL, " +
 //                "t_max INTEGER NOT NULL, " +

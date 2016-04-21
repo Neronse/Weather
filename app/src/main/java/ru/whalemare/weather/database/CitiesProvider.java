@@ -93,10 +93,7 @@ public class CitiesProvider extends ContentProvider {
         DatabaseHandlerImpl databaseHandler = new DatabaseHandlerImpl(getContext());
         db = databaseHandler.getWritableDatabase();
 
-        if (db != null) {
-            return true;
-        }
-        return false;
+        return db != null;
     }
 
     @Nullable
@@ -124,7 +121,8 @@ public class CitiesProvider extends ContentProvider {
         }
 
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+        if (getContext() != null)
+            c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
@@ -151,7 +149,8 @@ public class CitiesProvider extends ContentProvider {
         long rowID = db.insert(StatsMetaData.TABLE_NAME, null, values);
         if (rowID > 0) {
             Uri returnUri = ContentUris.withAppendedId(STATS_CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(returnUri, null);
+            if (getContext() != null)
+                getContext().getContentResolver().notifyChange(returnUri, null);
             return returnUri;
         }
         throw new SQLException("Failed to add a record into " + uri);
@@ -171,7 +170,8 @@ public class CitiesProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (getContext() != null)
+            getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
     }
@@ -190,7 +190,8 @@ public class CitiesProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (getContext() != null)
+            getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
     }

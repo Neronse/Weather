@@ -12,6 +12,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -57,4 +58,10 @@ dependencies {
 
     //ButterKnife
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    //2D-Charts
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
+    //Calendar
+    compile 'com.github.prolificinteractive:material-calendarview:v1.2.0'
 }

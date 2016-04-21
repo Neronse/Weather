@@ -2,7 +2,12 @@ package ru.whalemare.weather.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.activity.ForecastActivity;
+import ru.whalemare.weather.database.CitiesProvider;
 import ru.whalemare.weather.interfaces.ItemClickListener;
 import ru.whalemare.weather.models.City;
 
@@ -25,30 +31,48 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
 
     private final String TAG = getClass().getSimpleName();
     Cursor cursor;
+    Context context;
 
     public CityCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor);
         this.cursor = cursor;
+        this.context = context;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         City city = getCityFromCursor(cursor);
 
-        final String KEY_GISMETEO = viewHolder.name.getContext().getResources().getString(R.string.KEY_GISMETEO);
-        final String KEY_CITYNAME = viewHolder.name.getContext().getResources().getString(R.string.KEY_CITYNAME);
-
         viewHolder.name.setText(city.getCityName());
 
         viewHolder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                Intent intent = new Intent(view.getContext(), ForecastActivity.class)
-                        .putExtra(KEY_GISMETEO, city.getGismeteoCode())
-                        .putExtra(KEY_CITYNAME, city.getCityName());
-                view.getContext().startActivity(intent);
+                if (checkInternet()) {
+
+                    SharedPreferences shared = context.getSharedPreferences(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, Context.MODE_PRIVATE);
+                    shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode()).commit(); // TODO: 18.04.2016 возможно ли что имя настроек и ключа будет совпадать?
+                    shared.edit().putString(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName()).commit();
+
+                    Intent intent = new Intent(view.getContext(), ForecastActivity.class)
+                            .putExtra(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode())
+                            .putExtra(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName());
+                    view.getContext().startActivity(intent);
+                } else {
+                    Snackbar snackbar = Snackbar.make(view, "Подключитесь к интернету", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("OK", v -> {
+                                view.getContext().startActivity(new Intent(Settings.ACTION_SETTINGS));
+                            });
+                    snackbar.show();
+                }
             }
         });
+    }
+
+    private boolean checkInternet() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo internetInfo = cm.getActiveNetworkInfo();
+        return !(internetInfo == null || !internetInfo.isConnectedOrConnecting());
     }
 
     @Override
@@ -81,20 +105,16 @@ public class CityCursorAdapter extends CursorRecyclerViewAdapter<CityCursorAdapt
         }
     }
 
-    final String KEY_GISMETEO_CODE = "gismeteo_code";
-    final String KEY_CITY_NAME = "city_name";
     private City getCityFromCursor(Cursor cursor) {
 
-        final int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE);
-        final int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
+        final int gismeteoCodeIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
+        final int cityNameIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
 
         if (cityNameIndex != -1 && gismeteoCodeIndex != -1) {
-//            Log.d(TAG, "getCityFromCursor: city_name = " + cursor.getString(cityNameIndex));
-//            Log.d(TAG, "getCityFromCursor: gismeteo_code = " + cursor.getString(gismeteoCodeIndex));
             return new City(cursor.getString(cityNameIndex), cursor.getString(gismeteoCodeIndex));
         } else {
             Log.w(TAG, "getCityFromCursor: WARNING! cursor have is " + cursor.getColumnCount() + " column.");
-            throw new IllegalArgumentException("Item of the city not found name and gismeteo_code columns");
+            throw new IllegalArgumentException("Item of the city not found name and gismeteoCode columns");
         }
     }
 

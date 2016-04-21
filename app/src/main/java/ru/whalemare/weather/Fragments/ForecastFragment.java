@@ -15,9 +15,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
-    private static final String KEY_WEATHER = "KEY_WEATHER";
+
 
     private TextView pressRefresh;
     private SwipeRefreshLayout swipeRefresh;
@@ -60,7 +62,7 @@ public class ForecastFragment extends Fragment {
     public static ForecastFragment newInstance(String gismeteoCode){
         ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_WEATHER, gismeteoCode);
+        args.putString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, gismeteoCode);
         fragment.setArguments(args);
 
         return fragment;
@@ -92,7 +94,7 @@ public class ForecastFragment extends Fragment {
         Log.d(TAG, "onCreate");
 
         if (getArguments() != null) {
-            this.gismeteoCode = getArguments().getString(KEY_WEATHER, null);
+            this.gismeteoCode = getArguments().getString(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, null);
         }
     }
 
@@ -127,9 +129,20 @@ public class ForecastFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
     Snackbar snackbar;
     void tryToGetForecast(){
-        if (!checkInternet()) {
+        if (!checkInternet() && getView() != null) {
             pressRefresh.setText("Нет подключения к интернету");
             snackbar = Snackbar.make(getView(), "Подключитесь к интернету", Snackbar.LENGTH_INDEFINITE)
                     .setAction("OK", view -> {
@@ -137,6 +150,9 @@ public class ForecastFragment extends Fragment {
                     });
                     snackbar.show();
         } else {
+            if (!checkInternet() && getView() == null) {
+                Toast.makeText(getContext(), "Подключитесь к интернету", Toast.LENGTH_SHORT).show();
+            }
             if (snackbar != null)
                 if (snackbar.isShown())
                     snackbar.dismiss();
