@@ -19,7 +19,8 @@ public class CityActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+//        if (getSupportActionBar() != null)
+//            getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 
         if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()

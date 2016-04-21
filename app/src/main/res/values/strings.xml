@@ -31,5 +31,7 @@
     <string name="chart">Статистика</string>
     <string name="choose_range">Выбрать диапазон</string>
     <string name="KEY_SHARED_WEATHER">KEY_SHARED_WEATHER</string>
+    <string name="date_from">Начните вводить начальную дату</string>
+    <string name="date_to">Начните вводить конечную дату</string>
 
 </resources>

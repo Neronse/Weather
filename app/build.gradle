@@ -61,4 +61,7 @@ dependencies {
 
     //2D-Charts
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
+    //Calendar
+    compile 'com.github.prolificinteractive:material-calendarview:v1.2.0'
 }

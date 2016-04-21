@@ -9,15 +9,15 @@ public class Stats {
     private final String gismeteo_code;
     private final String tod;
     private final String date;
-    private final int t_max;
-    private final int t_min;
+    private final int temperature;
+    private int min;
+    private int max;
 
-    public Stats(String gismeteo_code, String tod, String date, int t_max, int t_min) {
+    public Stats(String gismeteo_code, String tod, String date, int t_max) {
         this.gismeteo_code = gismeteo_code;
         this.tod = tod;
         this.date = date;
-        this.t_max = t_max;
-        this.t_min = t_min;
+        this.temperature = t_max;
     }
 
     public String getGismeteo_code() {
@@ -32,11 +32,23 @@ public class Stats {
         return date;
     }
 
-    public int getT_max() {
-        return t_max;
+    public int getTemperature() {
+        return temperature;
     }
 
-    public int getT_min() {
-        return t_min;
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }
