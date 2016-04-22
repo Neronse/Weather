@@ -12,7 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name=".database.CitiesProvider"
             android:authorities="ru.whalemare.weather.database.CitiesProvider"
@@ -28,9 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".activity.ChartActivity">
         </activity>
+
+        <receiver android:name=".Widget.ForecastWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/forecast_widget_info"/>
+        </receiver>
     </application>
 
 </manifest>
