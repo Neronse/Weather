@@ -33,5 +33,7 @@
     <string name="KEY_SHARED_WEATHER">KEY_SHARED_WEATHER</string>
     <string name="date_from">Начните вводить начальную дату</string>
     <string name="date_to">Начните вводить конечную дату</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
