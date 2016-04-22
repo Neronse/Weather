@@ -17,9 +17,23 @@
     <string name="aboutWeather">Легкий снегопад</string>
     <string name="min_max_tempr_item">-27 | -30</string>
     <string name="search">Поиск</string>
+    <string name="more">Подробно</string>
     <string name="KEY_CITYNAME">KEY_CITYNAME</string>
     <string name="database_name">citiesDatabase</string>
 
     <string name="morning">Утром</string>
+    <string name="atmosphere_pressure">"Атмосферное давление: "</string>
+    <string name="mm_rt_st">" мм."</string>
+    <string name="m_s">" м/с"</string>
+    <string name="back">Назад</string>
+    <string name="gismeteo_base_url">http://informer.gismeteo.ru/xml/</string>
+    <string name="city_not_founded">Города по запросу не найдено</string>
+    <string name="chart">Статистика</string>
+    <string name="choose_range">Выбрать диапазон</string>
+    <string name="KEY_SHARED_WEATHER">KEY_SHARED_WEATHER</string>
+    <string name="date_from">Начните вводить начальную дату</string>
+    <string name="date_to">Начните вводить конечную дату</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

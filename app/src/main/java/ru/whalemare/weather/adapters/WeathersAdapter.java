@@ -8,33 +8,36 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ru.whalemare.weather.R;
 import ru.whalemare.weather.fragments.ForecastFragment;
 import ru.whalemare.weather.interfaces.ItemClickListener;
-import ru.whalemare.weather.models.Weather;
+import ru.whalemare.weather.models.forecast.FORECAST;
 
 public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHolder> {
 
-    private List<Weather> weathers;
+    private List<FORECAST> forecasts;
     private ForecastFragment.OnChooseForecastListener listener;
 
-    public WeathersAdapter(List<Weather> weathers, ForecastFragment.OnChooseForecastListener listener) {
-        this.weathers = weathers;
+    public WeathersAdapter(List<FORECAST> forecasts, ForecastFragment.OnChooseForecastListener listener) {
+        this.forecasts = forecasts;
         this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @Bind(R.id.tod)
         public TextView tod;
+
+        @Bind(R.id.now_temperature)
         public TextView nowTemperature;
 
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tod = (TextView) itemView.findViewById(R.id.tod);
-            nowTemperature = (TextView) itemView.findViewById(R.id.now_temperature);
+            ButterKnife.bind(this, itemView);
 
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
@@ -60,8 +63,8 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
     @Override
     public void onBindViewHolder(WeathersAdapter.ViewHolder holder, int position) {
 
-        String tod = weathers.get(position).getHumanTod();
-        String nowTemperature = weathers.get(position).getTemperature_max() + holder.tod.getContext().getString(R.string.celcium);
+        String tod = forecasts.get(position).getHumanTod();
+        String nowTemperature = forecasts.get(position).getTEMPERATURE().getMax() + holder.tod.getContext().getString(R.string.celcium);
 
         holder.tod.setText(tod);
         holder.nowTemperature.setText(nowTemperature); // TODO среднее арифметическое
@@ -69,13 +72,13 @@ public class WeathersAdapter extends RecyclerView.Adapter<WeathersAdapter.ViewHo
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, int position, boolean IsLongClick) {
-                listener.sendForecast(weathers.get(position));
+                listener.sendForecast(forecasts.get(position));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return weathers.size();
+        return forecasts.size();
     }
 }

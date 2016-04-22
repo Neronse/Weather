@@ -1,4 +1,6 @@
-package ru.whalemare.weather.interfaces;
+package ru.whalemare.weather.database;
+
+import android.database.Cursor;
 
 import java.util.List;
 
@@ -10,24 +12,28 @@ import ru.whalemare.weather.models.City;
  */
 public interface DatabaseHandler {
 
+    String DATABASES_FOLDER = "/data/data/ru.whalemare.weather/databases/";
+
     List<City> getAllData();
 
     void setAllData(List<City> cities);
 
-    void setVersion(int version);
-
-    int getCountCities();
-
-    int getVersion();
-
-    City getCity(int position);
-
     String getQueryCreateTable();
+
+    void initializeDatabaseFromAPK();
+
+    void openReadOnlyDatabase();
+
+    void close();
 
     /**
      * @return <b>true</b> if the database has a items <br>
      *         else <b>false</b>.
      */
-    boolean checkTable();
+    boolean isHasTable();
+
+    Cursor getCursorWithAllData();
+
+    Cursor getCursorWithDataByQuery(String name);
 
 }

@@ -1,4 +1,4 @@
-package ru.whalemare.weather;
+package ru.whalemare.weather.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,11 +15,10 @@ import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.whalemare.weather.interfaces.DatabaseHandler;
+import ru.whalemare.weather.R;
 import ru.whalemare.weather.models.City;
 
 /**
@@ -32,16 +31,8 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
     private SQLiteDatabase database;
     private final Context context;
 
-    private final String DATABASES_FOLDER = "/data/data/ru.whalemare.weather/databases/";
     private final String DATABASE_NAME;
     private final int DATABASE_VERSION;
-
-    private final String TABLE_NAME = "cities";
-    private final String KEY_ID = "id";
-    private final String KEY_GISMETEO_CODE = "gismeteo_code";
-    private final String KEY_CITY_NAME = "city_name";
-    private final String KEY_REGION_CODE = "region_code";
-    private final String KEY_REGION_NAME = "region_name";
 
     public DatabaseHandlerImpl(Context context) {
         super(context, context.getString(R.string.database_name), null, context.getResources().getInteger(R.integer.database_version));
@@ -57,8 +48,17 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + CitiesProvider.CitiesMetaData.TABLE_NAME);
 //        onCreate(database);
+//        if (newVersion == 3)
+//            database.execSQL("CREATE TABLE IF NOT EXISTS stats (" +
+//                "_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+//                "gismeteoCode TEXT NOT NULL, " +
+//                "tod TEXT NOT NULL, " +
+//                "date TEXT NOT NULL, " +
+//                "t_max INTEGER NOT NULL, " +
+//                "t_min INTEGER NOT NULL" +
+//                ")");
     }
 
     public void initializeDatabaseFromAPK() {
@@ -86,12 +86,16 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
                     SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
             Log.e(TAG, e.getMessage());
+            Log.d(TAG, e.getMessage());
         } finally {
             if (checkDatabase != null)
                 checkDatabase.close();
         }
 
-        return checkDatabase != null;
+        if (checkDatabase != null)
+            return true;
+        else
+            return false;
     }
 
     private void copyDatabaseFromAssets() throws IOException {
@@ -120,11 +124,9 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
             output.close();
             input.close();
         }
-
-
     }
 
-    public void openDatabase() throws SQLException {
+    public void openReadOnlyDatabase() {
         String path = DATABASES_FOLDER + DATABASE_NAME;
         this.database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -139,12 +141,13 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
     @Override
     public List<City> getAllData() {
-        final String query = "SELECT * FROM " + TABLE_NAME +" ORDER BY city_name ASC"; // FIXME: 25.03.2016 add already sorted the database
+//        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC";
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor;
 
         try {
-            cursor = database.rawQuery(query, null);
+//            cursor = database.rawQuery(query, null);
+            cursor = database.query(CitiesProvider.CitiesMetaData.TABLE_NAME, null, null, null, null, null, CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
         } catch (IOError e) {
             e.printStackTrace();
             Log.e(TAG, "getAllData: не удалось получить курсор");
@@ -153,10 +156,10 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
 
         List<City> data = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            int gismeteoCodeIndex = cursor.getColumnIndex(KEY_GISMETEO_CODE);
-            int cityNameIndex = cursor.getColumnIndex(KEY_CITY_NAME);
-            int regionCodeIndex = cursor.getColumnIndex(KEY_REGION_CODE);
-            int regionNameIndex = cursor.getColumnIndex(KEY_REGION_NAME);
+            int gismeteoCodeIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE);
+            int cityNameIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_CITY_NAME);
+            int regionCodeIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_REGION_CODE);
+            int regionNameIndex = cursor.getColumnIndex(CitiesProvider.CitiesMetaData.KEY_REGION_NAME);
 
             do {
                 data.add(new City(
@@ -179,53 +182,68 @@ public class DatabaseHandlerImpl extends SQLiteOpenHelper implements DatabaseHan
         ContentValues values = new ContentValues();
 
         for (City city : cities) {
-            values.put(KEY_GISMETEO_CODE, city.getGismeteoCode());
-            values.put(KEY_CITY_NAME, city.getCityName());
-            values.put(KEY_REGION_CODE, city.getRegionCode());
-            values.put(KEY_REGION_NAME, city.getRegionName());
-            database.insert(TABLE_NAME, null, values);
+            values.put(CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE, city.getGismeteoCode());
+            values.put(CitiesProvider.CitiesMetaData.KEY_CITY_NAME, city.getCityName());
+            values.put(CitiesProvider.CitiesMetaData.KEY_REGION_CODE, city.getRegionCode());
+            values.put(CitiesProvider.CitiesMetaData.KEY_REGION_NAME, city.getRegionName());
+            database.insert(CitiesProvider.CitiesMetaData.TABLE_NAME, null, values);
         }
     }
 
     @Override
-    public void setVersion(int version) {
-
-    }
-
-    @Override
-    public int getCountCities() {
-        return 0;
-    }
-
-    @Override
-    public int getVersion() {
-        return 0;
-    }
-
-    @Override
-    public City getCity(int position) {
-        return null;
-    }
-
-    @Override
-    public boolean checkTable() {
+    public boolean isHasTable() {
         SQLiteDatabase database = this.getReadableDatabase();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME, null);
 
         boolean answer = !cursor.getString(1).isEmpty() || !(cursor.getString(1) == null);
         cursor.close();
 
-        Log.d(TAG, "Таблица " + TABLE_NAME + " есть ?= " + answer);
+        Log.d(TAG, "Таблица " + CitiesProvider.CitiesMetaData.TABLE_NAME + " есть ?= " + answer);
         return answer;
     }
 
     public String getQueryCreateTable() {
-        return "CREATE TABLE " + TABLE_NAME + "( "
-                + KEY_ID + " integer primary key autoincrement, "
-                + KEY_GISMETEO_CODE + " text not null, "
-                + KEY_CITY_NAME + " text not null, "
-                + KEY_REGION_CODE + " text not null, "
-                + KEY_REGION_NAME + " text not null);";
+        return "CREATE TABLE " + CitiesProvider.CitiesMetaData.TABLE_NAME + "( "
+                + CitiesProvider.CitiesMetaData.KEY_ID + " integer primary key autoincrement, "
+                + CitiesProvider.CitiesMetaData.KEY_GISMETEO_CODE + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_CITY_NAME + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_REGION_CODE + " text not null, "
+                + CitiesProvider.CitiesMetaData.KEY_REGION_NAME + " text not null);";
+    }
+
+    @Override
+    public Cursor getCursorWithAllData() {
+        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" ORDER BY city_name ASC";
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor;
+
+        try {
+            cursor = database.rawQuery(query, null);
+        } catch (IOError e) {
+            e.printStackTrace();
+            Log.e(TAG, "getAllData: не удалось получить курсор");
+            return null;
+        }
+
+        return cursor;
+    }
+
+    @Override
+    public Cursor getCursorWithDataByQuery(String name) {
+        final String query = "SELECT * FROM " + CitiesProvider.CitiesMetaData.TABLE_NAME +" WHERE city_name " +
+                "LIKE \'%" + name + "%\' ORDER BY city_name ASC";
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor;
+
+        try {
+            cursor = database.rawQuery(query, null);
+        } catch (IOError e) {
+            e.printStackTrace();
+            Log.e(TAG, "getAllData: не удалось получить курсор");
+            return null;
+        }
+
+        return cursor;
     }
 }
