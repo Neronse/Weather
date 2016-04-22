@@ -4,7 +4,7 @@
                     android:initialLayout="@layout/forecast_widget"
                     android:minHeight="72dip"
                     android:minWidth="294dip"
-                    android:previewImage="@drawable/example_appwidget_preview"
+                    android:previewImage="@drawable/widget_preview"
                     android:updatePeriodMillis="43200000"
                     android:widgetCategory="home_screen">
 </appwidget-provider>
